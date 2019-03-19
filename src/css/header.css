@@ -1,0 +1,143 @@
+/* Navbar */
+.form-inline {
+  border-radius: 20px;
+}
+.badge {
+  background-color: red;
+  font-size: 10px;
+}
+.navbar {
+  background-color: gray;
+}
+
+/* Navbar */
+
+/* Home */
+/* Home */
+
+/* Register */
+.jumbotron {
+  background-image: url("../images/photography6.jpg");
+  /* background-color: #cccccc;
+  height: 560px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  margin-top: -60px;
+  border-radius: 0px;
+  padding: 0px; */
+  /* Full height */
+  height: 300px;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 0px;
+}
+.navbar2 {
+  padding-top: 60px;
+}
+.fa-chevron-right {
+  font-size: 10px;
+  /* margin-bottom: 5px; */
+}
+.card {
+  margin: auto;
+  top: 120px;
+  width: 75%;
+  background-color: rgba(77, 77, 77, 0.6);
+}
+
+.text-light {
+  font-size: 30px;
+  text-align: center;
+  font-weight: bold;
+}
+
+form .btn {
+  border: 10px;
+  font-weight: 600;
+}
+.text-white {
+  text-align: center;
+  font-weight: bold;
+  padding: 5px;
+  border-radius: 10px;
+  /* margin-top: 70px; */
+}
+
+.text-white b {
+  background-color: rgba(39, 39, 39, 0.7);
+  padding: 5px 10px;
+}
+
+.row h5 {
+  font-weight: 100;
+}
+
+.col-md-4 .btn,
+.col-md-8 .btn,
+.form-control {
+  border-radius: 0px;
+}
+.form-control {
+  border: 0px;
+}
+
+.login .form-control {
+  border-radius: 0px;
+  height: 50px;
+  margin-top: 0px;
+}
+.col-md-3 ul {
+  padding-left: 0px !important;
+  list-style-type: none;
+}
+.register p,
+.form-group {
+  font-size: 12px;
+}
+/* .col-md-8 .btn {
+  border-radius: 0px;
+  margin-top: 0px;
+} */
+
+.account a,
+.register a {
+  color: black;
+}
+
+.account a:hover,
+.register a:hover {
+  color: rgb(124, 124, 124);
+  text-decoration: none;
+}
+
+.dropdown-menu {
+  border-radius: 0px;
+  background-color: gray;
+}
+
+/* Register */
+
+@media (min-width: 768px) {
+  body {
+    padding: 20px 20px;
+  }
+  .navbar {
+    background-color: rgba(71, 71, 71, 0.5) !important;
+    height: 60px;
+  }
+  .carousel {
+    margin-top: -60px;
+  }
+  .carousel-caption {
+    top: 0;
+    margin-top: 30%;
+  }
+  .card {
+    width: 50%;
+  }
+}
