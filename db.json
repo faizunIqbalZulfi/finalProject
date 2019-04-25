@@ -1,0 +1,146 @@
+{
+  "users": [
+    {
+      "username": "faizun",
+      "email": "faizun@gmail.com",
+      "password": "empatdan4",
+      "id": 3
+    },
+    {
+      "username": "iqbal",
+      "email": "iqbal@gmail.com",
+      "password": "empatdan4",
+      "id": 4
+    }
+  ],
+  "products": [
+    {
+      "name": "T-Shirt V Neck",
+      "desc": "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
+      "price": "59000",
+      "src": "https://www.jakartanotebook.com/images/products/99/63/19075/2/kaos-polos-katun-pria-o-neck-size-m-81402b-or-t-shirt-black-24.jpg",
+      "id": 1
+    },
+    {
+      "name": "T-Shirt O Neck",
+      "desc": "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
+      "price": 59000,
+      "src": "https://www.jakartanotebook.com/images/products/99/63/19075/2/kaos-polos-katun-pria-o-neck-size-m-81402b-or-t-shirt-black-24.jpg",
+      "id": 2
+    },
+    {
+      "name": "T-Shirt U Neck",
+      "desc": "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
+      "price": "75000",
+      "src": "https://www.jakartanotebook.com/images/products/99/63/19075/2/kaos-polos-katun-pria-o-neck-size-m-81402b-or-t-shirt-black-24.jpg",
+      "id": 3
+    },
+    {
+      "name": "celana",
+      "desc": "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
+      "price": "12000",
+      "src": "https://www.jakartanotebook.com/images/products/99/63/19075/2/kaos-polos-katun-pria-o-neck-size-m-81402b-or-t-shirt-black-24.jpg",
+      "id": 4
+    },
+    {
+      "name": "jaket",
+      "desc": "Lorem",
+      "price": "100000",
+      "src": "https://www.jakartanotebook.com/images/products/99/63/19075/2/kaos-polos-katun-pria-o-neck-size-m-81402b-or-t-shirt-black-24.jpg",
+      "id": 5
+    },
+    {
+      "name": "hoodie",
+      "desc": "Lorem ipsum",
+      "price": "120000",
+      "src": "https://www.jakartanotebook.com/images/products/99/63/19075/2/kaos-polos-katun-pria-o-neck-size-m-81402b-or-t-shirt-black-24.jpg",
+      "id": 6
+    },
+    {
+      "name": "celana pajang",
+      "desc": "Lorem ipsum",
+      "price": "50000",
+      "src": "https://www.jakartanotebook.com/images/products/99/63/19075/2/kaos-polos-katun-pria-o-neck-size-m-81402b-or-t-shirt-black-24.jpg",
+      "id": 7
+    },
+    {
+      "name": "celana pendek",
+      "desc": "Lorem ipsum",
+      "price": "25000",
+      "src": "https://www.jakartanotebook.com/images/products/99/63/19075/2/kaos-polos-katun-pria-o-neck-size-m-81402b-or-t-shirt-black-24.jpg",
+      "id": 8
+    }
+  ],
+  "carts": [
+    {
+      "username": "faizun",
+      "qty": 0,
+      "name": "T-Shirt O Neck",
+      "desc": "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
+      "price": 59000,
+      "src": "https://www.jakartanotebook.com/images/products/99/63/19075/2/kaos-polos-katun-pria-o-neck-size-m-81402b-or-t-shirt-black-24.jpg",
+      "productId": 2,
+      "id": 3
+    },
+    {
+      "username": "faizun",
+      "qty": 0,
+      "name": "T-Shirt V Neck",
+      "desc": "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
+      "price": "59000",
+      "src": "https://www.jakartanotebook.com/images/products/99/63/19075/2/kaos-polos-katun-pria-o-neck-size-m-81402b-or-t-shirt-black-24.jpg",
+      "productId": 1,
+      "id": 4
+    },
+    {
+      "username": "faizun",
+      "qty": "5",
+      "name": "T-Shirt U Neck",
+      "desc": "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
+      "price": "75000",
+      "src": "https://www.jakartanotebook.com/images/products/99/63/19075/2/kaos-polos-katun-pria-o-neck-size-m-81402b-or-t-shirt-black-24.jpg",
+      "productId": 3,
+      "id": 5
+    },
+    {
+      "username": "iqbal",
+      "qty": "5",
+      "name": "jaket",
+      "desc": "Lorem",
+      "price": "100000",
+      "src": "https://www.jakartanotebook.com/images/products/99/63/19075/2/kaos-polos-katun-pria-o-neck-size-m-81402b-or-t-shirt-black-24.jpg",
+      "productId": 5,
+      "id": 6
+    },
+    {
+      "username": "iqbal",
+      "qty": "10",
+      "name": "celana pendek",
+      "desc": "Lorem ipsum",
+      "price": "25000",
+      "src": "https://www.jakartanotebook.com/images/products/99/63/19075/2/kaos-polos-katun-pria-o-neck-size-m-81402b-or-t-shirt-black-24.jpg",
+      "productId": 8,
+      "id": 7
+    },
+    {
+      "username": "iqbal",
+      "qty": "1",
+      "name": "T-Shirt O Neck",
+      "desc": "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
+      "price": 59000,
+      "src": "https://www.jakartanotebook.com/images/products/99/63/19075/2/kaos-polos-katun-pria-o-neck-size-m-81402b-or-t-shirt-black-24.jpg",
+      "productId": 3,
+      "id": 8
+    },
+    {
+      "username": "iqbal",
+      "qty": "16",
+      "name": "T-Shirt O Neck",
+      "desc": "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
+      "price": 59000,
+      "src": "https://www.jakartanotebook.com/images/products/99/63/19075/2/kaos-polos-katun-pria-o-neck-size-m-81402b-or-t-shirt-black-24.jpg",
+      "productId": 3,
+      "id": 9
+    }
+  ]
+}
