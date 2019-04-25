@@ -8,6 +8,8 @@ import Home from "./Home";
 import Login from "./Login";
 import Register from "./Register";
 import Account from "./Account";
+import Cart from "./Cart";
+import Footer from "./Footer";
 
 // import Header from "./Header";
 // import AllProduct from "./AllProduct";
@@ -34,6 +36,8 @@ class App extends Component {
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
           <Route path="/account" component={Account} />
+          <Route path="/cart" component={Cart} />
+          <Footer />
         </div>
       </BrowserRouter>
     );

@@ -2,6 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { Link, Redirect } from "react-router-dom";
 
+import { onLogoutClick } from "../actions";
+
 class Account extends React.Component {
   render() {
     if (this.props.username !== "") {
@@ -134,7 +136,9 @@ class Account extends React.Component {
                   <a href="">Lorem</a>
                 </li>
                 <li className="my-3">
-                  <a href="">Lorem</a>
+                  <a href="" onClick={this.props.onLogoutClick}>
+                    Logout
+                  </a>
                 </li>
               </ul>
             </div>
@@ -149,4 +153,7 @@ class Account extends React.Component {
 const mapStateToProps = state => {
   return { username: state.auth.username };
 };
-export default connect(mapStateToProps)(Account);
+export default connect(
+  mapStateToProps,
+  { onLogoutClick }
+)(Account);

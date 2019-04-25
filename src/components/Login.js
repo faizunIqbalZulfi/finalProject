@@ -3,7 +3,6 @@ import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
 import { onLoginClick } from "../actions";
-import { runInThisContext } from "vm";
 
 class Login extends React.Component {
   onLogin = () => {
@@ -13,8 +12,21 @@ class Login extends React.Component {
     this.props.onLoginClick(username, password);
   };
 
+  onLoginError = () => {
+    if (this.props.error !== "") {
+      return (
+        <div className="alert alert-danger mt-2" role="alert">
+          {this.props.error}
+        </div>
+      );
+    } else {
+      return null;
+    }
+  };
+
   render() {
     console.log(this.props.username);
+    console.log(this.props.error);
     if (this.props.username === "") {
       return (
         <div>
@@ -38,6 +50,7 @@ class Login extends React.Component {
               </Link>
             </div>
             <div className="col-md-4">
+              {this.onLoginError()}
               <h5>RETURNING CUSTOMER</h5>
               <p className="font-weight-bold mt-4">I am a returning customer</p>
               <form className="login">
@@ -155,7 +168,8 @@ class Login extends React.Component {
 }
 const mapStateToProps = state => {
   return {
-    username: state.auth.username
+    username: state.auth.username,
+    error: state.auth.error
   };
 };
 
