@@ -7,7 +7,7 @@ import Navigasibar from "./Navigasibar";
 import Home from "./Home";
 import Login from "./Login";
 import Register from "./Register";
-import Account from "./Account";
+import Setting from "./Setting";
 import Cart from "./Cart";
 import Footer from "./Footer";
 
@@ -15,15 +15,15 @@ import Footer from "./Footer";
 // import AllProduct from "./AllProduct";
 // import ManageProduct from "./ManageProduct";
 // import DetailProduct from "./DetailProduct";
-import { keepLogin } from "../actions";
+import { keepLogin } from "../actions/index";
 
 const cookies = new Cookies();
 
 class App extends Component {
   componentDidMount() {
-    var username = cookies.get("username");
-    if (username !== undefined) {
-      this.props.keepLogin(username);
+    var user_id = cookies.get("user_id");
+    if (user_id !== undefined) {
+      this.props.keepLogin(user_id);
     }
   }
 
@@ -35,9 +35,9 @@ class App extends Component {
           <Route path="/" exact component={Home} />
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
-          <Route path="/account" component={Account} />
+          <Route path="/setting/:pages" component={Setting} />
           <Route path="/cart" component={Cart} />
-          <Footer />
+          {/* <Footer /> */}
         </div>
       </BrowserRouter>
     );

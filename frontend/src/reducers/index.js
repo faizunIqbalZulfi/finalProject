@@ -1,27 +1,30 @@
 import { combineReducers } from "redux";
+import { log } from "util";
 
 const init = {
-  id: "",
-  username: "",
-  error: "",
-  success: ""
+  user_id: "",
+  role: "",
+  message: ""
 };
 
 const authReducer = (state = init, action) => {
   switch (action.type) {
+    case "REGISTER":
+      return { ...state, message: action.payload.data };
     case "LOGIN_SUCCESS":
       return {
         ...state,
-        id: action.payload.id,
-        username: action.payload.username
+        user_id: action.payload.user_id,
+        role: action.payload.role
       };
     case "LOGOUT_SUCCESS":
       return { ...state, ...init };
     case "AUTH_ERROR":
-      return { ...state, error: action.payload };
+      return { ...state, message: action.payload.data };
     case "SETTIMEOUT":
-      return { ...state, error: "" };
-
+      return { ...state, message: "" };
+    case "EDIT_USER":
+      return { ...state, message: action.payload.data };
     default:
       return state;
   }

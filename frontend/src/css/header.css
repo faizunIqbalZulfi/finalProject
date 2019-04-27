@@ -7,7 +7,16 @@
   font-size: 10px;
 }
 .navbar {
-  background-color: gray;
+  background-color: rgb(255, 255, 255) !important;
+  padding: 0px 30px;
+  border-bottom: 1px solid rgb(238, 238, 238);
+}
+.navbar2 {
+  margin-top: 40px;
+  background-color: rgb(255, 255, 255) !important;
+  height: 60px;
+  padding: 0px 30px;
+  border-bottom: 1px solid rgb(199, 199, 199);
 }
 
 .navtext {
@@ -19,7 +28,13 @@
 .navsearch {
   padding: 10px;
   background-color: white !important;
-  right: -150px !important;
+  right: -100px !important;
+  border: 1px solid rgb(99, 99, 99);
+}
+.navacount {
+  padding: 10px;
+  background-color: white !important;
+  right: -30px !important;
   border: 1px solid rgb(99, 99, 99);
 }
 .navsearch input {
@@ -62,30 +77,81 @@
 }
 /* Home */
 
-/* Register */
-.jumbotron {
-  background-image: url("../images/photography4.jpg");
-  /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
-  /* background-color: #cccccc;
-  height: 560px;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  position: relative;
-  border-radius: 0px; */
-  padding: auto;
-  /* Full height */
-  height: 300px;
+/* Login */
+.login {
+  margin-top: 150px;
+}
 
-  /* Center and scale the image nicely */
+.login2 .form-control {
+  border-radius: 0px;
+  height: 50px;
+  margin-top: 0px;
+}
+/* Login */
+
+/* Account */
+.account {
+  margin-top: 100px;
+}
+
+.account .name {
+  margin-bottom: 80px;
+}
+
+.account .list-group-item {
+  padding-left: 0;
+}
+
+.btnsavedit {
+  margin-left: 15px;
+  width: 100px;
+  float: right;
+  border-radius: 0px;
+}
+
+.bortopbot {
+  border-bottom: 0.5px solid rgb(161, 161, 161);
+  border-top: 0.5px solid rgb(161, 161, 161);
+  margin-top: 60px;
+
+  /* padding-bottom: 50px; */
+}
+
+/* Account */
+
+/* Address */
+.address {
+  border: 1px solid rgb(199, 199, 199);
+  padding: 20px;
+  margin-bottom: 40px;
+}
+.address .card-title {
+  border-bottom: 1px solid rgb(199, 199, 199);
+  padding-bottom: 10px;
+}
+/* Address */
+
+/* Register */
+/* .jumbotron {
+  background-image: url("../images/photography4.jpg");
+  padding: auto;
+  height: 300px;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   border-radius: 0px;
+} */
+.loginRegister {
+  font-size: 12px;
 }
-.navbar2 {
+
+.register {
+  margin-top: 150px;
+}
+
+/* .navbar2 {
   padding-top: 60px;
-}
+} */
 .fa-chevron-right {
   font-size: 10px;
   /* margin-bottom: 5px; */
@@ -130,7 +196,8 @@ form .btn {
 .col-md-4 .btn,
 .col-md-8 .btn,
 .form-control,
-.alert {
+.alert,
+.account .btn {
   border-radius: 0px;
 }
 .form-control {
@@ -138,19 +205,11 @@ form .btn {
   height: 50px;
 }
 
-.login .form-control {
-  border-radius: 0px;
-  height: 50px;
-  margin-top: 0px;
-}
 .col-md-3 ul {
   padding-left: 0px !important;
   list-style-type: none;
 }
-.register p,
-.form-group {
-  font-size: 12px;
-}
+
 /* .col-md-8 .btn {
   border-radius: 0px;
   margin-top: 0px;
@@ -261,11 +320,15 @@ a:hover {
   body {
     padding: 20px 20px;
   }
-  .navbar {
+  /* .navbar {
     background-color: rgb(255, 255, 255) !important;
     height: 80px;
     padding: 0px 30px;
-  }
+    border-bottom: 1px solid black;
+  } */
+  /* .navbar {
+    border-bottom: 5px solid #000;
+  } */
   .jumbotron {
     margin-top: 80px !important;
   }
