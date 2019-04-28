@@ -2,25 +2,89 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import Cookies from "universal-cookie";
+import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
-import axios from "../config/axios";
+import { deleteSuccess, addAddressSucces } from "../config/message";
+import { onDeleteAddress, onGetAddress, onAddAddress } from "../actions/index";
 
 const cookies = new Cookies();
 
 class Addresses extends React.Component {
   state = {
-    addresses: []
+    modal: false
   };
 
+  toggle = () => {
+    this.setState({ modal: !this.state.modal });
+  };
   componentDidMount() {
-    this.props.getAddress(cookies.get("user_id"));
+    this.props.onGetAddress(cookies.get("user_id"));
   }
 
+  onDeleteBtnClick = async (address_id, user_id) => {
+    await this.props.onDeleteAddress(address_id);
+    this.props.onGetAddress(user_id);
+    console.log(this.props.addresses);
+  };
+
+  onAddBtnClick = async user_id => {
+    const address_name = this.address_name.value;
+    const address1 = this.address1.value;
+    const no_telp = this.no_telp.value;
+    const pos_code = this.pos_code.value;
+    const city = this.city.value;
+
+    await this.props.onAddAddress({
+      user_id,
+      address1,
+      address_name,
+      no_telp,
+      pos_code,
+      city
+    });
+    this.toggle();
+    this.props.onGetAddress(user_id);
+  };
+
+  onMessage = () => {
+    console.log(this.props.addresses);
+    if (this.props.message !== "") {
+      return (
+        <div
+          className={
+            this.props.message === deleteSuccess ||
+            this.props.message === addAddressSucces
+              ? "alert alert-success mt-2 text-center"
+              : "alert alert-danger mt-2 text-center"
+          }
+        >
+          {this.props.message}
+        </div>
+      );
+    } else {
+      return null;
+    }
+  };
+
   render() {
-    console.log(this.props.user_id);
+    console.log(this.props.addresses);
     return (
       <div>
+        {this.onMessage()}
         <h4 className="mb-4">Address</h4>
+        <div className="form-group">
+          <p className="loginRegister mb-0">Add Address</p>
+          <button
+            onClick={() => {
+              this.toggle();
+            }}
+            className="btn btn-outline-secondary btn-block"
+            ata-toggle="modal"
+            data-target="#exampleModal"
+          >
+            Add
+          </button>
+        </div>
         {this.props.addresses.length !== 0
           ? this.props.addresses.map((address, index) => {
               return (
@@ -32,23 +96,120 @@ class Addresses extends React.Component {
                       {address.city} <span>{address.pos_code}</span>
                     </p>
                     <p className="card-text">{address.no_telp}</p>
-                    <Link to={`/setting/${index}`} class="card-link">
+                    <Link to={`/setting_address/${index}`} class="card-link">
                       Edit
                     </Link>
-                    <a href="#" class="card-link">
+                    <button
+                      onClick={() => {
+                        this.onDeleteBtnClick(
+                          address.address_id,
+                          address.user_id
+                        );
+                      }}
+                      className="btnlink card-link"
+                    >
                       Delete
-                    </a>
+                    </button>
                   </div>
                 </div>
               );
             })
           : null}
+        <Modal
+          isOpen={this.state.modal}
+          fade={false}
+          toggle={this.toggle}
+          className={this.props.className}
+        >
+          <ModalHeader className="border-0" toggle={this.toggle} />
+          <h5 className="mt-1 text-center">Add Address</h5>
+
+          <ModalBody>
+            <div className="form-group">
+              <p className="loginRegister mb-0">address_name</p>
+              <input
+                ref={input => {
+                  this.address_name = input;
+                }}
+                type="text"
+                className="form-control"
+                // defaultValue={address_name}
+              />
+            </div>
+            <div className="form-group">
+              <p className="loginRegister mb-0">address</p>
+              <input
+                ref={input => {
+                  this.address1 = input;
+                }}
+                className="form-control"
+                id="exampleFormControlTextarea"
+                rows="3"
+                // defaultValue={address1}
+              />
+            </div>
+
+            <div className="form-group">
+              <p className="loginRegister mb-0">City</p>
+              <input
+                ref={input => {
+                  this.city = input;
+                }}
+                type="texy"
+                className="form-control"
+                // defaultValue={city}
+              />
+            </div>
+            <div className="form-group">
+              <p className="loginRegister mb-0">pos_code</p>
+              <input
+                ref={input => {
+                  this.pos_code = input;
+                }}
+                type="text"
+                className="form-control"
+                // defaultValue={pos_code}
+              />
+            </div>
+            <div className="form-group">
+              <p className="loginRegister mb-0">phone number</p>
+              <input
+                ref={input => {
+                  this.no_telp = input;
+                }}
+                type="text"
+                className="form-control"
+                // defaultValue={no_telp}
+              />
+            </div>
+          </ModalBody>
+
+          <ModalFooter className="border-0">
+            <button
+              className="btnsavedit btn btn-outline-secondary"
+              onClick={() => {
+                this.onAddBtnClick(cookies.get("user_id"));
+              }}
+            >
+              Save
+            </button>{" "}
+            <button
+              className="btnsavedit btn btn-outline-secondary"
+              onClick={this.toggle}
+            >
+              Cancel
+            </button>
+          </ModalFooter>
+        </Modal>
       </div>
     );
   }
 }
 
 const mapStateToProps = state => {
-  return { user_id: state.auth.user_id };
+  return { message: state.auth.message, addresses: state.auth.addresses };
 };
-export default connect(mapStateToProps)(Addresses);
+export default connect(
+  mapStateToProps,
+  { onDeleteAddress, onGetAddress, onAddAddress }
+)(Addresses);

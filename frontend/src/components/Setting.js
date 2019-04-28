@@ -16,31 +16,18 @@ const cookies = new Cookies();
 
 class Setting extends React.Component {
   state = {
-    user: [],
-    addresses: []
+    user: []
   };
 
   componentDidMount() {
     this.getUser(cookies.get("user_id"));
-    this.getAddress(cookies.get("user_id"));
+    // this.getAddress(cookies.get("user_id"));
   }
 
   getUser = async user_id => {
     try {
       const res = await axios.get(`/user/${user_id}`);
       this.setState({ user: res.data });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  getAddress = async user_id => {
-    try {
-      const res = await axios.get(`/address/${user_id}`);
-
-      this.setState({ addresses: res.data });
-      return res.data;
-      console.log(res.data);
     } catch (e) {
       console.log(e);
     }
@@ -53,15 +40,8 @@ class Setting extends React.Component {
     // console.log(this.props);
     if (pathname === "/setting/account")
       return <Account user={this.state.user} />;
-    if (pathname === "/setting/addresses")
-      return (
-        <Addresses
-          getAddress={this.getAddress}
-          addresses={this.state.addresses}
-        />
-      );
-    if (pathname === `/setting/${pages}`)
-      return <AddSet addresses={this.state.addresses} />;
+    if (pathname === "/setting/addresses") return <Addresses />;
+    if (pathname === `/setting_address/${pages}`) return <AddSet />;
     if (pathname === "/setting/orders") return <Orders />;
     if (pathname === "/setting/wishlist") return <Wishlist />;
     if (pathname === "/setting/payment") return <Payment />;

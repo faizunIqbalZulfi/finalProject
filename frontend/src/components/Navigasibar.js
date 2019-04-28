@@ -62,7 +62,7 @@ class Navigasibar extends React.Component {
                     <span className="ml-2 ">My Account</span>
                   </DropdownToggle>
                   {this.props.role === user ? (
-                    <DropdownMenu className="navacount" right>
+                    <DropdownMenu className="navaccount" right>
                       <Link className="dropdown-item" to="">
                         Orders
                       </Link>
@@ -82,11 +82,11 @@ class Navigasibar extends React.Component {
                       </Button>
                     </DropdownMenu>
                   ) : (
-                    <DropdownMenu className="navacount" right>
-                      <Link className="dropdown-item" to="">
+                    <DropdownMenu className="navaccount" right>
+                      <Link className="dropdown-item" to="/manageproducts">
                         Manage Products
                       </Link>
-                      <Link className="dropdown-item" to="">
+                      <Link className="dropdown-item" to="/manageusers">
                         Manage Users
                       </Link>
                       {/* <Link className="dropdown-item" to="/setting/account">
@@ -106,7 +106,9 @@ class Navigasibar extends React.Component {
               ) : (
                 <NavItem>
                   <NavLink className="navtext">
-                    <Link to="/login">Join / Log In To Account</Link>
+                    <Link className="joinlogin" to="/login">
+                      Join / Log In To Account
+                    </Link>
                   </NavLink>
                 </NavItem>
               )}
@@ -119,7 +121,7 @@ class Navigasibar extends React.Component {
                 </NavLink>
               </NavItem>
             </Nav>
-            <Nav className="ml-auto" navbar>
+            <Nav className="ml-auto fontcategory" navbar>
               <UncontrolledDropdown className="mx-2" nav inNavbar>
                 <DropdownToggle className="navtext" nav>
                   <i className="fas fa-search" />
@@ -137,28 +139,28 @@ class Navigasibar extends React.Component {
                 <NavLink className="navtext" href="/cart">
                   {/* <p>CAT</p> */}
                   {/* <i className="">CAT</i> */}
-                  <span className="ml-1 font-weight-bold">CAT</span>
+                  <span className="ml-1">Cate</span>
                 </NavLink>
               </NavItem>
               <NavItem className="mx-2">
                 <NavLink className="navtext" href="/cart">
                   {/* <p>CAT</p> */}
                   {/* <i className="">CAT</i> */}
-                  <span className="ml-1 font-weight-bold">CAT</span>
+                  <span className="ml-1">Cate</span>
                 </NavLink>
               </NavItem>
               <NavItem className="mx-2">
                 <NavLink className="navtext" href="/cart">
                   {/* <p>CAT</p> */}
                   {/* <i className="">CAT</i> */}
-                  <span className="ml-1 font-weight-bold">CAT</span>
+                  <span className="ml-1">Cate</span>
                 </NavLink>
               </NavItem>
               <NavItem className="mx-2">
                 <NavLink className="navtext" href="/cart">
                   {/* <p>CAT</p> */}
                   {/* <i className="">CAT</i> */}
-                  <span className="ml-1 font-weight-bold">CAT</span>
+                  <span className="ml-1">Cate</span>
                 </NavLink>
               </NavItem>
             </Nav>

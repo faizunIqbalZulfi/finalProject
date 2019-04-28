@@ -6,7 +6,7 @@ const { sendMail } = require("../mails/nodemailer");
 const connection = require("../connections/connection");
 const {
   registerSuccess,
-  editUserSuccess
+  editSuccess
 } = require("../../../frontend/src/config/message");
 
 //verify
@@ -100,7 +100,7 @@ router.patch("/edit/user/:user_id", (req, res) => {
     connection.query(sql2, (err, result) => {
       if (err) return res.send(err);
 
-      res.send(editUserSuccess);
+      res.send(editSuccess);
     });
   });
 });
@@ -133,8 +133,19 @@ router.patch("/edit/password/:user_id", (req, res) => {
     connection.query(sql2, req.body, (err, result) => {
       if (err) return res.send(err);
 
-      res.send(editUserSuccess);
+      res.send(editSuccess);
     });
+  });
+});
+
+//deleteuser
+router.delete("/delete/user/:user_id", (req, res) => {
+  const sql = `DELETE FROM users WHERE user_id = ${req.params.user_id}`;
+
+  connection.query(sql, (err, result) => {
+    if (err) return res.send(err.sqlMessage);
+
+    res.send("delete user success");
   });
 });
 

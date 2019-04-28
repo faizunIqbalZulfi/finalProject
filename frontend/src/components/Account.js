@@ -2,8 +2,9 @@ import React from "react";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { connect } from "react-redux";
 
-import { onEditUser, onEditPassword } from "../actions/index";
-import { editUserSuccess } from "../config/message";
+import { onEditUser, onEditPassword, onDeleteUser } from "../actions/index";
+import { editSuccess } from "../config/message";
+// import Cookies from "universal-cookie";
 
 class Account extends React.Component {
   state = {
@@ -44,7 +45,7 @@ class Account extends React.Component {
       return (
         <div
           className={
-            this.props.message === editUserSuccess
+            this.props.message === editSuccess
               ? "alert alert-success mt-2 text-center"
               : "alert alert-danger mt-2 text-center"
           }
@@ -166,9 +167,9 @@ class Account extends React.Component {
             </button>
           </div>
           <button
-            // onClick={() => {
-            //   console.log(this.state.gender);
-            // }}
+            onClick={() => {
+              this.props.onDeleteUser(this.props.user_id);
+            }}
             className="btnsavedit btn btn-outline-secondary mt-3"
           >
             DELETE
@@ -244,5 +245,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { onEditUser, onEditPassword }
+  { onEditUser, onEditPassword, onDeleteUser }
 )(Account);

@@ -3,12 +3,16 @@ import Cookies from "universal-cookie";
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
-import { onEditAddress } from "../actions";
-import { editUserSuccess } from "../config/message";
+import { onEditAddress, onGetAddress } from "../actions";
+import { editSuccess } from "../config/message";
 
 const cookies = new Cookies();
 
 class AddSet extends React.Component {
+  componentDidMount() {
+    this.props.onGetAddress(cookies.get("user_id"));
+  }
+
   onEditBtnClick = address_id => {
     const address_name = this.address_name.value;
     const address1 = this.address1.value;
@@ -30,7 +34,7 @@ class AddSet extends React.Component {
       return (
         <div
           className={
-            this.props.message === editUserSuccess
+            this.props.message === editSuccess
               ? "alert alert-success mt-2 text-center"
               : "alert alert-danger mt-2 text-center"
           }
@@ -54,6 +58,7 @@ class AddSet extends React.Component {
         address_id
       } = this.props.addresses[cookies.get("address")];
     }
+    console.log(this.props.addresses);
 
     return (
       <div>
@@ -142,10 +147,10 @@ class AddSet extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return { message: state.auth.message };
+  return { message: state.auth.message, addresses: state.auth.addresses };
 };
 
 export default connect(
   mapStateToProps,
-  { onEditAddress }
+  { onEditAddress, onGetAddress }
 )(AddSet);

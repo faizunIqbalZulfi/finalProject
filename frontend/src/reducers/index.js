@@ -2,6 +2,7 @@ import { combineReducers } from "redux";
 import { log } from "util";
 
 const init = {
+  addresses: [],
   user_id: "",
   role: "",
   message: ""
@@ -25,6 +26,10 @@ const authReducer = (state = init, action) => {
       return { ...state, message: "" };
     case "EDIT_USER":
       return { ...state, message: action.payload.data };
+    case "GET_ADDRESS":
+      return { ...state, addresses: action.payload.data };
+    case "DELETE_USER":
+      return { ...state, ...init };
     default:
       return state;
   }

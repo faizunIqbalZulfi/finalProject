@@ -1,5 +1,15 @@
 const registerSuccess = "register success, verify your email";
-const editUserSuccess = "edit success";
+const editSuccess = "edit success";
 const user = "user";
+const admin = "admin";
+const deleteSuccess = "delete address success";
+const addAddressSucces = "success";
 
-module.exports = { registerSuccess, editUserSuccess, user };
+module.exports = {
+  registerSuccess,
+  editSuccess,
+  user,
+  admin,
+  deleteSuccess,
+  addAddressSucces
+};
