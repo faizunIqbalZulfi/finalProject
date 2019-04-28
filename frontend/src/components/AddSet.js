@@ -1,38 +1,59 @@
 import React from "react";
 import Cookies from "universal-cookie";
-import axios from "../config/axios";
+import { Link, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+
+import { onEditAddress } from "../actions";
+import { editUserSuccess } from "../config/message";
 
 const cookies = new Cookies();
 
 class AddSet extends React.Component {
-  state = {
-    address: []
+  onEditBtnClick = address_id => {
+    const address_name = this.address_name.value;
+    const address1 = this.address1.value;
+    const no_telp = this.no_telp.value;
+    const city = this.city.value;
+    const pos_code = this.pos_code.value;
+
+    this.props.onEditAddress(address_id, {
+      address_name,
+      address1,
+      no_telp,
+      city,
+      pos_code
+    });
   };
 
-  componentDidMount() {
-    this.getAddress();
-  }
-
-  getAddress = async () => {
-    try {
-      const res = await axios.get(`/edit/address/${cookies.get("address_id")}`);
-      this.setState({ address: res.data });
-    } catch (e) {
-      console.log(e);
+  onEditMessage = () => {
+    if (this.props.message !== "") {
+      return (
+        <div
+          className={
+            this.props.message === editUserSuccess
+              ? "alert alert-success mt-2 text-center"
+              : "alert alert-danger mt-2 text-center"
+          }
+        >
+          {this.props.message}
+        </div>
+      );
+    } else {
+      return null;
     }
   };
 
   render() {
-    if (this.state.address.length !== 0) {
+    if (this.props.addresses.length !== 0) {
       var {
         address_name,
         address1,
         no_telp,
         city,
-        pos_code
-      } = this.state.address[0];
+        pos_code,
+        address_id
+      } = this.props.addresses[cookies.get("address")];
     }
-    console.log(address1);
 
     return (
       <div>
@@ -42,7 +63,7 @@ class AddSet extends React.Component {
             <p className="loginRegister mb-0">address_name</p>
             <input
               ref={input => {
-                this.email = input;
+                this.address_name = input;
               }}
               type="text"
               className="form-control"
@@ -53,7 +74,7 @@ class AddSet extends React.Component {
             <p className="loginRegister mb-0">address</p>
             <input
               ref={input => {
-                this.address = input;
+                this.address1 = input;
               }}
               className="form-control"
               id="exampleFormControlTextarea"
@@ -66,7 +87,7 @@ class AddSet extends React.Component {
             <p className="loginRegister mb-0">City</p>
             <input
               ref={input => {
-                this.firstName = input;
+                this.city = input;
               }}
               type="texy"
               className="form-control"
@@ -77,7 +98,7 @@ class AddSet extends React.Component {
             <p className="loginRegister mb-0">pos_code</p>
             <input
               ref={input => {
-                this.lastName = input;
+                this.pos_code = input;
               }}
               type="text"
               className="form-control"
@@ -88,7 +109,7 @@ class AddSet extends React.Component {
             <p className="loginRegister mb-0">phone number</p>
             <input
               ref={input => {
-                this.lastName = input;
+                this.no_telp = input;
               }}
               type="text"
               className="form-control"
@@ -96,21 +117,19 @@ class AddSet extends React.Component {
             />
           </div>
         </form>
-        {/* {this.onEditMessage()} */}
+        {this.onEditMessage()}
         <div className="bortopbot">
           <div className="row py-3">
-            <button
-              //   onClick={() => {
-              //     console.log(this.state.gender);
-              //   }}
+            <Link
+              to="/setting/addresses"
               className="btnsavedit btn btn-outline-secondary"
             >
               CANCEL
-            </button>
+            </Link>
             <button
-              //   onClick={() => {
-              //     this.onEditBtnClick();
-              //   }}
+              onClick={() => {
+                this.onEditBtnClick(address_id);
+              }}
               className="btnsavedit btn btn-outline-secondary"
             >
               SAVE
@@ -122,4 +141,11 @@ class AddSet extends React.Component {
   }
 }
 
-export default AddSet;
+const mapStateToProps = state => {
+  return { message: state.auth.message };
+};
+
+export default connect(
+  mapStateToProps,
+  { onEditAddress }
+)(AddSet);

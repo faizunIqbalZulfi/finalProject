@@ -39,6 +39,7 @@ class Setting extends React.Component {
       const res = await axios.get(`/address/${user_id}`);
 
       this.setState({ addresses: res.data });
+      return res.data;
       console.log(res.data);
     } catch (e) {
       console.log(e);
@@ -48,12 +49,19 @@ class Setting extends React.Component {
   onSettingClick = () => {
     const { pathname } = this.props.location;
     const { pages } = this.props.match.params;
-    cookies.set("address_id", pages, { path: "/" });
+    cookies.set("address", pages, { path: "/" });
+    // console.log(this.props);
     if (pathname === "/setting/account")
       return <Account user={this.state.user} />;
     if (pathname === "/setting/addresses")
-      return <Addresses addresses={this.state.addresses} />;
-    if (pathname === `/setting/${pages}`) return <AddSet />;
+      return (
+        <Addresses
+          getAddress={this.getAddress}
+          addresses={this.state.addresses}
+        />
+      );
+    if (pathname === `/setting/${pages}`)
+      return <AddSet addresses={this.state.addresses} />;
     if (pathname === "/setting/orders") return <Orders />;
     if (pathname === "/setting/wishlist") return <Wishlist />;
     if (pathname === "/setting/payment") return <Payment />;
@@ -61,7 +69,6 @@ class Setting extends React.Component {
 
   render() {
     console.log(this.props);
-    console.log(cookies.get("address_id"));
 
     if (this.state.user.length !== 0) {
       var { first_name, last_name } = this.state.user[0];

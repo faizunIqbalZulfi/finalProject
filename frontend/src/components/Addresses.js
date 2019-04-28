@@ -8,10 +8,16 @@ import axios from "../config/axios";
 const cookies = new Cookies();
 
 class Addresses extends React.Component {
-  render() {
-    // console.log(this.props.addresses);
-    console.log(this.props.user_id);
+  state = {
+    addresses: []
+  };
 
+  componentDidMount() {
+    this.props.getAddress(cookies.get("user_id"));
+  }
+
+  render() {
+    console.log(this.props.user_id);
     return (
       <div>
         <h4 className="mb-4">Address</h4>
@@ -26,10 +32,7 @@ class Addresses extends React.Component {
                       {address.city} <span>{address.pos_code}</span>
                     </p>
                     <p className="card-text">{address.no_telp}</p>
-                    <Link
-                      to={`/setting/${address.address_id}`}
-                      class="card-link"
-                    >
+                    <Link to={`/setting/${index}`} class="card-link">
                       Edit
                     </Link>
                     <a href="#" class="card-link">

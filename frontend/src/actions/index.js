@@ -125,3 +125,24 @@ export const onLogout = () => {
     type: "LOGOUT_SUCCESS"
   };
 };
+
+//editaddress
+export const onEditAddress = (address_id, data) => {
+  return async dispatch => {
+    try {
+      const res = await axios.patch(`/edit/address/${address_id}`, data);
+      dispatch({
+        type: "AUTH_ERROR",
+        payload: res
+      });
+      setTimeout(() => {
+        dispatch({
+          type: "SETTIMEOUT"
+        });
+      }, 3000);
+      console.log(res);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+};
