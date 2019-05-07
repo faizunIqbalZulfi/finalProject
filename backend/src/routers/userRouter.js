@@ -81,7 +81,7 @@ router.get("/user/:user_id", (req, res) => {
   });
 });
 
-//edituse
+//edituser
 router.patch("/edit/user/:user_id", (req, res) => {
   Object.keys(req.body).forEach(key => {
     if (!req.body[key]) {
