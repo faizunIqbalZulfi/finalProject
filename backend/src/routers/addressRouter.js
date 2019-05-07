@@ -31,8 +31,8 @@ router.patch("/edit/address/:address_id", (req, res) => {
 
   connection.query(sql, req.body, (err, result) => {
     if (err) return res.send(err.sqlMessage);
-
-    res.send(editSuccess);
+    res.send(result);
+    // res.send(editSuccess);
   });
 });
 

@@ -18,6 +18,7 @@ import Footer from "./Footer";
 import { keepLogin } from "../actions/index";
 import ManageProducts from "./ManageProducts";
 import ManageUsers from "./ManageUsers";
+import Testimage from "./Testimage";
 
 const cookies = new Cookies();
 
@@ -37,10 +38,11 @@ class App extends Component {
           <Route path="/" exact component={Home} />
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
-          <Route path="/:path/:pages" component={Setting} />
+          <Route path="/setting/:path" component={Setting} />
           <Route path="/cart" component={Cart} />
-          <Route path="/manageproducts" component={ManageProducts} />
+          <Route path="/manageproducts/:path" component={ManageProducts} />
           <Route path="/manageusers" component={ManageUsers} />
+          <Route path="/image" component={Testimage} />
           {/* <Footer /> */}
         </div>
       </BrowserRouter>

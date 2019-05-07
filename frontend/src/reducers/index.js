@@ -1,7 +1,11 @@
 import { combineReducers } from "redux";
 import { log } from "util";
+import { stat } from "fs";
 
 const init = {
+  images: [],
+  products: [],
+  product: [],
   addresses: [],
   user_id: "",
   role: "",
@@ -30,6 +34,15 @@ const authReducer = (state = init, action) => {
       return { ...state, addresses: action.payload.data };
     case "DELETE_USER":
       return { ...state, ...init };
+    case "GET_PRODUCTS":
+      return { ...state, products: action.payload.data };
+    case "GET_IMAGE":
+      return {
+        ...state,
+        images: action.payload.data
+      };
+    case "DELETE_IMAGE":
+      return { ...state, images: action.payload.images };
     default:
       return state;
   }

@@ -96,7 +96,7 @@ class Addresses extends React.Component {
                       {address.city} <span>{address.pos_code}</span>
                     </p>
                     <p className="card-text">{address.no_telp}</p>
-                    <Link to={`/setting_address/${index}`} class="card-link">
+                    <Link to={`/setting/${index}`} class="card-link">
                       Edit
                     </Link>
                     <button

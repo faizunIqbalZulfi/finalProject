@@ -18,7 +18,7 @@ import {
 import Cookies from "universal-cookie";
 
 import { onLogout } from "../actions/index";
-import { user } from "../config/message";
+import { user, admin } from "../config/message";
 
 const cookies = new Cookies();
 
@@ -57,9 +57,11 @@ class Navigasibar extends React.Component {
             <Nav className="ml-auto" navbar>
               {this.props.user_id !== "" ? (
                 <UncontrolledDropdown className="mx-2" nav inNavbar>
-                  <DropdownToggle className="navtext" nav>
+                  <DropdownToggle className="navtext myaccount" nav>
                     <i className="fas fa-user" />
-                    <span className="ml-2 ">My Account</span>
+                    <span className="ml-2 ">
+                      {this.props.role === admin ? "Admin" : "My Account"}
+                    </span>
                   </DropdownToggle>
                   {this.props.role === user ? (
                     <DropdownMenu className="navaccount" right>
@@ -83,7 +85,10 @@ class Navigasibar extends React.Component {
                     </DropdownMenu>
                   ) : (
                     <DropdownMenu className="navaccount" right>
-                      <Link className="dropdown-item" to="/manageproducts">
+                      <Link
+                        className="dropdown-item"
+                        to="/manageproducts/products"
+                      >
                         Manage Products
                       </Link>
                       <Link className="dropdown-item" to="/manageusers">

@@ -11,6 +11,7 @@ import Orders from "./Orders";
 import Wishlist from "./Wishlist";
 import Payment from "./Payment";
 import AddSet from "./AddSet";
+import { user } from "../config/message";
 
 const cookies = new Cookies();
 
@@ -35,13 +36,13 @@ class Setting extends React.Component {
 
   onSettingClick = () => {
     const { pathname } = this.props.location;
-    const { pages } = this.props.match.params;
-    cookies.set("address", pages, { path: "/" });
-    // console.log(this.props);
+    const { pages, path } = this.props.match.params;
+    cookies.set("address", path, { path: "/" });
+    console.log(this.props);
     if (pathname === "/setting/account")
       return <Account user={this.state.user} />;
     if (pathname === "/setting/addresses") return <Addresses />;
-    if (pathname === `/setting_address/${pages}`) return <AddSet />;
+    if (pathname === `/setting/${path}`) return <AddSet />;
     if (pathname === "/setting/orders") return <Orders />;
     if (pathname === "/setting/wishlist") return <Wishlist />;
     if (pathname === "/setting/payment") return <Payment />;
@@ -53,7 +54,7 @@ class Setting extends React.Component {
     if (this.state.user.length !== 0) {
       var { first_name, last_name } = this.state.user[0];
     }
-    if (cookies.get("user_id") !== undefined) {
+    if (cookies.get("role") === user) {
       return (
         <div className="account">
           <div className="d-flex justify-content-center name">
@@ -72,13 +73,13 @@ class Setting extends React.Component {
                   <Link to="/setting/addresses">Addresses</Link>
                 </li>
                 <li class="list-group-item border border-left-0 border-right-0">
-                  <Link to="/setting/payment">Payment Options</Link>
-                </li>
-                <li class="list-group-item border border-left-0 border-right-0">
                   <Link to="/setting/orders">Orders</Link>
                 </li>
                 <li class="list-group-item border border-left-0 border-right-0">
                   <Link to="/setting/wishlist">Wish List</Link>{" "}
+                </li>
+                <li class="list-group-item border border-left-0 border-right-0">
+                  <Link to="/setting/payment">Payment Options</Link>
                 </li>
               </ul>
             </div>
@@ -92,6 +93,6 @@ class Setting extends React.Component {
   }
 }
 const mapStateToProps = state => {
-  return { user_id: state.auth.user_id };
+  return { user_id: state.auth.user_id, role: state.auth.role };
 };
 export default connect(mapStateToProps)(Setting);

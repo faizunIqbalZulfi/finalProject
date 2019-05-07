@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 import { admin } from "../config/message";
 
@@ -8,7 +8,7 @@ class ManageUsers extends React.Component {
   render() {
     if (this.props.role === admin) {
       return (
-        <div className="mt-5">
+        <div className="manageuser">
           <h1>ini ManageUsers</h1>
         </div>
       );

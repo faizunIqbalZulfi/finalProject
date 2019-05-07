@@ -1,3 +1,61 @@
+.constainer {
+  margin-top: 100px;
+}
+
+.gambar {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  position: relative;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  border: 1px solid rgb(199, 199, 199);
+}
+
+.image {
+  display: inline;
+}
+
+.close {
+  position: absolute;
+  transform: translate(-200%, 10%);
+}
+
+.btnImg {
+  width: 100px;
+  height: 100px;
+  background-color: rgb(238, 238, 238);
+  border: 0;
+  color: rgb(199, 199, 199);
+}
+
+.btnImg:hover,
+.fa-plus:hover {
+  background-color: rgb(199, 199, 199);
+  color: rgb(238, 238, 238);
+}
+
+.dropcate {
+  border: 1px solid rgb(212, 212, 212);
+  padding: 0;
+}
+
+.dropcate2 {
+  border: 1px solid rgb(255, 255, 255);
+}
+
+.dropcatemenu {
+  background-color: white !important;
+  border: 1px solid rgb(212, 212, 212);
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+/* .fa-plus {
+  color: rgb(161, 161, 161);
+} */
+
 /* Navbar */
 /* .form-inline {
   border-radius: 20px;
@@ -39,7 +97,8 @@
 .navsearch input {
   width: 300px;
 }
-.joinlogin {
+.joinlogin,
+.myaccount {
   font-weight: 100;
   font-size: 13px;
 }
@@ -125,6 +184,19 @@
 }
 
 /* Account */
+
+/* ManageProduct */
+.manageproducts,
+.manageuser {
+  margin-top: 100px;
+}
+.manageproducts .list-group-item {
+  padding-left: 0;
+}
+.manageproducts .mproduct {
+  margin-bottom: 80px;
+}
+/* ManageProduct */
 
 /* Address */
 .address {
@@ -213,7 +285,8 @@ form .btn {
 .col-md-8 .btn,
 .form-control,
 .alert,
-.account .btn {
+.account .btn,
+.btn {
   border-radius: 0px;
 }
 .form-control {
