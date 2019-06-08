@@ -7,6 +7,8 @@ const serveStatic = require("serve-static");
 const userRouter = require("./routers/userRouter");
 const addressRouter = require("./routers/addressRouter");
 const productRouter = require("./routers/productRouter");
+const homeRouter = require("./routers/homeRouter");
+const wishlistRouter = require("./routers/wishlistRouter");
 const app = express();
 const port = 2404;
 
@@ -15,6 +17,8 @@ app.use(express.json());
 app.use(userRouter);
 app.use(addressRouter);
 app.use(productRouter);
+app.use(homeRouter);
+app.use(wishlistRouter);
 // app.use("/static", express.static("./static"));
 // app.use("/", corsPrefetch);
 

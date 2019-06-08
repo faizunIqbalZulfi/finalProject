@@ -15,10 +15,13 @@ import Footer from "./Footer";
 // import AllProduct from "./AllProduct";
 // import ManageProduct from "./ManageProduct";
 // import DetailProduct from "./DetailProduct";
-import { keepLogin } from "../actions/index";
+import { keepLogin } from "../store/actions/user";
 import ManageProducts from "./ManageProducts";
 import ManageUsers from "./ManageUsers";
 import Testimage from "./Testimage";
+import DetailProduct from "./DetailProduct";
+import Wishlist from "./Wishlist";
+import Shop from "./Shop";
 
 const cookies = new Cookies();
 
@@ -38,11 +41,18 @@ class App extends Component {
           <Route path="/" exact component={Home} />
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
-          <Route path="/setting/:path" component={Setting} />
+          <Route path="/setting/:path/:page" component={Setting} />
           <Route path="/cart" component={Cart} />
-          <Route path="/manageproducts/:path" component={ManageProducts} />
+          <Route path="/wishlist" component={Wishlist} />
+          <Route path="/shop/:gender/:category" component={Shop} />
+
+          <Route
+            path="/manageproducts/:path/:page"
+            component={ManageProducts}
+          />
           <Route path="/manageusers" component={ManageUsers} />
           <Route path="/image" component={Testimage} />
+          <Route path="/detailproduct/:product_id" component={DetailProduct} />
           {/* <Footer /> */}
         </div>
       </BrowserRouter>

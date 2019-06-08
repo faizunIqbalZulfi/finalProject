@@ -1,9 +1,9 @@
 import React from "react";
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import { onRegister } from "../actions/index";
 import Cookies from "universal-cookie";
 
+import { onRegister } from "../store/actions/user";
 import { registerSuccess } from "../config/message";
 
 const cookies = new Cookies();
@@ -16,10 +16,18 @@ class Register extends React.Component {
   btnRegisterOnClick = () => {
     const first_Name = this.firstName.value;
     const last_Name = this.lastName.value;
+    const username = this.username.value;
     const email = this.email.value;
     const password = this.password.value;
     const gender = this.state.gender;
-    this.props.onRegister({ first_Name, last_Name, email, password, gender });
+    this.props.onRegister({
+      first_Name,
+      last_Name,
+      username,
+      email,
+      password,
+      gender
+    });
   };
 
   onRadioBtnClick = gender => {
@@ -55,6 +63,45 @@ class Register extends React.Component {
                 <hr />
               </div>
               <form className="register2">
+                <div className="d-flex justify-content-between">
+                  <div className="col-6 pl-0">
+                    <div className="form-group">
+                      <p className="loginRegister mb-0">First Name</p>
+                      <input
+                        ref={input => {
+                          this.firstName = input;
+                        }}
+                        type="texy"
+                        className="form-control"
+                        placeholder="First Name"
+                      />
+                    </div>
+                  </div>
+                  <div className="col-6 pr-0">
+                    <div className="form-group">
+                      <p className="loginRegister mb-0">Last Name</p>
+                      <input
+                        ref={input => {
+                          this.lastName = input;
+                        }}
+                        type="text"
+                        className="form-control"
+                        placeholder="Last Name"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="form-group">
+                  <p className="loginRegister mb-0">Username</p>
+                  <input
+                    ref={input => {
+                      this.username = input;
+                    }}
+                    type="text"
+                    className="form-control"
+                    placeholder="Username"
+                  />
+                </div>
                 <div className="form-group">
                   <p className="loginRegister mb-0">E-Mail</p>
                   <input
@@ -75,28 +122,6 @@ class Register extends React.Component {
                     type="password"
                     className="form-control"
                     placeholder="Password"
-                  />
-                </div>
-                <div className="form-group">
-                  <p className="loginRegister mb-0">First Name</p>
-                  <input
-                    ref={input => {
-                      this.firstName = input;
-                    }}
-                    type="texy"
-                    className="form-control"
-                    placeholder="First Name"
-                  />
-                </div>
-                <div className="form-group">
-                  <p className="loginRegister mb-0">Last Name</p>
-                  <input
-                    ref={input => {
-                      this.lastName = input;
-                    }}
-                    type="text"
-                    className="form-control"
-                    placeholder="Last Name"
                   />
                 </div>
               </form>
@@ -150,7 +175,7 @@ class Register extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return { message: state.auth.message };
+  return { message: state.user.message };
 };
 export default connect(
   mapStateToProps,

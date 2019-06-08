@@ -6,7 +6,7 @@ class Orders extends React.Component {
       <div>
         <h4 className="mb-4">Orders</h4>
 
-        <div class="address">
+        {/* <div class="address">
           <div class="card-body p-0">
             <h5 class="card-title">address_name</h5>
             <p class="card-text">
@@ -23,7 +23,7 @@ class Orders extends React.Component {
               Delete
             </a>
           </div>
-        </div>
+        </div> */}
       </div>
     );
   }

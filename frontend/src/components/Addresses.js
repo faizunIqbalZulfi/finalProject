@@ -5,7 +5,11 @@ import Cookies from "universal-cookie";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
 import { deleteSuccess, addAddressSucces } from "../config/message";
-import { onDeleteAddress, onGetAddress, onAddAddress } from "../actions/index";
+import {
+  onDeleteAddress,
+  onGetAddress,
+  onAddAddress
+} from "../store/actions/address";
 
 const cookies = new Cookies();
 
@@ -96,7 +100,10 @@ class Addresses extends React.Component {
                       {address.city} <span>{address.pos_code}</span>
                     </p>
                     <p className="card-text">{address.no_telp}</p>
-                    <Link to={`/setting/${index}`} class="card-link">
+                    <Link
+                      to={`/setting/editaddress/${index}`}
+                      class="card-link"
+                    >
                       Edit
                     </Link>
                     <button
@@ -207,7 +214,7 @@ class Addresses extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return { message: state.auth.message, addresses: state.auth.addresses };
+  return { message: state.address.message, addresses: state.address.addresses };
 };
 export default connect(
   mapStateToProps,

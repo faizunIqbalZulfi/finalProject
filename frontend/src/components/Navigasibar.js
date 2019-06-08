@@ -17,27 +17,52 @@ import {
 } from "reactstrap";
 import Cookies from "universal-cookie";
 
-import { onLogout } from "../actions/index";
+import { onLogout } from "../store/actions/user";
+import { getAllWishcart } from "../store/actions/product";
 import { user, admin } from "../config/message";
+import axios from "../config/axios";
 
 const cookies = new Cookies();
 
 class Navigasibar extends React.Component {
+  isUpdate = true;
   state = {
-    isOpen: false
+    isOpen: false,
+    allCart: []
   };
-  // constructor(props) {
-  //   super(props);
 
-  //   this.toggle = this.toggle.bind(this);
-  // }
+  componentDidUpdate() {
+    this.isUpdate = true;
+    console.log("did");
+  }
+
+  async componentWillUpdate() {
+    if (this.isUpdate) {
+      await this.props.getAllWishcart(cookies.get("user_id"));
+      console.log("new");
+    }
+    console.log("will");
+    this.isUpdate = false;
+  }
+
+  // getAllWishcart = async () => {
+  //   const cart = await axios.get(`/get/cart/${cookies.get("user_id")}`);
+  //   this.setState({ allCart: cart.data });
+  // };
+
   toggle() {
     this.setState({
       isOpen: !this.state.isOpen
     });
   }
   render() {
-    console.log(this.props.user_id);
+    // console.log(this.props.user_id);
+    var sumCart = 0;
+    if (this.props.cart.length) {
+      this.props.cart.forEach(product => {
+        sumCart += product.qty;
+      });
+    }
 
     return (
       <div>
@@ -55,6 +80,19 @@ class Navigasibar extends React.Component {
           />
           <Collapse className="flex-column" isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
+              <UncontrolledDropdown className="mx-2" nav inNavbar>
+                <DropdownToggle className="navtext" nav>
+                  <i className="fas fa-search" />
+                  <span className="ml-2 ">Search</span>
+                </DropdownToggle>
+                <DropdownMenu className="navsearch" right>
+                  <input
+                    className="text-center"
+                    type="text"
+                    placeholder="search here"
+                  />
+                </DropdownMenu>
+              </UncontrolledDropdown>
               {this.props.user_id !== "" ? (
                 <UncontrolledDropdown className="mx-2" nav inNavbar>
                   <DropdownToggle className="navtext myaccount" nav>
@@ -66,13 +104,22 @@ class Navigasibar extends React.Component {
                   {this.props.role === user ? (
                     <DropdownMenu className="navaccount" right>
                       <Link className="dropdown-item" to="">
-                        Orders
+                        <DropdownItem className="namedropnav">
+                          Orders
+                        </DropdownItem>
                       </Link>
-                      <Link className="dropdown-item" to="">
-                        Wish list
+                      <Link className="dropdown-item" to="/wishlist">
+                        <DropdownItem className="namedropnav">
+                          Wish list
+                        </DropdownItem>
                       </Link>
-                      <Link className="dropdown-item" to="/setting/account">
-                        Account Setting
+                      <Link
+                        className="dropdown-item"
+                        to="/setting/account/:page"
+                      >
+                        <DropdownItem className="namedropnav">
+                          Account Setting
+                        </DropdownItem>
                       </Link>
                       <Button
                         className="dropdown-item"
@@ -80,19 +127,25 @@ class Navigasibar extends React.Component {
                           this.props.onLogout();
                         }}
                       >
-                        Log Out
+                        <DropdownItem className="namedropnav">
+                          Log Out
+                        </DropdownItem>
                       </Button>
                     </DropdownMenu>
                   ) : (
                     <DropdownMenu className="navaccount" right>
                       <Link
                         className="dropdown-item"
-                        to="/manageproducts/products"
+                        to="/manageproducts/products/0"
                       >
-                        Manage Products
+                        <DropdownItem className="namedropnav">
+                          Manage Products
+                        </DropdownItem>
                       </Link>
                       <Link className="dropdown-item" to="/manageusers">
-                        Manage Users
+                        <DropdownItem className="namedropnav">
+                          Manage Users
+                        </DropdownItem>
                       </Link>
                       {/* <Link className="dropdown-item" to="/setting/account">
                         Account Setting
@@ -103,7 +156,9 @@ class Navigasibar extends React.Component {
                           this.props.onLogout();
                         }}
                       >
-                        Log Out
+                        <DropdownItem className="namedropnav">
+                          Log Out
+                        </DropdownItem>
                       </Button>
                     </DropdownMenu>
                   )}
@@ -119,53 +174,34 @@ class Navigasibar extends React.Component {
               )}
 
               <NavItem className="mx-2">
-                <NavLink className="navtext" href="/cart">
-                  <i className="fas fa-shopping-cart" />
-                  <span className="ml-1">(5)</span>
+                <NavLink className="navtext">
+                  <Link to="/cart">
+                    <i className="fas fa-shopping-cart" />
+                    <span className="ml-1">
+                      {this.props.role === user ? `(${sumCart})` : "(0)"}
+                    </span>
+                  </Link>
                   {/* <sup className="badge rounded-circle">5</sup> */}
                 </NavLink>
               </NavItem>
             </Nav>
-            <Nav className="ml-auto fontcategory" navbar>
-              <UncontrolledDropdown className="mx-2" nav inNavbar>
-                <DropdownToggle className="navtext" nav>
-                  <i className="fas fa-search" />
-                  <span className="ml-2 ">Search</span>
-                </DropdownToggle>
-                <DropdownMenu className="navsearch" right>
-                  <input
-                    className="text-center"
-                    type="text"
-                    placeholder="search here"
-                  />
-                </DropdownMenu>
-              </UncontrolledDropdown>
+            <Nav className="fontcategory ml-auto" navbar>
               <NavItem className="mx-2">
-                <NavLink className="navtext" href="/cart">
-                  {/* <p>CAT</p> */}
-                  {/* <i className="">CAT</i> */}
-                  <span className="ml-1">Cate</span>
+                <NavLink className="navtext">
+                  <Link to={`/shop/men/0`}>
+                    {/* <p>CAT</p> */}
+                    {/* <i className="">CAT</i> */}
+                    <span className="ml-1">MEN</span>
+                  </Link>
                 </NavLink>
               </NavItem>
               <NavItem className="mx-2">
-                <NavLink className="navtext" href="/cart">
-                  {/* <p>CAT</p> */}
-                  {/* <i className="">CAT</i> */}
-                  <span className="ml-1">Cate</span>
-                </NavLink>
-              </NavItem>
-              <NavItem className="mx-2">
-                <NavLink className="navtext" href="/cart">
-                  {/* <p>CAT</p> */}
-                  {/* <i className="">CAT</i> */}
-                  <span className="ml-1">Cate</span>
-                </NavLink>
-              </NavItem>
-              <NavItem className="mx-2">
-                <NavLink className="navtext" href="/cart">
-                  {/* <p>CAT</p> */}
-                  {/* <i className="">CAT</i> */}
-                  <span className="ml-1">Cate</span>
+                <NavLink className="navtext">
+                  <Link to={`/shop/women/0`}>
+                    {/* <p>CAT</p> */}
+                    {/* <i className="">CAT</i> */}
+                    <span className="ml-1">WOMEN</span>
+                  </Link>
                 </NavLink>
               </NavItem>
             </Nav>
@@ -178,12 +214,13 @@ class Navigasibar extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    user_id: state.auth.user_id,
-    role: state.auth.role
+    user_id: state.user.user_id,
+    role: state.user.role,
+    cart: state.product.cart
   };
 };
 
 export default connect(
   mapStateToProps,
-  { onLogout }
+  { onLogout, getAllWishcart }
 )(Navigasibar);

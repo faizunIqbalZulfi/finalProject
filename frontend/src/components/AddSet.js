@@ -147,7 +147,7 @@ class AddSet extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return { message: state.auth.message, addresses: state.auth.addresses };
+  return { message: state.address.message, addresses: state.address.addresses };
 };
 
 export default connect(

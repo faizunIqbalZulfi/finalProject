@@ -36,30 +36,30 @@ class Setting extends React.Component {
 
   onSettingClick = () => {
     const { pathname } = this.props.location;
-    const { pages, path } = this.props.match.params;
-    cookies.set("address", path, { path: "/" });
+    const { page, path } = this.props.match.params;
+    cookies.set("address", page, { page: "/" });
     console.log(this.props);
-    if (pathname === "/setting/account")
+    if (pathname === `/setting/account/${page}`)
       return <Account user={this.state.user} />;
-    if (pathname === "/setting/addresses") return <Addresses />;
-    if (pathname === `/setting/${path}`) return <AddSet />;
-    if (pathname === "/setting/orders") return <Orders />;
-    if (pathname === "/setting/wishlist") return <Wishlist />;
-    if (pathname === "/setting/payment") return <Payment />;
+    if (pathname === `/setting/addresses/${page}`) return <Addresses />;
+    if (pathname === `/setting/editaddress/${page}`) return <AddSet />;
+    if (pathname === `/setting/orders/${page}`) return <Orders />;
+    // if (pathname === `/setting/wishlist/${page}`) return <Wishlist />;
+    // if (pathname === `/setting/payment/${page}`) return <Payment />;
   };
 
   render() {
-    console.log(this.props);
+    // console.log(this.props);
 
     if (this.state.user.length !== 0) {
-      var { first_name, last_name } = this.state.user[0];
+      var { first_name, last_name, username } = this.state.user[0];
     }
     if (cookies.get("role") === user) {
       return (
         <div className="account">
           <div className="d-flex justify-content-center name">
             <div className="">
-              <h2>{`${first_name} ${last_name}`}</h2>
+              <h2>{username}</h2>
             </div>
           </div>
           <div className="d-flex">
@@ -67,20 +67,34 @@ class Setting extends React.Component {
               <h4 className="mb-4">Settings</h4>
               <ul class="list-group list-group-flush">
                 <li class="list-group-item border border-top-0 border-left-0 border-right-0">
-                  <Link to="/setting/account">Account</Link>
+                  <Link to={`/setting/account/${Math.random()}`}>
+                    <i class="mx-2 fas fa-user-circle fa-1x" />
+                    Account
+                  </Link>
                 </li>
                 <li class="list-group-item border border-left-0 border-right-0">
-                  <Link to="/setting/addresses">Addresses</Link>
+                  <Link to={`/setting/addresses/${Math.random()}`}>
+                    <i class="mx-2 fas fa-home" />
+                    Addresses
+                  </Link>
                 </li>
                 <li class="list-group-item border border-left-0 border-right-0">
-                  <Link to="/setting/orders">Orders</Link>
+                  <Link to={`/setting/orders/${Math.random()}`}>
+                    <i class="mx-2 fas fa-history" /> Orders
+                  </Link>
+                </li>
+                {/* <li class="list-group-item border border-left-0 border-right-0">
+                  <Link to={`/setting/wishlist/${Math.random()}`}>
+                    <i class="mx-2 fas fa-th-list" />
+                    Wish List
+                  </Link>{" "}
                 </li>
                 <li class="list-group-item border border-left-0 border-right-0">
-                  <Link to="/setting/wishlist">Wish List</Link>{" "}
-                </li>
-                <li class="list-group-item border border-left-0 border-right-0">
-                  <Link to="/setting/payment">Payment Options</Link>
-                </li>
+                  <Link to={`/setting/payment/${Math.random()}`}>
+                    <i class="mx-2 fas fa-credit-card" />
+                    Payment Options
+                  </Link>
+                </li> */}
               </ul>
             </div>
             <div className="col-md-7 ">{this.onSettingClick()}</div>
@@ -93,6 +107,6 @@ class Setting extends React.Component {
   }
 }
 const mapStateToProps = state => {
-  return { user_id: state.auth.user_id, role: state.auth.role };
+  return { user_id: state.user.user_id, role: state.user.role };
 };
 export default connect(mapStateToProps)(Setting);

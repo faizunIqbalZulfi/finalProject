@@ -3,7 +3,7 @@ import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import Cookies from "universal-cookie";
 
-import { onLogin } from "../actions";
+import { onLogin } from "../store/actions/user";
 
 const cookies = new Cookies();
 
@@ -92,8 +92,8 @@ class Login extends React.Component {
 }
 const mapStateToProps = state => {
   return {
-    user_id: state.auth.user_id,
-    message: state.auth.message
+    user_id: state.user.user_id,
+    message: state.user.message
   };
 };
 

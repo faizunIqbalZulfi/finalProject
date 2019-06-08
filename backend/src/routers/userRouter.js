@@ -1,6 +1,9 @@
 const router = require("express").Router();
 const bcrypt = require("bcrypt");
 const isEmail = require("validator/lib/isEmail");
+const multer = require("multer");
+const fs = require("fs");
+const path = require("path");
 
 const { sendMail } = require("../mails/nodemailer");
 const connection = require("../connections/connection");
@@ -8,6 +11,40 @@ const {
   registerSuccess,
   editSuccess
 } = require("../../../frontend/src/config/message");
+
+const uploadDir = path.join(__dirname, "../uploads/avatar");
+
+const storage = multer.diskStorage({
+  // Destination
+  destination: function(req, file, cb) {
+    cb(null, uploadDir);
+  },
+  // Filename
+  filename: function(req, file, cb) {
+    // var check = true;
+    // if (file.originalname === "default.jpg") {
+    //   console.log(file);
+    //   // check = !check;
+    //   cb(null, Date.now() + file.fieldname + file.originalname);
+    // } else {
+    cb(null, Date.now() + file.fieldname + path.extname(file.originalname));
+    // }
+  }
+});
+
+const upstore = multer({
+  storage,
+  limits: {
+    fileSize: 10000000 // Byte
+  },
+  fileFilter(req, file, cb) {
+    if (!file.originalname.match(/\.(jpg|jpeg||png)$/)) {
+      return cb(new Error("Please upload image file (jpg, jpeg, or png)"));
+    }
+
+    cb(undefined, true);
+  }
+});
 
 //verify
 router.get("/verify", (req, res) => {
@@ -82,14 +119,14 @@ router.get("/user/:user_id", (req, res) => {
 });
 
 //edituser
-router.patch("/edit/user/:user_id", (req, res) => {
+router.patch("/edit/user/:user_id", upstore.single("avatar"), (req, res) => {
   Object.keys(req.body).forEach(key => {
     if (!req.body[key]) {
-      req.body[key] = null;
+      delete req.body[key];
     }
   });
+
   const sql = `UPDATE users SET ? WHERE user_id =${req.params.user_id}`;
-  const sql2 = `SELECT * FROM users WHERE user_id = ${req.params.user_id}`;
 
   if (req.body.email === null || !isEmail(req.body.email))
     return res.send("invalid email");
@@ -97,11 +134,20 @@ router.patch("/edit/user/:user_id", (req, res) => {
   connection.query(sql, req.body, (err, result) => {
     if (err) return res.send(err);
 
-    connection.query(sql2, (err, result) => {
+    console.log(req.file);
+    console.log(req.files);
+
+    if (!req.file) return res.send(editSuccess);
+
+    const sql = `UPDATE users SET avatar = '${
+      req.file.filename
+    }' WHERE user_id = ${req.params.user_id}`;
+    connection.query(sql, (err, result) => {
       if (err) return res.send(err);
 
       res.send(editSuccess);
     });
+    // res.send(editSuccess);
   });
 });
 
@@ -134,6 +180,36 @@ router.patch("/edit/password/:user_id", (req, res) => {
       if (err) return res.send(err);
 
       res.send(editSuccess);
+    });
+  });
+});
+
+//showavatar
+router.get("/show/avatar/:img", (req, res) => {
+  res.sendFile(`${uploadDir}/${req.params.img}`);
+});
+
+//deleteavatar
+router.delete("/delete/avatar/:user_id", (req, res) => {
+  const sql = `SELECT avatar FROM users WHERE user_id = ${req.params.user_id}`;
+
+  connection.query(sql, (err, result) => {
+    if (err) return res.send(err);
+
+    const sql = `UPDATE users SET avatar = null WHERE user_id = ${
+      req.params.user_id
+    }`;
+
+    fs.unlink(`${uploadDir}/${result[0].avatar}`, err => {
+      if (err) return res.send(err);
+
+      connection.query(sql, (err, result) => {
+        if (err) return res.send(err);
+
+        res.send(editSuccess);
+
+        // return res.send(editSuccess);
+      });
     });
   });
 });

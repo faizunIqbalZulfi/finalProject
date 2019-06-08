@@ -1,170 +1,295 @@
 import React from "react";
 import { connect } from "react-redux";
-import {
-  Card,
-  CardImg,
-  CardText,
-  CardBody,
-  CardTitle,
-  CardSubtitle,
-  Button
-} from "reactstrap";
 import { Redirect } from "react-router-dom";
+import Cookies from "universal-cookie";
+
+import axios from "../config/axios";
+import { getAllWishcart } from "../store/actions/product";
+import EditCart from "./EditCart";
+
+const cookies = new Cookies();
 
 class Cart extends React.Component {
-  render() {
-    // if (this.props.username !== "") {
-    return (
-      <div>
-        <div className="jumbotron my-3">
-          <h3 className="text-white">
-            <b>YOUR CART</b>
-          </h3>
-        </div>
-        <div className="container">
-          <div class="row">
-            <div class="col-8">
-              <div class="cart row">
-                <div class="col-4">
-                  <img
-                    className="cartimg"
-                    src="https://c.static-nike.com/a/images/f_auto,b_rgb:f5f5f5,w_880/xiytnf2wr80zqmoryldo/air-jordan-legacy-312-shoe-0lsnP0.jpg"
-                  />
-                </div>
-                <div class="col-8">
-                  <div className="row my-3">
-                    <div className="col-8">
-                      <p>Product Name</p>
-                      <p>Product Color</p>
-                      <p>Product Qty</p>
-                      <button
-                        type="button"
-                        class="btn btn-outline-warning mr-2"
-                      >
-                        Remove
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary mr-2"
-                      >
-                        Edit
-                      </button>
-                    </div>
-                    <div className="col-4">
-                      <p>Rp.2.000.000</p>
-                    </div>
-                  </div>
-                </div>
+  // state = {
+  //   allWishlist: [props cart: []
+  // };
+
+  componentDidMount() {
+    this.props.getAllWishcart(cookies.get("user_id"));
+  }
+
+  addToCart = async wishcart_id => {
+    const res = await axios.post(`/add/cart/wishlist/${wishcart_id}`);
+    console.log(res);
+
+    this.props.getAllWishcart(cookies.get("user_id"));
+  };
+
+  addToWishlist = async wishcart_id => {
+    const res = await axios.post(`/add/wishlist/cart/${wishcart_id}`);
+    console.log(res);
+
+    this.props.getAllWishcart(cookies.get("user_id"));
+  };
+
+  // getAllWishcart = async () => {
+  //   const wishlist = await axios.get(`/get/wishlist/${cookies.get("user_id")}`);
+  //   this.setState({ allWishlist: wishlist.data });
+
+  //   const cart = await axios.get(`/get/cart/${cookies.get("user_id")}`);
+  //   this.setStprops cart: cart.data });
+  // };
+
+  deleteWishcart = async wishcart_id => {
+    console.log(wishcart_id);
+
+    const res = await axios.delete(`/delete/wishlist/${wishcart_id}`);
+    this.props.getAllWishcart(cookies.get("user_id"));
+  };
+
+  renderWishlist = () => {
+    if (this.props.wishlist.length) {
+      return this.props.wishlist.map(product => {
+        const {
+          wishcart_id,
+          user_id,
+          product_id,
+          size_id,
+          qty,
+          created_at,
+          product_name,
+          description,
+          price,
+          category1,
+          category2,
+          size,
+          name_image
+        } = product;
+
+        return (
+          <div className="body py-0">
+            <div className="d-flex justify-content-around">
+              <div className="col-4 p-0">
+                <img src={`http://localhost:2404/show/image/${name_image}`} />
               </div>
-              <div class="cart row">
-                <div class="col-4">
-                  <img
-                    className="cartimg"
-                    src="https://c.static-nike.com/a/images/f_auto,b_rgb:f5f5f5,w_880/lerifbk0kfytxxdmhmlg/epic-react-flyknit-2-running-shoe-ShRZnm.jpg"
-                  />
-                </div>
-                <div class="col-8">
-                  <div className="row my-3">
-                    <div className="col-8">
-                      <p>Product Name</p>
-                      <p>Product Color</p>
-                      <p>Product Qty</p>
-                      <button
-                        type="button"
-                        class="btn btn-outline-warning mr-2"
-                      >
-                        Remove
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary mr-2"
-                      >
-                        Edit
-                      </button>
-                    </div>
-                    <div className="col-4">
-                      <p>Rp.2579.000</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="cart row">
-                <div class="col-4">
-                  <img
-                    className="cartimg"
-                    src="https://c.static-nike.com/a/images/f_auto,b_rgb:f5f5f5,w_880/f0cdxumsmslyedrer7kv/sb-zoom-janoski-mid-rm-se-skate-shoe-gpSHtZ.jpg"
-                  />
-                </div>
-                <div class="col-8">
-                  <div className="row my-3">
-                    <div className="col-8">
-                      <p>Product Name</p>
-                      <p>Product Color</p>
-                      <p>Product Qty</p>
-                      <button
-                        type="button"
-                        class="btn btn-outline-warning mr-2"
-                      >
-                        Remove
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary mr-2"
-                      >
-                        Edit
-                      </button>
-                    </div>
-                    <div className="col-4">
-                      <p>Rp.1.600.000</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-4">
-              <div class="cart">
-                <div class="card-body">
-                  <h5 class="card-title my-3">ORDER SUMMARY</h5>
-                  {/* <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6> */}
-                  <form>
-                    <div className="d-flex my-3">
-                      {/* <span src={require("../icon/tag.png")} /> */}
-                      {/* <i className="fas fa-tag d-inline" /> */}
-                      <input
-                        className="form-control"
-                        placeholder="HAVE A PROMO CODE?"
-                      />
-                    </div>
-                  </form>
-                  <div className="cartitem">
-                    <div className="d-flex justify-content-between">
-                      <p class="d-inline">SUBTOTAL</p> <span>Rp.6.179.000</span>
-                    </div>
-                    <div className="d-flex justify-content-between">
-                      <p class="d-inline">ESTIMATED SHIPPING</p>{" "}
-                      <span>Rp.50.000</span>
-                    </div>
-                  </div>
-                  <div className="d-flex justify-content-between">
-                    <p class="card-text d-inline">TOTAL</p>{" "}
-                    <span>Rp.6.229.000</span>
-                  </div>
-                  <button className="btn btn-black form-control">
-                    CHECKOUT
+              <div className="product col-6 p-0">
+                <h3>{product_name}</h3>
+                <p>{`${category1}'s ${category2}`}</p>
+                <br />
+                <h3>{`SIZE: EU ${size}`}</h3>
+                <h3>{`QTY: ${qty}`}</h3>
+                <div>
+                  <button
+                    onClick={() => {
+                      this.deleteWishcart(wishcart_id);
+                    }}
+                    className="btnCart btn btn-outline-secondary mr-2"
+                  >
+                    REMOVE
+                  </button>
+                  <button className="btnCart btn btn-outline-secondary mr-2">
+                    EDIT
+                  </button>
+                  <button
+                    onClick={() => {
+                      this.addToCart(wishcart_id);
+                    }}
+                    className="btnCart btn btn-outline-secondary "
+                  >
+                    ADD TO CART
                   </button>
                 </div>
               </div>
+              <div className="col-2 p-0">
+                <h3>{`Rp.${price.toLocaleString("IN")}`}</h3>
+              </div>
             </div>
           </div>
+        );
+      });
+    }
+  };
+
+  renderCart = () => {
+    if (this.props.cart.length) {
+      return this.props.cart.map(product => {
+        const {
+          wishcart_id,
+          user_id,
+          product_id,
+          size_id,
+          qty,
+          created_at,
+          product_name,
+          description,
+          price,
+          category1,
+          category2,
+          size,
+          name_image
+        } = product;
+
+        return (
+          <div className="body py-0">
+            <div className="d-flex justify-content-around">
+              <div className="col-4 p-0">
+                <img src={`http://localhost:2404/show/image/${name_image}`} />
+              </div>
+              <div className="product col-6 p-0">
+                <h3>{product_name}</h3>
+                <p>{`${category1}'s ${category2}`}</p>
+                <br />
+                <h3>{`SIZE: EU ${size}`}</h3>
+                <h3>{`QTY: ${qty}`}</h3>
+                <div>
+                  <button
+                    onClick={() => {
+                      this.deleteWishcart(wishcart_id);
+                    }}
+                    className="btnCart btn btn-outline-secondary mr-2"
+                  >
+                    REMOVE
+                  </button>
+                  {/* <button className="btnCart btn btn-outline-secondary mr-2">
+                    EDIT
+                  </button> */}
+                  <EditCart product={product} />
+                  <button
+                    onClick={() => {
+                      this.addToWishlist(wishcart_id);
+                    }}
+                    className="btnCart btn btn-outline-secondary "
+                  >
+                    SAVE
+                  </button>
+                </div>
+              </div>
+              <div className="col-2 p-0">
+                <h3>{`Rp.${price.toLocaleString("IN")}`}</h3>
+              </div>
+            </div>
+          </div>
+        );
+      });
+    }
+  };
+
+  renderOrderSummary = () => {
+    if (this.props.cart.length) {
+      var sumPrice = 0;
+      var sumQty = 0;
+      this.props.cart.forEach(product => {
+        const { qty, price } = product;
+        sumQty += qty;
+        sumPrice += price * qty;
+      });
+
+      return (
+        <div class="orderSummary">
+          <div className="header">
+            <h5 class="card-title my-3">ORDER SUMMARY</h5>
+          </div>
+          {/* <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6> */}
+          <div className="body">
+            <div className="d-flex justify-content-between px-0">
+              <p class="mb-0 d-inline">SUBTOTAL</p>
+              <p>{`Rp.${sumPrice.toLocaleString("IN")}`}</p>
+            </div>
+            <div className="d-flex justify-content-between px-0 pt-0">
+              <p class="mb-0 d-inline">ESTIMATED SHIPPING</p>
+              <p>{`Rp.${(50000).toLocaleString("IN")}`}</p>
+            </div>
+            <div className="total d-flex justify-content-between px-0">
+              <p class="mb-0 d-inline">TOTAL</p>
+              <p>{`${(sumPrice + 50000).toLocaleString("IN")}`}</p>
+            </div>
+          </div>
+          <div className="d-flex justify-content-center">
+            <button className="btnCheckout btn btn-warning m-2">
+              CHECKOUT
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return (
+      <div class="orderSummary">
+        <div className="header">
+          <h5 class="card-title my-3">ORDER SUMMARY</h5>
+        </div>
+        {/* <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6> */}
+        <div className="body">
+          <div className="d-flex justify-content-between px-0">
+            <p class="mb-0 d-inline">SUBTOTAL</p>
+            <p>{`Rp.${(0).toLocaleString("IN")}`}</p>
+          </div>
+          <div className="d-flex justify-content-between px-0 pt-0">
+            <p class="mb-0 d-inline">ESTIMATED SHIPPING</p>
+            <p>{`Rp.${(0).toLocaleString("IN")}`}</p>
+          </div>
+          <div className="total d-flex justify-content-between px-0">
+            <p class="mb-0 d-inline">TOTAL</p>
+            <p>{`Rp.${(0).toLocaleString("IN")}`}</p>
+          </div>
+        </div>
+        <div className="d-flex justify-content-center">
+          <button className="btnCheckout btn btn-warning m-2">CHECKOUT</button>
         </div>
       </div>
     );
-    // } else {
-    //   return <Redirect to="login" />;
-    // }
+  };
+
+  render() {
+    if (this.props.user_id || cookies.get("user_id")) {
+      if (this.props.cart.length) {
+        var sumQty = 0;
+        this.props.cart.forEach(product => {
+          const { qty } = product;
+          sumQty += qty;
+        });
+      }
+      return (
+        <div className="cartContainer">
+          <div class="row">
+            <div class="col-8 p-0">
+              {/* cart */}
+              <div className="cart mb-5">
+                <div className="header">
+                  YOUR CART ({this.props.cart.length ? sumQty : 0})
+                </div>
+
+                {this.props.cart.length ? (
+                  this.renderCart()
+                ) : (
+                  <div className="body py-0">
+                    <p className="mt-3">There are no items in your cart.</p>
+                  </div>
+                )}
+              </div>
+              {/* wishlish */}
+              {this.props.wishlist.length ? (
+                <div className="cart mb-5">
+                  <div className="header">SAVED TO YOUR WISH LIST</div>
+                  {this.renderWishlist()}
+                </div>
+              ) : null}
+            </div>
+            <div class="col-4">{this.renderOrderSummary()}</div>
+          </div>
+        </div>
+      );
+    }
+    return <Redirect to="login" />;
   }
 }
 const mapStateToProps = state => {
-  return { username: state.auth.username };
+  return {
+    user_id: state.user.user_id,
+    cart: state.product.cart,
+    wishlist: state.product.wishlist
+  };
 };
-export default connect(mapStateToProps)(Cart);
+export default connect(
+  mapStateToProps,
+  { getAllWishcart }
+)(Cart);

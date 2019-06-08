@@ -1,10 +1,55 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
+import axios from "../config/axios";
 
 class Home extends React.Component {
+  state = {
+    products: []
+    // images: []
+  };
+
+  componentDidMount() {
+    this.getProduct();
+  }
+  getProduct = async () => {
+    const res = await axios.get("/gethome/product");
+    console.log(res);
+
+    this.setState({
+      products: res.data
+      // images: res.data.images.filter(images => {
+      //   return !this.state.products.includes(images.product_id);
+      // })
+    });
+  };
+
+  renderList = () => {
+    return this.state.products.map(product => {
+      return (
+        <div className="img1 col-3 p-2 text-center">
+          <Link to={`/detailproduct/${product.product_id}`}>
+            <img
+              src={`http://localhost:2404/show/image/${product.name_image}`}
+            />
+            <p>{product.product_name}</p>
+            <p>{`${product.category1}'s ${product.category2}`}</p>
+            <p>{`Rp.${product.price.toLocaleString("IN")}`}</p>
+          </Link>
+          {/* <button on className="btn btn-outline-secondary btn-block mt-2">
+            add to cart
+          </button> */}
+        </div>
+      );
+    });
+  };
+
   render() {
+    console.log(this.state.products);
+    // console.log(this.state.images);
     return (
       <div className="home">
-        <div className="bd-example">
+        <div className="homeCaro bd-example">
           <div
             id="carouselExampleCaptions"
             className="carousel slide"
@@ -22,7 +67,9 @@ class Home extends React.Component {
             <div className="carousel-inner">
               <div className="carousel-item active">
                 <img
-                  src={require("../images/photography6.jpg")}
+                  src={
+                    "https://c.static-nike.com/a/images/w_1920,c_limit/q8blogw5w76h26m6rjgn/image.jpg"
+                  }
                   className="d-block w-100"
                   alt="..."
                 />
@@ -35,7 +82,7 @@ class Home extends React.Component {
                   </p>
                 </div>
               </div>
-              <div className="carousel-item">
+              {/* <div className="carousel-item">
                 <img
                   src={require("../images/photography4.jpg")}
                   className="d-block w-100"
@@ -64,7 +111,7 @@ class Home extends React.Component {
                     quidem doloribus aperiam sint.
                   </p>
                 </div>
-              </div>
+              </div> */}
             </div>
             <a
               className="carousel-control-prev"
@@ -86,13 +133,90 @@ class Home extends React.Component {
             </a>
           </div>
         </div>
-        <hr />
-        <div className="d-flex justify-content-between">
-          <div className="men mr-4">
+        {/* <hr /> */}
+        <div class="scrollmenu">
+          {this.renderList()}
+          {/* <div className="img1 col-3 p-0">
+            <img src="https://c.static-nike.com/a/images/f_auto/q_auto/t_PDP_864_v1/wm3e8dz55pacjrdjgudl/react-element-55-shoe-BXvj0k.jpg" />
+            <p>Name Product</p>
+            <p>Category</p>
+            <p>Price</p>
+          </div>
+          <div className="img1 col-3 p-0">
+            <img src="https://c.static-nike.com/a/images/f_auto/q_auto/t_PDP_864_v1/wm3e8dz55pacjrdjgudl/react-element-55-shoe-BXvj0k.jpg" />
+            <p>Name Product</p>
+            <p>Category</p>
+            <p>Price</p>
+          </div>
+          <div className="img1 col-3 p-0">
+            <img src="https://c.static-nike.com/a/images/f_auto/q_auto/t_PDP_864_v1/wm3e8dz55pacjrdjgudl/react-element-55-shoe-BXvj0k.jpg" />
+            <p>Name Product</p>
+            <p>Category</p>
+            <p>Price</p>
+          </div>
+          <div className="img1 col-3 p-0">
+            <img src="https://c.static-nike.com/a/images/f_auto/q_auto/t_PDP_864_v1/wm3e8dz55pacjrdjgudl/react-element-55-shoe-BXvj0k.jpg" />
+            <p>Name Product</p>
+            <p>Category</p>
+            <p>Price</p>
+          </div>
+          <div className="img1 col-3 p-0">
+            <img src="https://c.static-nike.com/a/images/f_auto/q_auto/t_PDP_864_v1/wm3e8dz55pacjrdjgudl/react-element-55-shoe-BXvj0k.jpg" />
+            <p>Name Product</p>
+            <p>Category</p>
+            <p>Price</p>
+          </div>
+          <div className="img1 col-3 p-0">
+            <img src="https://c.static-nike.com/a/images/f_auto/q_auto/t_PDP_864_v1/wm3e8dz55pacjrdjgudl/react-element-55-shoe-BXvj0k.jpg" />
+            <p>Name Product</p>
+            <p>Category</p>
+            <p>Price</p>
+          </div> */}
+        </div>
+        <div className="homeCate d-flex justify-content-between">
+          <div className="men">
             <p>MEN</p>
           </div>
           <div className="women">
             <p>WOMEN</p>
+          </div>
+        </div>
+        <div class="scrollmenu">
+          <div className="img1 col-3 p-0">
+            <img src="https://c.static-nike.com/a/images/f_auto/q_auto/t_PDP_864_v1/wm3e8dz55pacjrdjgudl/react-element-55-shoe-BXvj0k.jpg" />
+            <p>Name Product</p>
+            <p>Category</p>
+            <p>Price</p>
+          </div>
+          <div className="img1 col-3 p-0">
+            <img src="https://c.static-nike.com/a/images/f_auto/q_auto/t_PDP_864_v1/wm3e8dz55pacjrdjgudl/react-element-55-shoe-BXvj0k.jpg" />
+            <p>Name Product</p>
+            <p>Category</p>
+            <p>Price</p>
+          </div>
+          <div className="img1 col-3 p-0">
+            <img src="https://c.static-nike.com/a/images/f_auto/q_auto/t_PDP_864_v1/wm3e8dz55pacjrdjgudl/react-element-55-shoe-BXvj0k.jpg" />
+            <p>Name Product</p>
+            <p>Category</p>
+            <p>Price</p>
+          </div>
+          <div className="img1 col-3 p-0">
+            <img src="https://c.static-nike.com/a/images/f_auto/q_auto/t_PDP_864_v1/wm3e8dz55pacjrdjgudl/react-element-55-shoe-BXvj0k.jpg" />
+            <p>Name Product</p>
+            <p>Category</p>
+            <p>Price</p>
+          </div>
+          <div className="img1 col-3 p-0">
+            <img src="https://c.static-nike.com/a/images/f_auto/q_auto/t_PDP_864_v1/wm3e8dz55pacjrdjgudl/react-element-55-shoe-BXvj0k.jpg" />
+            <p>Name Product</p>
+            <p>Category</p>
+            <p>Price</p>
+          </div>
+          <div className="img1 col-3 p-0">
+            <img src="https://c.static-nike.com/a/images/f_auto/q_auto/t_PDP_864_v1/wm3e8dz55pacjrdjgudl/react-element-55-shoe-BXvj0k.jpg" />
+            <p>Name Product</p>
+            <p>Category</p>
+            <p>Price</p>
           </div>
         </div>
       </div>
