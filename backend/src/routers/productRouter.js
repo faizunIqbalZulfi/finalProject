@@ -71,21 +71,18 @@ router.post("/add/size", (req, res) => {
   });
 });
 
+// getsize
+router.get("/get/size", (req, res) => {
+  const sql = `SELECT * FROM size`;
+  connection.query(sql, (err, result) => {
+    if (err) return res.send(err);
+
+    res.send(result);
+  });
+});
+
 //addstock
 router.post("/add/stock", (req, res) => {
-  // Object.keys(req.body.filter(key => {
-  //   return true;
-  // if (req.body[key]) {
-  //   if (!req.body[key].size) {
-  //     delete req.body[key];
-  //   }
-  // }
-  // });
-
-  // const arr = [...req.body];
-
-  console.log(req.body);
-
   req.body = req.body.filter(size => {
     return size.size !== "";
   });
@@ -369,8 +366,11 @@ router.get("/get/products/shop/:gender", (req, res) => {
   console.log(typeof req.query.category);
 
   if (req.query.category) {
-    const sql = `SELECT * FROM products p
+    const sql = `SELECT p.category1, p.category2, p.created_at, i.name_image, p.price,
+    p.product_id, p.product_name, s.size  FROM products p
     JOIN images i ON p.product_id = i.product_id
+    JOIN stock st ON p.product_id = st.product_id
+    JOIN size s ON st.size_id = s.size_id
     WHERE i.name_image LIKE '%default%'
     AND p.category1 = '${req.params.gender}'
     AND p.category2 = '${req.query.category}'`;
@@ -380,8 +380,11 @@ router.get("/get/products/shop/:gender", (req, res) => {
       res.send(result);
     });
   } else {
-    const sql = `SELECT * FROM products p
+    const sql = `SELECT p.category1, p.category2, p.created_at, i.name_image, p.price,
+    p.product_id, p.product_name, s.size  FROM products p
     JOIN images i ON p.product_id = i.product_id
+    JOIN stock st ON p.product_id = st.product_id
+    JOIN size s ON st.size_id = s.size_id
     WHERE i.name_image LIKE '%default%'
     AND p.category1 = '${req.params.gender}'`;
 

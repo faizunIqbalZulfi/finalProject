@@ -1,25 +1,88 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import {
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
+} from "reactstrap";
 
 import { onGetAllProduct } from "../store/actions/product";
 import axios from "../config/axios";
 
 class Products extends React.Component {
-  componentDidMount() {
-    this.props.onGetAllProduct();
+  state = {
+    products: [],
+    dropdownSort: false,
+    sortBy: "",
+    ascordsc: ""
   }
+  async componentDidMount() {
+    await this.props.onGetAllProduct();
+    await this.setState({ products: this.props.products })
+  }
+  toggleSort = () => {
+    this.setState({ dropdownSort: !this.state.dropdownSort });
+  };
+  selectSort = async e => {
+    await this.setState({ ascordsc: e.target.innerText });
+    console.log(this.state);
+
+    if (this.state.sortBy === "Newest") {
+      if (this.state.ascordsc === "Asc") {
+        this.setState({
+          products: this.state.products.sort((a, b) => {
+            return a.product_id - b.product_id;
+          })
+        });
+      } else if (this.state.ascordsc === "Dsc") {
+        this.setState({
+          products: this.state.products.sort((a, b) => {
+            return b.product_id - a.product_id;
+          })
+        });
+      }
+    } else if (this.state.sortBy === "Quantity") {
+      if (this.state.ascordsc === "Asc") {
+        this.setState({
+          products: this.state.products.sort((a, b) => {
+            return a.qty - b.qty;
+          })
+        });
+      } else if (this.state.ascordsc === "Dsc") {
+        this.setState({
+          products: this.state.products.sort((a, b) => {
+            return b.qty - a.qty;
+          })
+        });
+      }
+    }
+  };
 
   deleteProduct = async product_id => {
+    console.log("sebelum delete");
+
     await axios.delete(`/delete/product/${product_id}`);
-    this.props.onGetAllProduct();
+    console.log("setelah delete");
+
+    await this.props.onGetAllProduct();
+    await this.setState({ products: this.props.products })
+
+    console.log("seteleah updata");
+
   };
 
   onShowProducts = () => {
-    if (this.props.products) {
-      console.log(this.props.products[0]);
+    if (this.state.products) {
+      console.log(this.state.products[0]);
 
-      return this.props.products.map((product, index) => {
+      return this.state.products.map((product, index) => {
         return (
           <tr key={index}>
             <td>{index + 1}</td>
@@ -34,7 +97,7 @@ class Products extends React.Component {
               <button className="btnEditLink">
                 <Link
                   className="btnEditLink mr-2"
-                  to={`/manageproducts/editproduct/${index}`}
+                  to={`/manageproducts/editproduct/${product.product_id}`}
                 >
                   EDIT
                 </Link>
@@ -56,11 +119,65 @@ class Products extends React.Component {
   };
 
   render() {
-    console.log(this.props.products);
+    console.log(this.state.products);
 
     return (
       <div>
-        <h4 className="mb-4">All Product</h4>
+        <div className="d-flex">
+          <h4 className="mb-4">All Product</h4>
+          <form className="d-flex">
+            <div className="radio radioAddress col-3 mx-3">
+              <label>
+                <input
+                  onClick={() => { this.setState({ sortBy: "Newest" }) }}
+                  type="radio"
+                  name="bank"
+                  className="inlinebutton"
+                />
+                <div className="ml-4 optionBank">
+                  <div className="cartBody text-uppercase">Newest</div>
+                </div>
+              </label>
+            </div>
+            <div className="radio radioAddress col-3 mx-3">
+              <label>
+                <input
+                  onClick={() => { this.setState({ sortBy: "Quantity" }) }}
+                  type="radio"
+                  name="bank"
+                  className="inlinebutton"
+                />
+                <div className="ml-4 optionBank">
+                  <div className="cartBody text-uppercase">Quantity</div>
+                </div>
+              </label>
+            </div>
+          </form>
+          <Dropdown
+            isOpen={this.state.dropdownSort}
+            toggle={() => {
+              this.toggleSort();
+            }}
+          >
+            <DropdownToggle
+              className={`dropdownsort d-flex justify-content-between`}
+              color="white"
+            >
+              SORT BY:
+            <i class="fas fa-caret-down" />
+            </DropdownToggle>
+            <DropdownMenu className="dropCartMenu m-0">
+              <DropdownItem
+                onClick={this.selectSort}>
+                Asc
+            </DropdownItem>
+              <DropdownItem
+                onClick={this.selectSort}>
+                Dsc
+            </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        </div>
         <table class="table table-striped">
           <thead>
             <tr>

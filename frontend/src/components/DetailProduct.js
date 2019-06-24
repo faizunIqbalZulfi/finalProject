@@ -1,9 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
 import Cookies from "universal-cookie";
+import { Link, Redirect } from "react-router-dom";
 
 import axios from "../config/axios";
 import { getAllWishcart } from "../store/actions/product";
+import { admin } from "../config/message";
 
 const cookies = new Cookies();
 
@@ -126,27 +128,13 @@ class DetailProduct extends React.Component {
         }
       }
     }
+    if (this.props.role === admin) {
+      return <Redirect to="/manageproducts/products/:page" />;
+    }
     return (
       <div className="detailProduct">
         <div className="row">
-          <div className="col-8">
-            {this.renderList()}
-            {/* <img
-              src={`http://localhost:2404/show/image/1558065763315imagedefault.jpg`}
-            />
-            <img
-              src={`http://localhost:2404/show/image/1558065763315imagedefault.jpg`}
-            />
-            <img
-              src={`http://localhost:2404/show/image/1558065763315imagedefault.jpg`}
-            />
-            <img
-              src={`http://localhost:2404/show/image/1558065763315imagedefault.jpg`}
-            />
-            <img
-              src={`http://localhost:2404/show/image/1558065763315imagedefault.jpg`}
-            /> */}
-          </div>
+          <div className="col-8">{this.renderList()}</div>
           <div className="col-4">
             <div className="d-flex justify-content-between">
               <div>
@@ -295,20 +283,41 @@ class DetailProduct extends React.Component {
                 EU 44
               </button>
             </div>
-            <div className="my-2">
-              <button
-                onClick={this.addcart}
-                className="btn btn-outline-warning btn-block"
-              >
-                Add to Cart
-              </button>
-              <button
-                onClick={this.addWishlist}
-                className="btn btn-outline-secondary btn-block"
-              >
-                Wishlist
-              </button>
-            </div>
+            {cookies.get("user_id") ? (
+              <div className="my-2">
+                <button
+                  onClick={this.addcart}
+                  className="btn btn-outline-warning btn-block"
+                >
+                  Add to Cart
+                </button>
+                <button
+                  onClick={this.addWishlist}
+                  className="btn btn-outline-secondary btn-block"
+                >
+                  Wishlist
+                </button>
+              </div>
+            ) : (
+              <div className="my-2">
+                <Link to="/login">
+                  <button
+                    onClick={this.addcart}
+                    className="btn btn-outline-warning btn-block"
+                  >
+                    Add to Cart
+                  </button>
+                </Link>
+                <Link to="/login">
+                  <button
+                    onClick={this.addWishlist}
+                    className="btn btn-outline-secondary btn-block mt-2"
+                  >
+                    Wishlist
+                  </button>
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -317,7 +326,7 @@ class DetailProduct extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return { user_id: state.user.user_id };
+  return { user_id: state.user.user_id, role: state.user.role };
 };
 
 export default connect(

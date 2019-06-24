@@ -1,11 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import Cookies from "universal-cookie";
 
 import axios from "../config/axios";
 import { getAllWishcart } from "../store/actions/product";
 import EditCart from "./EditCart";
+import { admin, user } from "../config/message";
 
 const cookies = new Cookies();
 
@@ -87,9 +88,9 @@ class Cart extends React.Component {
                   >
                     REMOVE
                   </button>
-                  <button className="btnCart btn btn-outline-secondary mr-2">
+                  {/* <button className="btnCart btn btn-outline-secondary mr-2">
                     EDIT
-                  </button>
+                  </button> */}
                   <button
                     onClick={() => {
                       this.addToCart(wishcart_id);
@@ -172,6 +173,11 @@ class Cart extends React.Component {
         );
       });
     }
+    return (
+      <div className="body py-0">
+        <p className="mt-3">There are no items in your cart.</p>
+      </div>
+    );
   };
 
   renderOrderSummary = () => {
@@ -205,9 +211,11 @@ class Cart extends React.Component {
             </div>
           </div>
           <div className="d-flex justify-content-center">
-            <button className="btnCheckout btn btn-warning m-2">
-              CHECKOUT
-            </button>
+            <Link to="/checkout" products={this.props.cart}>
+              <button className="btnCheckout btn btn-warning m-2">
+                CHECKOUT
+              </button>
+            </Link>
           </div>
         </div>
       );
@@ -233,14 +241,23 @@ class Cart extends React.Component {
           </div>
         </div>
         <div className="d-flex justify-content-center">
-          <button className="btnCheckout btn btn-warning m-2">CHECKOUT</button>
+          <Link to="/checkout">
+            <button className="btnCheckout btn btn-warning m-2">
+              CHECKOUT
+            </button>
+          </Link>
         </div>
       </div>
     );
   };
 
   render() {
-    if (this.props.user_id || cookies.get("user_id")) {
+    console.log(this.props.cart);
+
+    if (this.props.role === admin) {
+      return <Redirect to="/manageproducts/products/:page" />;
+    }
+    if (cookies.get("user_id")) {
       if (this.props.cart.length) {
         var sumQty = 0;
         this.props.cart.forEach(product => {
@@ -257,14 +274,7 @@ class Cart extends React.Component {
                 <div className="header">
                   YOUR CART ({this.props.cart.length ? sumQty : 0})
                 </div>
-
-                {this.props.cart.length ? (
-                  this.renderCart()
-                ) : (
-                  <div className="body py-0">
-                    <p className="mt-3">There are no items in your cart.</p>
-                  </div>
-                )}
+                {this.renderCart()}
               </div>
               {/* wishlish */}
               {this.props.wishlist.length ? (
@@ -279,6 +289,7 @@ class Cart extends React.Component {
         </div>
       );
     }
+
     return <Redirect to="login" />;
   }
 }
@@ -286,7 +297,8 @@ const mapStateToProps = state => {
   return {
     user_id: state.user.user_id,
     cart: state.product.cart,
-    wishlist: state.product.wishlist
+    wishlist: state.product.wishlist,
+    role: state.user.role
   };
 };
 export default connect(

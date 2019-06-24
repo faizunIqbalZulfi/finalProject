@@ -10,6 +10,7 @@ import {
   onGetAddress,
   onAddAddress
 } from "../store/actions/address";
+import axios from "../config/axios";
 
 const cookies = new Cookies();
 
@@ -26,7 +27,7 @@ class Addresses extends React.Component {
   }
 
   onDeleteBtnClick = async (address_id, user_id) => {
-    await this.props.onDeleteAddress(address_id);
+    await this.props.onDeleteAddress(address_id, user_id);
     this.props.onGetAddress(user_id);
     console.log(this.props.addresses);
   };
@@ -37,6 +38,8 @@ class Addresses extends React.Component {
     const no_telp = this.no_telp.value;
     const pos_code = this.pos_code.value;
     const city = this.city.value;
+    const name = this.name.value;
+    const province = this.province.value;
 
     await this.props.onAddAddress({
       user_id,
@@ -44,9 +47,16 @@ class Addresses extends React.Component {
       address_name,
       no_telp,
       pos_code,
-      city
+      city,
+      name,
+      province
     });
     this.toggle();
+    this.props.onGetAddress(user_id);
+  };
+
+  onSelectDefault = async (address_id, user_id) => {
+    await axios.patch(`/setdefault/address/${address_id}/${user_id}`);
     this.props.onGetAddress(user_id);
   };
 
@@ -73,7 +83,7 @@ class Addresses extends React.Component {
   render() {
     console.log(this.props.addresses);
     return (
-      <div>
+      <div className="AccountAddress">
         {this.onMessage()}
         <h4 className="mb-4">Address</h4>
         <div className="form-group">
@@ -94,7 +104,22 @@ class Addresses extends React.Component {
               return (
                 <div key={index} class="address">
                   <div class="card-body p-0">
-                    <h5 class="card-title">{address.address_name}</h5>
+                    <h5 class="card-title">
+                      {address.status ? (
+                        `${address.address_name} (${address.status})`
+                      ) : (
+                        <button
+                          onClick={() => {
+                            this.onSelectDefault(
+                              address.address_id,
+                              address.user_id
+                            );
+                          }}
+                          className="btnsetdefault"
+                        >{`${address.address_name} set default`}</button>
+                      )}
+                    </h5>
+                    {/* {address.status ? null : <button>set default</button>} */}
                     <p class="card-text">{address.address1}</p>
                     <p class="card-text">
                       {address.city} <span>{address.pos_code}</span>
@@ -133,7 +158,7 @@ class Addresses extends React.Component {
 
           <ModalBody>
             <div className="form-group">
-              <p className="loginRegister mb-0">address_name</p>
+              <p className="loginRegister mb-0">Address Name</p>
               <input
                 ref={input => {
                   this.address_name = input;
@@ -144,18 +169,16 @@ class Addresses extends React.Component {
               />
             </div>
             <div className="form-group">
-              <p className="loginRegister mb-0">address</p>
+              <p className="loginRegister mb-0">Name</p>
               <input
                 ref={input => {
-                  this.address1 = input;
+                  this.name = input;
                 }}
+                type="texy"
                 className="form-control"
-                id="exampleFormControlTextarea"
-                rows="3"
-                // defaultValue={address1}
+                // defaultValue={city}
               />
             </div>
-
             <div className="form-group">
               <p className="loginRegister mb-0">City</p>
               <input
@@ -165,6 +188,28 @@ class Addresses extends React.Component {
                 type="texy"
                 className="form-control"
                 // defaultValue={city}
+              />
+            </div>
+            <div className="form-group">
+              <p className="loginRegister mb-0">Province</p>
+              <input
+                ref={input => {
+                  this.province = input;
+                }}
+                type="texy"
+                className="form-control"
+                // defaultValue={city}
+              />
+            </div>
+            <div className="form-group">
+              <p className="loginRegister mb-0">address</p>
+              <textarea
+                ref={input => {
+                  this.address1 = input;
+                }}
+                rows="3"
+                className="form-control"
+                // defaultValue={address1}
               />
             </div>
             <div className="form-group">

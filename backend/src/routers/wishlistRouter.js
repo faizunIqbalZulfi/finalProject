@@ -4,14 +4,40 @@ const connection = require("../connections/connection");
 
 // addtowishlistfromcart
 router.post("/add/wishlist/cart/:wishcart_id", (req, res) => {
-  const sql = `UPDATE wishcart SET status = "w" WHERE wishcart_id = ${
+  const sql = `SELECT * FROM wishcart WHERE wishcart_id = ${
     req.params.wishcart_id
-  }`;
+    }`;
 
   connection.query(sql, (err, result) => {
     if (err) return res.send(err);
+    var { user_id, product_id, size_id, qty, status } = result[0];
 
-    res.send(result);
+    const sql = `SELECT * FROM wishcart WHERE user_id = ${user_id}
+    AND product_id = ${product_id}
+    AND size_id = ${size_id}
+    AND status = "w"`;
+    connection.query(sql, (err, result) => {
+      if (err) return res.send(err);
+      if (result.length) {
+        const sql = `DELETE FROM wishcart WHERE wishcart_id = ${
+          req.params.wishcart_id
+          }`;
+        connection.query(sql, (err, result) => {
+          if (err) return res.send(err);
+
+          res.send(result);
+        });
+      } else {
+        const sql = `UPDATE wishcart SET status = "w", qty = 1 WHERE wishcart_id = ${
+          req.params.wishcart_id
+          }`;
+        connection.query(sql, (err, result) => {
+          if (err) return res.send(err);
+
+          res.send(result);
+        });
+      }
+    });
   });
 });
 
@@ -32,7 +58,7 @@ router.post("/add/wishlist", (req, res) => {
     connection.query(sql, (err, result) => {
       if (err) return res.send(err);
 
-      if (result.length) return res.send("sudah ada");
+      if (result.length) return res.send("product sudah ada");
 
       const sql = `INSERT INTO wishcart (user_id, product_id, size_id, status)
         VALUES (${user_id}, ${product_id}, ${size_id}, '${status}')`;
@@ -68,7 +94,7 @@ router.get("/get/wishlist/:user_id", (req, res) => {
   JOIN images i ON p.product_id = i.product_id
   WHERE w.user_id = ${
     req.params.user_id
-  } AND i.name_image LIKE '%default%' AND status = "w"`;
+    } AND i.name_image LIKE '%default%' AND w.status = "w"`;
 
   connection.query(sql, (err, result) => {
     if (err) return res.send(err);
@@ -81,7 +107,7 @@ router.get("/get/wishlist/:user_id", (req, res) => {
 router.delete("/delete/wishlist/:wishcart_id", (req, res) => {
   const sql = `DELETE FROM wishcart WHERE wishcart_id = ${
     req.params.wishcart_id
-  }`;
+    }`;
 
   connection.query(sql, (err, result) => {
     if (err) return res.send(err);
@@ -94,7 +120,7 @@ router.delete("/delete/wishlist/:wishcart_id", (req, res) => {
 router.post("/add/cart/wishlist/:wishcart_id", (req, res) => {
   const sql = `SELECT * FROM wishcart WHERE wishcart_id = ${
     req.params.wishcart_id
-  }`;
+    }`;
 
   connection.query(sql, (err, result) => {
     if (err) return res.send(err);
@@ -110,23 +136,23 @@ router.post("/add/cart/wishlist/:wishcart_id", (req, res) => {
       if (err) return res.send(err);
 
       if (result.length) {
-        const sql = `UPDATE wishcart SET qty = ${result[0].qty + qty} 
-        WHERE wishcart_id = ${result[0].wishcart_id}`;
+        // const sql = `UPDATE wishcart SET qty = ${result[0].qty + qty}
+        // WHERE wishcart_id = ${result[0].wishcart_id}`;
+        // connection.query(sql, (err, result) => {
+        //   if (err) return res.send(err);
+
+        const sql = `DELETE FROM wishcart WHERE wishcart_id = ${
+          req.params.wishcart_id
+          }`;
         connection.query(sql, (err, result) => {
           if (err) return res.send(err);
-
-          const sql = `DELETE FROM wishcart WHERE wishcart_id = ${
-            req.params.wishcart_id
-          }`;
-          connection.query(sql, (err, result) => {
-            if (err) return res.send(err);
-            res.send(result);
-          });
+          res.send(result);
         });
+        // });
       } else {
         const sql = `UPDATE wishcart SET status = "c" WHERE wishcart_id = ${
           req.params.wishcart_id
-        }`;
+          }`;
 
         connection.query(sql, (err, result) => {
           if (err) return res.send(err);
@@ -155,16 +181,16 @@ router.post("/add/cart", (req, res) => {
     connection.query(sql, (err, result) => {
       if (err) return res.send(err);
 
-      if (result.length) {
-        const sql = `UPDATE wishcart SET qty = ${result[0].qty + 1}
-        WHERE wishcart_id = ${result[0].wishcart_id}`;
-
-        connection.query(sql, (err, result) => {
-          if (err) return res.send(err);
-
-          return res.send(result);
-        });
-      } else {
+      if (result.length) return res.send("product sudah ada");
+      // {
+      //   const sql = `UPDATE wishcart SET qty = ${result[0].qty + 1}
+      //   WHERE wishcart_id = ${result[0].wishcart_id}`;
+      //   connection.query(sql, (err, result) => {
+      //     if (err) return res.send(err);
+      //     return res.send(result);
+      //   });
+      // }
+      else {
         const sql = `INSERT INTO wishcart (user_id, product_id, size_id, status)
           VALUES (${user_id}, ${product_id}, ${size_id}, '${status}')`;
 
@@ -199,8 +225,8 @@ router.get("/get/cart/:user_id", (req, res) => {
     JOIN size s ON w.size_id = s.size_id
     JOIN images i ON p.product_id = i.product_id
     WHERE w.user_id = ${
-      req.params.user_id
-    } AND i.name_image LIKE '%default%' AND status = "c"`;
+    req.params.user_id
+    } AND i.name_image LIKE '%default%' AND w.status = "c"`;
 
   connection.query(sql, (err, result) => {
     if (err) return res.send(err);
@@ -233,23 +259,25 @@ router.patch("/edit/cart", (req, res) => {
 
     const sql = `SELECT * FROM wishcart WHERE user_id = ${user_id}
     AND product_id = ${product_id}
-    AND size_id = ${result[0].size_id}`;
+    AND size_id = ${result[0].size_id}
+    AND status = "c"`;
     connection.query(sql, (err, result) => {
       if (err) return res.send(err);
 
       if (result.length) {
-        const sql = `UPDATE wishcart SET qty = ${qty +
-          result[0].qty} WHERE wishcart_id = ${result[0].wishcart_id}`;
+        const sql = `UPDATE wishcart SET qty = ${qty} WHERE wishcart_id = ${
+          result[0].wishcart_id
+          }`;
 
         connection.query(sql, (err, result) => {
           if (err) return res.send(err);
 
-          const sql = `DELETE FROM wishcart WHERE wishcart_id = ${wishcart_id}`;
-          connection.query(sql, (err, result) => {
-            if (err) return res.send(err);
+          // const sql = `DELETE FROM wishcart WHERE wishcart_id = ${wishcart_id}`;
+          // connection.query(sql, (err, result) => {
+          //   if (err) return res.send(err);
 
-            res.send(result);
-          });
+          res.send(result);
+          // });
         });
       } else {
         const sql = `UPDATE wishcart SET qty = ${qty}, size_id = ${size_id} WHERE wishcart_id = ${wishcart_id}`;

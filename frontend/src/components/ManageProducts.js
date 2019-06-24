@@ -8,6 +8,10 @@ import Products from "./Products";
 import AddProduct from "./AddProduct";
 import EditProduct from "./EditProduct";
 import Orders from "./Orders";
+import RegisterAdmin from "./RegisterAdmin";
+import AddPaymentMethod from "./PaymentMethod";
+import Users from "./Users";
+import Shippers from "./Shippers";
 // import { onEditProduct } from "../actions/index";
 
 const cookies = new Cookies();
@@ -22,9 +26,13 @@ class ManageProducts extends React.Component {
       return <AddProduct />;
     if (pathname === `/manageproducts/editproduct/${page}`)
       return <EditProduct />;
+    if (pathname === `/manageproducts/addpaymentmethod/${page}`)
+      return <AddPaymentMethod />;
+    if (pathname === `/manageproducts/shippers/${page}`) return <Shippers />;
     if (pathname === `/manageproducts/orders/${page}`) return <Orders />;
-    // if (pathname === `/setting_address/${pages}`) return <AddSet />;
-    // if (pathname === "/setting/wishlist") return <Wishlist />;
+    if (pathname === `/manageproducts/registeradmin/${page}`)
+      return <RegisterAdmin />;
+    if (pathname === `/manageproducts/users/${page}`) return <Users />;
     // if (pathname === "/setting/payment") return <Payment />;
   };
 
@@ -58,23 +66,43 @@ class ManageProducts extends React.Component {
                     Orders
                   </Link>
                 </li>
-                {/* <li class="list-group-item border border-left-0 border-right-0">
-                  <Link to="/setting/orders">Orders</Link>
+                <li class="list-group-item border border-left-0 border-right-0">
+                  <Link to={`/manageproducts/addpaymentmethod/0`}>
+                    <i class="mx-2 fas fa-credit-card" />
+                    Payment
+                  </Link>
                 </li>
                 <li class="list-group-item border border-left-0 border-right-0">
-                  <Link to="/setting/wishlist">Wish List</Link>{" "}
+                  <Link to={`/manageproducts/shippers/0`}>
+                    <i class="mx-2 fas fa-truck" />
+                    Shipper
+                  </Link>
                 </li>
+              </ul>
+              <h4 className="mb-4 mt-5">Manage Users</h4>
+              <ul class="list-group list-group-flush">
                 <li class="list-group-item border border-left-0 border-right-0">
-                  <Link to="/setting/payment">Payment Options</Link>
-                </li> */}
+                  <Link to={`/manageproducts/registeradmin/${Math.random()}`}>
+                    <i class="mx-2 fas fa-user-plus" />
+                    Register Admin
+                  </Link>
+                </li>
+                <li class="list-group-item border border-top-0 border-left-0 border-right-0">
+                  <Link to={`/manageproducts/users/0`}>
+                    <i class="mx-2 fas fa-user" />
+                    Users
+                  </Link>
+                </li>
               </ul>
             </div>
             <div
               className={`${
-                pathname === `/manageproducts/products/${page}`
+                pathname === `/manageproducts/products/${page}` ||
+                  pathname === `/manageproducts/orders/${page}` ||
+                  pathname === `/manageproducts/users/${page}`
                   ? "col-md-10"
                   : "col-md-7"
-              }`}
+                }`}
             >
               {this.onSettingClick()}
             </div>
@@ -82,7 +110,7 @@ class ManageProducts extends React.Component {
         </div>
       );
     }
-    return <Redirect to="/home" />;
+    return <Redirect to="/" />;
   }
 }
 

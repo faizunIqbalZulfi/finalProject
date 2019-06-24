@@ -3,7 +3,7 @@ import Cookies from "universal-cookie";
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
-import { onEditAddress, onGetAddress } from "../actions";
+import { onEditAddress, onGetAddress } from "../store/actions/address";
 import { editSuccess } from "../config/message";
 
 const cookies = new Cookies();
@@ -17,15 +17,19 @@ class AddSet extends React.Component {
     const address_name = this.address_name.value;
     const address1 = this.address1.value;
     const no_telp = this.no_telp.value;
-    const city = this.city.value;
     const pos_code = this.pos_code.value;
+    const city = this.city.value;
+    const name = this.name.value;
+    const province = this.province.value;
 
     this.props.onEditAddress(address_id, {
       address_name,
       address1,
       no_telp,
       city,
-      pos_code
+      pos_code,
+      name,
+      province
     });
   };
 
@@ -55,7 +59,9 @@ class AddSet extends React.Component {
         no_telp,
         city,
         pos_code,
-        address_id
+        address_id,
+        province,
+        name
       } = this.props.addresses[cookies.get("address")];
     }
     console.log(this.props.addresses);
@@ -65,7 +71,7 @@ class AddSet extends React.Component {
         <h4 className="mb-4">Address Settings</h4>
         <form className="register2">
           <div className="form-group">
-            <p className="loginRegister mb-0">address_name</p>
+            <p className="loginRegister mb-0">Address Name</p>
             <input
               ref={input => {
                 this.address_name = input;
@@ -76,18 +82,16 @@ class AddSet extends React.Component {
             />
           </div>
           <div className="form-group">
-            <p className="loginRegister mb-0">address</p>
+            <p className="loginRegister mb-0">Name</p>
             <input
               ref={input => {
-                this.address1 = input;
+                this.name = input;
               }}
+              type="texy"
               className="form-control"
-              id="exampleFormControlTextarea"
-              rows="3"
-              defaultValue={address1}
+              defaultValue={name}
             />
           </div>
-
           <div className="form-group">
             <p className="loginRegister mb-0">City</p>
             <input
@@ -97,6 +101,28 @@ class AddSet extends React.Component {
               type="texy"
               className="form-control"
               defaultValue={city}
+            />
+          </div>
+          <div className="form-group">
+            <p className="loginRegister mb-0">Province</p>
+            <input
+              ref={input => {
+                this.province = input;
+              }}
+              type="texy"
+              className="form-control"
+              defaultValue={province}
+            />
+          </div>
+          <div className="form-group">
+            <p className="loginRegister mb-0">address</p>
+            <input
+              ref={input => {
+                this.address1 = input;
+              }}
+              type="text"
+              className="form-control"
+              defaultValue={address1}
             />
           </div>
           <div className="form-group">

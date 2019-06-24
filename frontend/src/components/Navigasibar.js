@@ -35,7 +35,6 @@ class Navigasibar extends React.Component {
     this.isUpdate = true;
     console.log("did");
   }
-
   async componentWillUpdate() {
     if (this.isUpdate) {
       await this.props.getAllWishcart(cookies.get("user_id"));
@@ -44,19 +43,13 @@ class Navigasibar extends React.Component {
     console.log("will");
     this.isUpdate = false;
   }
-
-  // getAllWishcart = async () => {
-  //   const cart = await axios.get(`/get/cart/${cookies.get("user_id")}`);
-  //   this.setState({ allCart: cart.data });
-  // };
-
   toggle() {
     this.setState({
       isOpen: !this.state.isOpen
     });
   }
   render() {
-    // console.log(this.props.user_id);
+    console.log("render");
     var sumCart = 0;
     if (this.props.cart.length) {
       this.props.cart.forEach(product => {
@@ -69,7 +62,7 @@ class Navigasibar extends React.Component {
         <Navbar className="navbar navbar-light bg-light fixed-top" expand="md">
           <NavbarBrand>
             <Link to="/" className="navbar-brand">
-              <i className="fas fa-camera-retro" />
+              <i class="mx-1 fas fa-shoe-prints" />
               Brand<b>Name</b>
             </Link>
           </NavbarBrand>
@@ -81,10 +74,10 @@ class Navigasibar extends React.Component {
           <Collapse className="flex-column" isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <UncontrolledDropdown className="mx-2" nav inNavbar>
-                <DropdownToggle className="navtext" nav>
+                {/* <DropdownToggle className="navtext" nav>
                   <i className="fas fa-search" />
                   <span className="ml-2 ">Search</span>
-                </DropdownToggle>
+                </DropdownToggle> */}
                 <DropdownMenu className="navsearch" right>
                   <input
                     className="text-center"
@@ -101,110 +94,93 @@ class Navigasibar extends React.Component {
                       {this.props.role === admin ? "Admin" : "My Account"}
                     </span>
                   </DropdownToggle>
-                  {this.props.role === user ? (
-                    <DropdownMenu className="navaccount" right>
-                      <Link className="dropdown-item" to="">
-                        <DropdownItem className="namedropnav">
-                          Orders
-                        </DropdownItem>
-                      </Link>
-                      <Link className="dropdown-item" to="/wishlist">
-                        <DropdownItem className="namedropnav">
-                          Wish list
-                        </DropdownItem>
-                      </Link>
-                      <Link
-                        className="dropdown-item"
-                        to="/setting/account/:page"
-                      >
-                        <DropdownItem className="namedropnav">
-                          Account Setting
-                        </DropdownItem>
-                      </Link>
-                      <Button
-                        className="dropdown-item"
-                        onClick={() => {
-                          this.props.onLogout();
-                        }}
-                      >
-                        <DropdownItem className="namedropnav">
-                          Log Out
-                        </DropdownItem>
-                      </Button>
-                    </DropdownMenu>
-                  ) : (
-                    <DropdownMenu className="navaccount" right>
-                      <Link
-                        className="dropdown-item"
-                        to="/manageproducts/products/0"
-                      >
-                        <DropdownItem className="namedropnav">
-                          Manage Products
-                        </DropdownItem>
-                      </Link>
-                      <Link className="dropdown-item" to="/manageusers">
-                        <DropdownItem className="namedropnav">
-                          Manage Users
-                        </DropdownItem>
-                      </Link>
-                      {/* <Link className="dropdown-item" to="/setting/account">
-                        Account Setting
-                      </Link> */}
-                      <Button
-                        className="dropdown-item"
-                        onClick={() => {
-                          this.props.onLogout();
-                        }}
-                      >
-                        <DropdownItem className="namedropnav">
-                          Log Out
-                        </DropdownItem>
-                      </Button>
-                    </DropdownMenu>
-                  )}
+                  {/* {this.props.role === user ? ( */}
+                  <DropdownMenu className="navaccount" right>
+                    {this.props.role === user ? (
+                      <div>
+                        <Link className="dropdown-item" to="/wishlist">
+                          <DropdownItem className="namedropnav">
+                            Wish list
+                          </DropdownItem>
+                        </Link>
+                        <Link className="dropdown-item" to="/setting/account/0">
+                          <DropdownItem className="namedropnav">
+                            Account Setting
+                          </DropdownItem>
+                        </Link>
+                      </div>
+                    ) : null}
+                    <Button
+                      className="dropdown-item"
+                      onClick={() => {
+                        this.props.onLogout();
+                      }}
+                    >
+                      <DropdownItem className="namedropnav">
+                        Log Out
+                      </DropdownItem>
+                    </Button>
+                  </DropdownMenu>
+                  {/* ) : ( */}
+                  {/* <DropdownMenu className="navaccount" right>
+                    <Button
+                      className="dropdown-item"
+                      onClick={() => {
+                        this.props.onLogout();
+                      }}
+                    >
+                      <DropdownItem className="namedropnav">
+                        Log Out
+                      </DropdownItem>
+                    </Button>
+                  </DropdownMenu>
+                  )} */}
                 </UncontrolledDropdown>
               ) : (
-                <NavItem>
-                  <NavLink className="navtext">
-                    <Link className="joinlogin" to="/login">
-                      Join / Log In To Account
+                  <NavItem>
+                    <NavLink className="navtext">
+                      <Link className="joinlogin" to="/login">
+                        Join / Log In To Account
                     </Link>
+                    </NavLink>
+                  </NavItem>
+                )}
+              {this.props.role === admin ? null : (
+                <NavItem className="mx-2">
+                  <NavLink className="navtext">
+                    <Link to="/cart">
+                      <i className="fas fa-shopping-cart" />
+                      <span className="ml-1">
+                        {this.props.role === user ? `(${sumCart})` : "(0)"}
+                      </span>
+                    </Link>
+                    {/* <sup className="badge rounded-circle">5</sup> */}
                   </NavLink>
                 </NavItem>
               )}
-
-              <NavItem className="mx-2">
-                <NavLink className="navtext">
-                  <Link to="/cart">
-                    <i className="fas fa-shopping-cart" />
-                    <span className="ml-1">
-                      {this.props.role === user ? `(${sumCart})` : "(0)"}
-                    </span>
-                  </Link>
-                  {/* <sup className="badge rounded-circle">5</sup> */}
-                </NavLink>
-              </NavItem>
             </Nav>
-            <Nav className="fontcategory ml-auto" navbar>
-              <NavItem className="mx-2">
-                <NavLink className="navtext">
-                  <Link to={`/shop/men/0`}>
-                    {/* <p>CAT</p> */}
-                    {/* <i className="">CAT</i> */}
-                    <span className="ml-1">MEN</span>
-                  </Link>
-                </NavLink>
-              </NavItem>
-              <NavItem className="mx-2">
-                <NavLink className="navtext">
-                  <Link to={`/shop/women/0`}>
-                    {/* <p>CAT</p> */}
-                    {/* <i className="">CAT</i> */}
-                    <span className="ml-1">WOMEN</span>
-                  </Link>
-                </NavLink>
-              </NavItem>
-            </Nav>
+            {this.props.role === admin ? null : (
+              <Nav className="fontcategory ml-auto" navbar>
+                <NavItem className="mx-2">
+                  <NavLink className="navtext">
+                    <Link to={`/shop/men/0`}>
+                      {/* <p>CAT</p> */}
+                      {/* <i className="">CAT</i> */}
+                      <span className="ml-1">MEN</span>
+                    </Link>
+                  </NavLink>
+                </NavItem>
+                <NavItem className="mx-2">
+                  <NavLink className="navtext">
+                    <Link to={`/shop/women/0`}>
+                      {/* <p>CAT</p> */}
+                      {/* <i className="">CAT</i> */}
+                      <span className="ml-1">WOMEN</span>
+                    </Link>
+                  </NavLink>
+                </NavItem>
+              </Nav>
+            )}
           </Collapse>
         </Navbar>
       </div>

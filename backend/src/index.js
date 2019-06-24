@@ -9,6 +9,7 @@ const addressRouter = require("./routers/addressRouter");
 const productRouter = require("./routers/productRouter");
 const homeRouter = require("./routers/homeRouter");
 const wishlistRouter = require("./routers/wishlistRouter");
+const ordersRouter = require("./routers/ordersRouter");
 const app = express();
 const port = 2404;
 
@@ -19,6 +20,7 @@ app.use(addressRouter);
 app.use(productRouter);
 app.use(homeRouter);
 app.use(wishlistRouter);
+app.use(ordersRouter);
 // app.use("/static", express.static("./static"));
 // app.use("/", corsPrefetch);
 

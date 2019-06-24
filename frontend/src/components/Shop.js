@@ -11,17 +11,23 @@ import {
   DropdownMenu,
   DropdownItem
 } from "reactstrap";
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 
 import axios from "../config/axios";
+import { user, admin } from "../config/message";
+import Cookies from "universal-cookie";
+
+const cookies = new Cookies();
 
 class Shop extends React.Component {
-  isUpdate = true;
   state = {
     gender: "",
     category: "",
     sort: "",
     dropdownSort: false,
-    products: []
+    products: [],
+    productsNotFilter: []
   };
 
   async componentDidMount() {
@@ -30,37 +36,18 @@ class Shop extends React.Component {
       category: this.props.match.params.category
     });
   }
-  // componentWillMount() {
-  // }
-
-  // async componentDidUpdate(prevProps, prevState) {
-  //   // only update chart if the data has changed
-  //   // if (prevProps.data !== this.props.data) {
-  //   //   this.chart = c3.load({
-  //   //     data: this.props.data
-  //   //   });
-  //   // }
-
-  // }
-  async componentWillUpdate(prevProps, prevState) {
+  async componentWillUpdate(prevProps) {
     if (
       this.state.gender !== prevProps.match.params.gender ||
       this.state.category !== prevProps.match.params.category
     ) {
-      console.log(this.state.gender);
-      console.log(prevProps.match.params.gender);
       await this.setState({
         gender: prevProps.match.params.gender,
         category: prevProps.match.params.category
       });
       await this.getProduct();
+      this.cancelBtn();
     }
-    // console.log(prevProps);
-    // if (this.isUpdate) {
-    //   await this.getProduct();
-    //   console.log("new");
-    // }
-    // this.isUpdate = false;
   }
 
   toggleSort = () => {
@@ -74,8 +61,15 @@ class Shop extends React.Component {
     const res = await axios.get(`/get/products/shop/${gender}`, {
       params: { category }
     });
-
-    this.setState({ products: res.data });
+    const seen = new Set();
+    this.setState({
+      productsNotFilter: res.data,
+      products: res.data.filter(obj => {
+        const duplicate = seen.has(obj.product_id);
+        seen.add(obj.product_id);
+        return !duplicate;
+      })
+    });
   };
 
   selectSort = async e => {
@@ -84,20 +78,7 @@ class Shop extends React.Component {
     if (this.state.sort === "Newest") {
       this.setState({
         products: this.state.products.sort((a, b) => {
-          return (
-            parseInt(
-              b.created_at
-                .substring(0, 10)
-                .split("-")
-                .join("")
-            ) -
-            parseInt(
-              a.created_at
-                .substring(0, 10)
-                .split("-")
-                .join("")
-            )
-          );
+          return a.product_id - b.product_id;
         })
       });
     } else if (this.state.sort === "Price High-Low") {
@@ -119,13 +100,79 @@ class Shop extends React.Component {
     console.log(this.state.products);
   };
 
+  filterBtn = async () => {
+    const filterPrice = document.querySelector('[name="priceradio"]:checked');
+    const filterSize = document.querySelector('[name="sizeradio"]:checked');
+    if (filterPrice && filterSize) {
+      await this.getProduct();
+      if (filterPrice.value == 2000001) {
+        this.setState({
+          products: this.state.productsNotFilter.filter(obj => {
+            return (
+              obj.price >= filterPrice.value && obj.size === filterSize.value
+            );
+          })
+        });
+      } else {
+        this.setState({
+          products: this.state.productsNotFilter.filter(obj => {
+            return (
+              obj.price <= filterPrice.value && obj.size === filterSize.value
+            );
+          })
+        });
+      }
+    } else if (filterPrice) {
+      await this.getProduct();
+      if (filterPrice.value == 2000001) {
+        this.setState({
+          products: this.state.products.filter(obj => {
+            return obj.price >= filterPrice.value;
+          })
+        });
+      } else {
+        this.setState({
+          products: this.state.products.filter(obj => {
+            return obj.price <= filterPrice.value;
+          })
+        });
+      }
+    } else if (filterSize) {
+      this.setState({
+        products: this.state.productsNotFilter.filter(obj => {
+          return obj.size === filterSize.value;
+        })
+      });
+    } else {
+      this.getProduct();
+    }
+    // console.log();
+  };
+  fnSearch = async (e) => {
+    this.setState({
+      onType: e.target.value
+    })
+    const type = e.target.value;
+    if (type) {
+      await this.getProduct()
+      this.setState({
+        products: this.state.products.filter(obj => {
+          return obj.product_name.toLowerCase().includes(type.toLowerCase())
+        })
+      })
+
+    } else {
+      await this.getProduct()
+
+    }
+  }
   cancelBtn = () => {
     var ele = document.getElementsByTagName("input");
     for (var i = 0; i < ele.length; i++) ele[i].checked = false;
   };
 
   renderList = () => {
-    // console.log(this.state.products);
+    console.log(this.state.products);
 
     return this.state.products.map(product => {
       return (
@@ -143,7 +190,7 @@ class Shop extends React.Component {
               <p>{product.product_name}</p>
               <p className="font-italic text-secondary">{`${
                 product.category1
-              }'s ${product.category2}`}</p>
+                }'s ${product.category2}`}</p>
               <p className="text-secondary">{`Rp${product.price.toLocaleString(
                 "IN"
               )}`}</p>
@@ -156,254 +203,288 @@ class Shop extends React.Component {
 
   render() {
     console.log(this.state.sort);
-    const { category, gender } = this.props.match.params;
+    if (this.props.role !== admin) {
+      const { category, gender } = this.props.match.params;
+      return (
+        <div className="shop">
+          <div className="row">
+            <div className="col-2">
+              <div className="mb-5">
+                <h4 className="mb-4 pb-3 border-bottom text-uppercase">
+                  {this.props.match.params.gender}
+                </h4>
+                <ul class="list-group list-group-flush">
+                  <Link to={`/shop/${gender}/0`}>
+                    <li class="list-group-item border-0 p-0">All</li>
+                  </Link>
+                  <Link to={`/shop/${gender}/lifestyle`}>
+                    <li class="list-group-item border-0 p-0">Lifestyle</li>
+                  </Link>
+                  <Link to={`/shop/${gender}/running`}>
+                    <li class="list-group-item border-0 p-0 ">Running</li>
+                  </Link>
+                  <Link to={`/shop/${gender}/basketball`}>
+                    <li class="list-group-item border-0 p-0 ">Basketball</li>
+                  </Link>
+                  <Link to={`/shop/${gender}/jordan`}>
+                    <li class="list-group-item border-0 p-0">Jordan</li>
+                  </Link>
+                  <Link to={`/shop/${gender}/football`}>
+                    <li class="list-group-item border-0 p-0 ">Football</li>
+                  </Link>
+                  <Link to={`/shop/${gender}/Gym&Training`}>
+                    <li class="list-group-item border-0 p-0 ">
+                      Gym & Training
+                    </li>
+                  </Link>
+                  <Link to={`/shop/${gender}/skateboarding`}>
+                    <li class="list-group-item border-0 p-0 ">Skateboarding</li>
+                  </Link>
+                </ul>
+              </div>
+              <div>
+                <h4 className="mb-4 border-bottom">SEARCH</h4>
+                <form className="mb-5">
+                  <input onChange={this.fnSearch} className="inputsearchshop" type="text" ref={input => this.search = input} placeholder="type here ..."></input>
+                </form>
 
-    return (
-      <div className="shop">
-        <div className="row">
-          <div className="col-2">
-            <div className="mb-5">
-              <h4 className="mb-4 pb-3 border-bottom text-uppercase">
-                {this.props.match.params.gender}
-              </h4>
-              <ul class="list-group list-group-flush">
-                <Link to={`/shop/${gender}/0`}>
-                  <li class="list-group-item border-0 p-0">All</li>
-                </Link>
-                <Link to={`/shop/${gender}/lifestyle`}>
-                  <li class="list-group-item border-0 p-0">Lifestyle</li>
-                </Link>
-                <Link to={`/shop/${gender}/running`}>
-                  <li class="list-group-item border-0 p-0 ">Running</li>
-                </Link>
-                <Link to={`/shop/${gender}/basketball`}>
-                  <li class="list-group-item border-0 p-0 ">Basketball</li>
-                </Link>
-                <Link to={`/shop/${gender}/jordan`}>
-                  <li class="list-group-item border-0 p-0">Jordan</li>
-                </Link>
-                <Link to={`/shop/${gender}/football`}>
-                  <li class="list-group-item border-0 p-0 ">Football</li>
-                </Link>
-                <Link to={`/shop/${gender}/Gym&Training`}>
-                  <li class="list-group-item border-0 p-0 ">Gym & Training</li>
-                </Link>
-                <Link to={`/shop/${gender}/skateboarding`}>
-                  <li class="list-group-item border-0 p-0 ">Skateboarding</li>
-                </Link>
-              </ul>
-            </div>
-            <div>
-              <h4 className="mb-4 border-bottom">FILTER</h4>
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item border-0 p-0">
-                  <h5>Price</h5>
-                  <form>
-                    <div class="radio">
-                      <label>
-                        <input type="radio" name="priceradio" value={1500000} />
-                        {`Under Rp${(1500000).toLocaleString("IN")}`}
-                      </label>
-                    </div>
-                    <div class="radio">
-                      <label>
-                        <input type="radio" name="priceradio" value={2000000} />
-                        {`Rp${(1500000).toLocaleString(
-                          "IN"
-                        )} - Rp${(1750000).toLocaleString("IN")}`}
-                      </label>
-                    </div>
-                    <div class="radio">
-                      <label>
-                        <input type="radio" name="priceradio" value={2500000} />
-                        {`Rp${(1750000).toLocaleString(
-                          "IN"
-                        )} - Rp${(2000000).toLocaleString("IN")}`}
-                      </label>
-                    </div>
-                    <div class="radio">
-                      <label>
-                        <input type="radio" name="priceradio" value={3000000} />
-                        {`Over Rp${(2000000).toLocaleString("IN")}`}
-                      </label>
-                    </div>
-                  </form>
-                </li>
+              </div>
+              <div>
+                <h4 className="mb-4 border-bottom">FILTER</h4>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item border-0 p-0">
+                    <h5>Price</h5>
+                    <form>
+                      <div class="radio">
+                        <label>
+                          <input
+                            type="radio"
+                            name="priceradio"
+                            value={1500000}
+                          />
+                          {`Under Rp${(1500000).toLocaleString("IN")}`}
+                        </label>
+                      </div>
+                      <div class="radio">
+                        <label>
+                          <input
+                            type="radio"
+                            name="priceradio"
+                            value={1750000}
+                          />
+                          {`Rp${(1500000).toLocaleString(
+                            "IN"
+                          )} - Rp${(1750000).toLocaleString("IN")}`}
+                        </label>
+                      </div>
+                      <div class="radio">
+                        <label>
+                          <input
+                            type="radio"
+                            name="priceradio"
+                            value={2000000}
+                          />
+                          {`Rp${(1750000).toLocaleString(
+                            "IN"
+                          )} - Rp${(2000000).toLocaleString("IN")}`}
+                        </label>
+                      </div>
+                      <div class="radio">
+                        <label>
+                          <input
+                            type="radio"
+                            name="priceradio"
+                            value={2000001}
+                          />
+                          {`Over Rp${(2000000).toLocaleString("IN")}`}
+                        </label>
+                      </div>
+                    </form>
+                  </li>
 
-                <li class="list-group-item border-0 p-0 ">
-                  <h5>Size</h5>
-                  <form>
-                    <div class="radio d-flex justify-content-around">
-                      <label className="col-6 p-0">
-                        <input
-                          className="radiosize"
-                          type="radio"
-                          name="sizeradio"
-                          value={35.5}
-                        />
-                        EU 35.5
-                      </label>
-                      <label className="col-6 p-0">
-                        <input
-                          className="radiosize"
-                          type="radio"
-                          name="sizeradio"
-                          value={36}
-                        />
-                        EU 36
-                      </label>
-                    </div>
-                    <div class="radio d-flex justify-content-around">
-                      <label className="col-6 p-0">
-                        <input
-                          className="radiosize"
-                          type="radio"
-                          name="sizeradio"
-                          value={37}
-                        />
-                        EU 37
-                      </label>
-                      <label className="col-6 p-0">
-                        <input
-                          className="radiosize"
-                          type="radio"
-                          name="sizeradio"
-                          value={37.5}
-                        />
-                        EU 37.5
-                      </label>
-                    </div>
-                    <div class="radio d-flex justify-content-around">
-                      <label className="col-6 p-0">
-                        <input
-                          className="radiosize"
-                          type="radio"
-                          name="sizeradio"
-                          value={38}
-                        />
-                        EU 38
-                      </label>
-                      <label className="col-6 p-0">
-                        <input
-                          className="radiosize"
-                          type="radio"
-                          name="sizeradio"
-                          value={38.5}
-                        />
-                        EU 38.5
-                      </label>
-                    </div>
-                    <div class="radio d-flex justify-content-around">
-                      <label className="col-6 p-0">
-                        <input
-                          className="radiosize"
-                          type="radio"
-                          name="sizeradio"
-                          value={39}
-                        />
-                        EU 39
-                      </label>
-                      <label className="col-6 p-0">
-                        <input
-                          className="radiosize"
-                          type="radio"
-                          name="sizeradio"
-                          value={40}
-                        />
-                        EU 40
-                      </label>
-                    </div>
-                    <div class="radio d-flex justify-content-around">
-                      <label className="col-6 p-0">
-                        <input
-                          className="radiosize"
-                          type="radio"
-                          name="sizeradio"
-                          value={41}
-                        />
-                        EU 41
-                      </label>
-                      <label className="col-6 p-0">
-                        <input
-                          className="radiosize"
-                          type="radio"
-                          name="sizeradio"
-                          value={42}
-                        />
-                        EU 42
-                      </label>
-                    </div>
-                    <div class="radio d-flex justify-content-around">
-                      <label className="col-6 p-0">
-                        <input
-                          className="radiosize"
-                          type="radio"
-                          name="sizeradio"
-                          value={43}
-                        />
-                        EU 43
-                      </label>
-                      <label className="col-6 p-0">
-                        <input
-                          className="radiosize"
-                          type="radio"
-                          name="sizeradio"
-                          value={44}
-                        />
-                        EU 44
-                      </label>
-                    </div>
-                  </form>
-                </li>
-              </ul>
-            </div>
-            <div className="groupbtnfilter d-flex justify-content-between">
-              <button className="btnfilter btn btn-outline-secondary">
-                FILTER
-              </button>
-              <button
-                onClick={this.cancelBtn}
-                className="btnfilter btn btn-outline-secondary"
-              >
-                CANCEL
-              </button>
-            </div>
-          </div>
-          <div className="col-10">
-            <div className="col-2 mb-4">
-              <Dropdown
-                isOpen={this.state.dropdownSort}
-                toggle={() => {
-                  this.toggleSort();
-                }}
-              >
-                <DropdownToggle
-                  className={`dropdownsort d-flex justify-content-between`}
-                  color="white"
+                  <li class="list-group-item border-0 p-0 ">
+                    <h5>Size</h5>
+                    <form>
+                      <div class="radio d-flex justify-content-around">
+                        <label className="col-6 p-0">
+                          <input
+                            className="radiosize"
+                            type="radio"
+                            name="sizeradio"
+                            value={35.5}
+                          />
+                          EU 35.5
+                        </label>
+                        <label className="col-6 p-0">
+                          <input
+                            className="radiosize"
+                            type="radio"
+                            name="sizeradio"
+                            value={36}
+                          />
+                          EU 36
+                        </label>
+                      </div>
+                      <div class="radio d-flex justify-content-around">
+                        <label className="col-6 p-0">
+                          <input
+                            className="radiosize"
+                            type="radio"
+                            name="sizeradio"
+                            value={37}
+                          />
+                          EU 37
+                        </label>
+                        <label className="col-6 p-0">
+                          <input
+                            className="radiosize"
+                            type="radio"
+                            name="sizeradio"
+                            value={37.5}
+                          />
+                          EU 37.5
+                        </label>
+                      </div>
+                      <div class="radio d-flex justify-content-around">
+                        <label className="col-6 p-0">
+                          <input
+                            className="radiosize"
+                            type="radio"
+                            name="sizeradio"
+                            value={38}
+                          />
+                          EU 38
+                        </label>
+                        <label className="col-6 p-0">
+                          <input
+                            className="radiosize"
+                            type="radio"
+                            name="sizeradio"
+                            value={38.5}
+                          />
+                          EU 38.5
+                        </label>
+                      </div>
+                      <div class="radio d-flex justify-content-around">
+                        <label className="col-6 p-0">
+                          <input
+                            className="radiosize"
+                            type="radio"
+                            name="sizeradio"
+                            value={39}
+                          />
+                          EU 39
+                        </label>
+                        <label className="col-6 p-0">
+                          <input
+                            className="radiosize"
+                            type="radio"
+                            name="sizeradio"
+                            value={40}
+                          />
+                          EU 40
+                        </label>
+                      </div>
+                      <div class="radio d-flex justify-content-around">
+                        <label className="col-6 p-0">
+                          <input
+                            className="radiosize"
+                            type="radio"
+                            name="sizeradio"
+                            value={41}
+                          />
+                          EU 41
+                        </label>
+                        <label className="col-6 p-0">
+                          <input
+                            className="radiosize"
+                            type="radio"
+                            name="sizeradio"
+                            value={42}
+                          />
+                          EU 42
+                        </label>
+                      </div>
+                      <div class="radio d-flex justify-content-around">
+                        <label className="col-6 p-0">
+                          <input
+                            className="radiosize"
+                            type="radio"
+                            name="sizeradio"
+                            value={43}
+                          />
+                          EU 43
+                        </label>
+                        <label className="col-6 p-0">
+                          <input
+                            className="radiosize"
+                            type="radio"
+                            name="sizeradio"
+                            value={44}
+                          />
+                          EU 44
+                        </label>
+                      </div>
+                    </form>
+                  </li>
+                </ul>
+              </div>
+              <div className="groupbtnfilter d-flex justify-content-between">
+                <button
+                  onClick={this.filterBtn}
+                  className="btnfilter btn btn-outline-secondary"
                 >
-                  SORT BY:
-                  <i class="fas fa-caret-down" />
-                </DropdownToggle>
-                <DropdownMenu className="dropCartMenu m-0">
-                  <DropdownItem onClick={this.selectSort}>Newest</DropdownItem>
-                  {/* <DropdownItem onClick={this.selectSort}>
-                    Highest Rated
-                  </DropdownItem> */}
-                  <DropdownItem onClick={this.selectSort}>
-                    Price High-Low
-                  </DropdownItem>
-                  <DropdownItem onClick={this.selectSort}>
-                    Price Low-High
-                  </DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
+                  FILTER
+                </button>
+                <button
+                  onClick={this.cancelBtn}
+                  className="btnfilter btn btn-outline-secondary"
+                >
+                  CANCEL
+                </button>
+              </div>
             </div>
-            {this.renderList()}
+            <div className="col-10">
+              <div className="col-2 mb-4">
+                <Dropdown
+                  isOpen={this.state.dropdownSort}
+                  toggle={() => {
+                    this.toggleSort();
+                  }}
+                >
+                  <DropdownToggle
+                    className={`dropdownsort d-flex justify-content-between`}
+                    color="white"
+                  >
+                    SORT BY:
+                    <i class="fas fa-caret-down" />
+                  </DropdownToggle>
+                  <DropdownMenu className="dropCartMenu m-0">
+                    <DropdownItem onClick={this.selectSort}>
+                      Newest
+                    </DropdownItem>
+                    <DropdownItem onClick={this.selectSort}>
+                      Price High-Low
+                    </DropdownItem>
+                    <DropdownItem onClick={this.selectSort}>
+                      Price Low-High
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              </div>
+              {this.renderList()}
+            </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return <Redirect to="/manageproducts/products/:page" />;
+    }
   }
 }
-
-export default Shop;
+const mapStateToProps = state => {
+  return {
+    role: state.user.role
+  };
+};
+export default connect(mapStateToProps)(Shop);

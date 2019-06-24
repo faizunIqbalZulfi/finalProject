@@ -39,10 +39,14 @@ export const onEditAddress = (address_id, data) => {
 };
 
 //deleteaddress
-export const onDeleteAddress = address_id => {
+export const onDeleteAddress = (address_id, user_id) => {
+  console.log(user_id);
+
   return async dispatch => {
     try {
-      const res = await axios.delete(`/delete/address/${address_id}`);
+      const res = await axios.delete(
+        `/delete/address/${address_id}/${user_id}`
+      );
 
       dispatch({
         type: AUTH_ERROR,

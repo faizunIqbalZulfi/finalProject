@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import Cookies from "universal-cookie";
 
 import { onRegister } from "../store/actions/user";
-import { registerSuccess } from "../config/message";
+import { registerSuccess, admin } from "../config/message";
 
 const cookies = new Cookies();
 
@@ -53,129 +53,131 @@ class Register extends React.Component {
   };
 
   render() {
-    if (cookies.get("user_id") === undefined) {
-      return (
-        <div className="register">
-          <div className="row-sd d-md-flex justify-content-between mt-5">
-            <div className="col-md-4 offset-4 ">
-              <div className="text-center mb-4">
-                <h3>REGISTER</h3>
-                <hr />
+    if (this.props.role === admin) {
+      return <Redirect to="/manageproducts/products/:page" />;
+    }
+    if (cookies.get("user_id") !== undefined) {
+      return <Redirect to="/" />;
+    }
+    return (
+      <div className="register">
+        <div className="row-sd d-md-flex justify-content-between mt-5">
+          <div className="col-md-4 offset-4 ">
+            <div className="text-center mb-4">
+              <h3>REGISTER</h3>
+              <hr />
+            </div>
+            <form className="register2">
+              <div className="d-flex justify-content-between">
+                <div className="col-6 pl-0">
+                  <div className="form-group">
+                    <p className="loginRegister mb-0">First Name</p>
+                    <input
+                      ref={input => {
+                        this.firstName = input;
+                      }}
+                      type="texy"
+                      className="form-control"
+                      placeholder="First Name"
+                    />
+                  </div>
+                </div>
+                <div className="col-6 pr-0">
+                  <div className="form-group">
+                    <p className="loginRegister mb-0">Last Name</p>
+                    <input
+                      ref={input => {
+                        this.lastName = input;
+                      }}
+                      type="text"
+                      className="form-control"
+                      placeholder="Last Name"
+                    />
+                  </div>
+                </div>
               </div>
-              <form className="register2">
-                <div className="d-flex justify-content-between">
-                  <div className="col-6 pl-0">
-                    <div className="form-group">
-                      <p className="loginRegister mb-0">First Name</p>
-                      <input
-                        ref={input => {
-                          this.firstName = input;
-                        }}
-                        type="texy"
-                        className="form-control"
-                        placeholder="First Name"
-                      />
-                    </div>
-                  </div>
-                  <div className="col-6 pr-0">
-                    <div className="form-group">
-                      <p className="loginRegister mb-0">Last Name</p>
-                      <input
-                        ref={input => {
-                          this.lastName = input;
-                        }}
-                        type="text"
-                        className="form-control"
-                        placeholder="Last Name"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="form-group">
-                  <p className="loginRegister mb-0">Username</p>
-                  <input
-                    ref={input => {
-                      this.username = input;
-                    }}
-                    type="text"
-                    className="form-control"
-                    placeholder="Username"
-                  />
-                </div>
-                <div className="form-group">
-                  <p className="loginRegister mb-0">E-Mail</p>
-                  <input
-                    ref={input => {
-                      this.email = input;
-                    }}
-                    type="text"
-                    className="form-control"
-                    placeholder="E-Mail Address"
-                  />
-                </div>
-                <div className="form-group">
-                  <p className="loginRegister mb-0">Password</p>
-                  <input
-                    ref={input => {
-                      this.password = input;
-                    }}
-                    type="password"
-                    className="form-control"
-                    placeholder="Password"
-                  />
-                </div>
-              </form>
               <div className="form-group">
-                <p className="loginRegister mb-0">Gender</p>
-                <div className="btn-group btn-block">
-                  <button
-                    className={
-                      this.state.gender === "M"
-                        ? "btn btn-secondary"
-                        : "btn btn-outline-secondary"
-                    }
-                    onClick={() => this.onRadioBtnClick("M")}
-                  >
-                    Male
-                  </button>
-                  <button
-                    className={
-                      this.state.gender === "F"
-                        ? "btn btn-secondary"
-                        : "btn btn-outline-secondary"
-                    }
-                    onClick={() => this.onRadioBtnClick("F")}
-                  >
-                    Female
-                  </button>
-                </div>
+                <p className="loginRegister mb-0">Username</p>
+                <input
+                  ref={input => {
+                    this.username = input;
+                  }}
+                  type="text"
+                  className="form-control"
+                  placeholder="Username"
+                />
               </div>
-              {this.onRegisterMessage()}
-              <button
-                onClick={() => {
-                  this.btnRegisterOnClick();
-                }}
-                className="btn btn-outline-secondary btn-block mt-4"
-              >
-                REGISTER
-              </button>
-              <div className="text-center">
-                <p className="loginRegister mt-3">
-                  Already a member? <Link to="/login">Sign in.</Link>
-                </p>
+              <div className="form-group">
+                <p className="loginRegister mb-0">E-Mail</p>
+                <input
+                  ref={input => {
+                    this.email = input;
+                  }}
+                  type="text"
+                  className="form-control"
+                  placeholder="E-Mail Address"
+                />
               </div>
+              <div className="form-group">
+                <p className="loginRegister mb-0">Password</p>
+                <input
+                  ref={input => {
+                    this.password = input;
+                  }}
+                  type="password"
+                  className="form-control"
+                  placeholder="Password"
+                />
+              </div>
+            </form>
+            <div className="form-group">
+              <p className="loginRegister mb-0">Gender</p>
+              <div className="btn-group btn-block">
+                <button
+                  className={
+                    this.state.gender === "M"
+                      ? "btn btn-secondary"
+                      : "btn btn-outline-secondary"
+                  }
+                  onClick={() => this.onRadioBtnClick("M")}
+                >
+                  Male
+                </button>
+                <button
+                  className={
+                    this.state.gender === "F"
+                      ? "btn btn-secondary"
+                      : "btn btn-outline-secondary"
+                  }
+                  onClick={() => this.onRadioBtnClick("F")}
+                >
+                  Female
+                </button>
+              </div>
+            </div>
+            {this.onRegisterMessage()}
+            <button
+              onClick={() => {
+                this.btnRegisterOnClick();
+              }}
+              className="btn btn-outline-secondary btn-block mt-4"
+            >
+              REGISTER
+            </button>
+            <div className="text-center">
+              <p className="loginRegister mt-3">
+                Already a member? <Link to="/login">Sign in.</Link>
+              </p>
             </div>
           </div>
         </div>
-      );
-    } else {
-      return <Redirect to="/setting/account" />;
-    }
+      </div>
+    );
   }
 }
 
 const mapStateToProps = state => {
-  return { message: state.user.message };
+  return { message: state.user.message, role: state.user.role };
 };
 export default connect(
   mapStateToProps,

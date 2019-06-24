@@ -5,7 +5,6 @@ const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
 
-const { sendMail } = require("../mails/nodemailer");
 const connection = require("../connections/connection");
 const {
   registerSuccess,
@@ -16,11 +15,11 @@ const uploadDir = path.join(__dirname, "../uploads/avatar");
 
 const storage = multer.diskStorage({
   // Destination
-  destination: function(req, file, cb) {
+  destination: function (req, file, cb) {
     cb(null, uploadDir);
   },
   // Filename
-  filename: function(req, file, cb) {
+  filename: function (req, file, cb) {
     // var check = true;
     // if (file.originalname === "default.jpg") {
     //   console.log(file);
@@ -47,10 +46,10 @@ const upstore = multer({
 });
 
 //verify
-router.get("/verify", (req, res) => {
-  const sql = `UPDATE users SET verified = TRUE WHERE email = '${
-    req.query.email
-  }'`;
+router.patch("/edit/status/:status/:user_id", (req, res) => {
+  const sql = `UPDATE users SET status = ${req.params.status} WHERE user_id = '${
+    req.params.user_id
+    }'`;
 
   connection.query(sql, (err, result) => {
     if (err) return res.send(err);
@@ -80,7 +79,7 @@ router.post("/register/user", async (req, res) => {
   connection.query(sql, data, (err, result) => {
     if (err) return res.send(err.sqlMessage);
 
-    sendMail(req.body.email);
+    // sendMail(req.body.email);
 
     res.send(registerSuccess);
   });
@@ -97,7 +96,7 @@ router.post("/login/user", (req, res) => {
 
     if (!result[0]) return res.send("user not found");
 
-    if (!result[0].verified) return res.send("please, verify your email");
+    if (!result[0].status) return res.send("banned");
 
     const hash = await bcrypt.compare(password, result[0].password);
 
@@ -141,7 +140,7 @@ router.patch("/edit/user/:user_id", upstore.single("avatar"), (req, res) => {
 
     const sql = `UPDATE users SET avatar = '${
       req.file.filename
-    }' WHERE user_id = ${req.params.user_id}`;
+      }' WHERE user_id = ${req.params.user_id}`;
     connection.query(sql, (err, result) => {
       if (err) return res.send(err);
 
@@ -198,7 +197,7 @@ router.delete("/delete/avatar/:user_id", (req, res) => {
 
     const sql = `UPDATE users SET avatar = null WHERE user_id = ${
       req.params.user_id
-    }`;
+      }`;
 
     fs.unlink(`${uploadDir}/${result[0].avatar}`, err => {
       if (err) return res.send(err);
@@ -222,6 +221,16 @@ router.delete("/delete/user/:user_id", (req, res) => {
     if (err) return res.send(err.sqlMessage);
 
     res.send("delete user success");
+  });
+});
+
+// getalluser
+router.get("/get/alluser", (req, res) => {
+  const sql = `SELECT * FROM users order by role`;
+  connection.query(sql, (err, result) => {
+    if (err) return res.send(err);
+
+    res.send(result);
   });
 });
 

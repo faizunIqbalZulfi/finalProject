@@ -1,4 +1,4 @@
-const registerSuccess = "register success, verify your email";
+const registerSuccess = "register success";
 const editSuccess = "edit success";
 const user = "user";
 const admin = "admin";

@@ -34,9 +34,15 @@ class EditCart extends React.Component {
     this.toggle = this.toggle.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     console.log(this.props.product.product_id);
-    this.getSizeProduct();
+    await this.getSizeProduct();
+
+    const con = this.state.stock.filter(stock => {
+      return this.state.size === stock.size;
+    });
+
+    this.setState({ arrQty: con[0].qty });
   }
 
   toggle() {

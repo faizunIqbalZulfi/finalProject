@@ -5,6 +5,7 @@ import { Redirect } from "react-router-dom";
 
 import axios from "../config/axios";
 import { getAllWishcart } from "../store/actions/product";
+import { admin } from "../config/message";
 
 const cookies = new Cookies();
 
@@ -102,10 +103,14 @@ class Wishlist extends React.Component {
   };
   render() {
     console.log(this.props.wishlist);
+    if (this.props.role === admin) {
+      return <Redirect to="/manageproducts/products/:page" />;
+    }
     if (cookies.get("user_id")) {
+      var items = 0;
       if (this.props.wishlist.length) {
-        var items = 0;
         this.props.wishlist.forEach(product => {
+          console.log(product.qty);
           items += product.qty;
         });
       }
@@ -117,7 +122,10 @@ class Wishlist extends React.Component {
           {!items ? (
             <div className="body">
               <div className="d-flex justify-content-between">
-                <img src={require("../images/wishlishDefault.png")} />
+                <img
+                  className="imgwishlist"
+                  src={require("../images/wishlishDefault.png")}
+                />
                 <div className="text">
                   <h3>YOUR WISH LIST IS CURRENTLY EMPTY.</h3>
                   <p>
@@ -153,7 +161,8 @@ class Wishlist extends React.Component {
 const mapStateToProps = state => {
   return {
     user_id: state.user.user_id,
-    wishlist: state.product.wishlist
+    wishlist: state.product.wishlist,
+    role: state.user.role
   };
 };
 

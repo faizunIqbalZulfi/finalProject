@@ -145,6 +145,7 @@ div .homeCaro {
 
 div .homeCate {
   margin-top: 30px;
+  margin-bottom: 30px;
   padding: 0px 30px;
 }
 
@@ -155,7 +156,7 @@ div .homeCate {
   background-size: cover;
   background-repeat: no-repeat;
   box-sizing: border-box;
-  border: 1.5px solid rgb(245, 245, 245);
+  border: 1px solid rgb(245, 245, 245);
 }
 
 .women {
@@ -165,7 +166,7 @@ div .homeCate {
   background-size: cover;
   background-repeat: no-repeat;
   box-sizing: border-box;
-  border: 1.5px solid rgb(245, 245, 245);
+  border: 1px solid rgb(245, 245, 245);
 }
 
 .home .d-flex p {
@@ -173,21 +174,43 @@ div .homeCate {
   text-align: center;
   margin-top: 200px;
 }
-
+.titlebestseller,
+.titlenewarrival {
+  margin: 30px 30px;
+  margin-bottom: 0px;
+  font-size: 30px;
+  font-weight: 900;
+  letter-spacing: 0;
+}
 div.scrollmenu {
-  background-color: rgb(245, 245, 245);
+  background-color: rgb(255, 255, 255);
   overflow: auto;
   white-space: nowrap;
-  margin-top: 30px;
+  /* margin-top: 30px; */
 }
 
 div.scrollmenu::-webkit-scrollbar {
   display: none;
 }
-
-div.scrollmenu p {
-  line-height: 13px;
-  letter-spacing: 1px;
+.cardshop {
+  border: 1px solid white;
+  margin-bottom: 10px;
+  width: 280px;
+}
+.cardshop:hover {
+  border: 1px solid black;
+}
+.cardshop .imgshop {
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+}
+.home .cardshop .textshop {
+  margin-top: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 2px;
 }
 
 .img1 img {
@@ -199,27 +222,28 @@ div.scrollmenu p {
 
 .img1:hover {
   width: 300px;
-  border: 1.5px solid rgb(0, 0, 0);
+  border: 1px solid rgb(0, 0, 0);
 }
 .img1 {
   background-color: rgb(245, 245, 245);
   width: 300px;
+  /* height: 426px; */
   display: inline-block;
   margin: 15px;
-  border: 1.5px solid rgb(245, 245, 245);
+  border: 1px solid rgb(245, 245, 245);
 }
 
 .men:hover,
 .women:hover {
-  border: 1.5px solid rgb(0, 0, 0);
+  border: 1px solid rgb(0, 0, 0);
   font-weight: 900;
 }
 
-.img1 p {
+/* .img1 p {
   margin: 5px;
   color: rgb(0, 0, 0);
   text-align: center;
-}
+} */
 
 /* Home */
 
@@ -228,12 +252,10 @@ div.scrollmenu p {
   margin-top: 130px;
   padding: 0px 50px;
 }
-
 .detailProduct img {
   width: 400px;
   margin: 5px;
 }
-
 .detailProduct div.row.justify-content-between .btnSizeDetail {
   width: 120px;
   margin: 5px 0px;
@@ -349,12 +371,12 @@ div.scrollmenu p {
 /* ManageProduct */
 
 /* Address */
-.address {
+.AccountAddress .address {
   border: 1px solid rgb(199, 199, 199);
   padding: 20px;
   margin-bottom: 40px;
 }
-.address .card-title {
+.AccountAddress .address .card-title {
   border-bottom: 1px solid rgb(199, 199, 199);
   padding-bottom: 10px;
 }
@@ -366,6 +388,11 @@ div.scrollmenu p {
 
 .btnlink:hover {
   color: rgb(136, 136, 136);
+}
+
+.btnsetdefault {
+  background-color: transparent;
+  border: none;
 }
 /* Address */
 
@@ -393,7 +420,7 @@ div.scrollmenu p {
   border: 1px solid black;
   background-color: rgb(245, 245, 245);
 }
-.wishlist .body img {
+.wishlist .body .imgwishlist {
   width: 250px;
   height: 250px;
   object-fit: cover;
@@ -428,6 +455,219 @@ div.col-2 {
   margin-top: 40px;
 }
 /* Wishlist */
+
+/* checkout */
+.checkout {
+  margin-top: 100px;
+  margin-bottom: 50px;
+  padding: 0 180px;
+}
+.checkout .titlecheckout {
+  border: 1px solid black;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+.checkout .titlecheckout .address {
+  background-color: rgb(245, 245, 245);
+  border: 3px solid rgb(0, 0, 0);
+  padding: 20px;
+  margin-bottom: 10px;
+}
+.checkout .headercheckout {
+  background-color: black;
+  color: white;
+  padding: 10px;
+}
+.checkout .cartCheckout {
+  margin-top: 25px;
+  border: 1px solid black;
+}
+.checkout .cartCheckout .header {
+  background-color: black;
+  color: white;
+  padding: 10px;
+  font-weight: 900;
+}
+.checkout .cartCheckout .body {
+  background-color: rgb(245, 245, 245);
+}
+.checkout .cartCheckout .productCheckout {
+  border-top: 1px solid black;
+}
+.checkout .cartCheckout img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+.checkout .cartCheckout p {
+  font-size: 12px;
+  margin: 0;
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 12px;
+}
+.checkout .cartCheckout .productCheckout .product {
+  margin: 15px 0px !important;
+}
+.checkout .inputCheckout {
+  padding: 10px 30px;
+}
+.checkout .orderSummaryCheckout {
+  border: 1px solid black;
+  padding: 0px;
+  background-color: rgb(255, 255, 255);
+}
+.orderSummaryCheckout .header {
+  background-color: black;
+  color: white;
+  padding: 10px;
+  font-weight: 900;
+}
+.orderSummaryCheckout .body {
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 5px;
+  padding: 10px;
+}
+.btnaddress {
+  text-align: left;
+  padding: 0;
+  margin-bottom: 10px;
+  background-color: transparent;
+  border: none;
+  width: 100%;
+}
+.btnaddress:hover {
+  background-color: rgb(245, 245, 245);
+}
+.address .card-title {
+  border-bottom: 1px solid rgb(199, 199, 199);
+  padding-bottom: 10px;
+}
+.btnaddress .address {
+  margin: 0;
+  border: 1px solid black;
+  padding: 10px;
+}
+.checkout .checkouttitle {
+  font-size: 20px;
+  font-weight: 900;
+}
+.checkout .titlecheckout form label {
+  margin: 0px;
+}
+.checkout .titlecheckout .checkoutpayment {
+  border: 3px solid black;
+  padding: 8px;
+  background-color: rgb(245, 245, 245);
+}
+.checkout .titlecheckout .checkoutpayment h4 {
+  font-size: 15px;
+  font-weight: 900;
+}
+.checkout .titlecheckout .shipment .dropdownCart {
+  width: 150px;
+}
+.checkout .titlecheckout .shipment .dropdownHeader {
+  padding: 10px 0;
+}
+.checkout .titlecheckout .shipment .dropCartMenu {
+  padding: 0 10px;
+}
+.checkout .titlecheckout .shipment .d-inline-block {
+  vertical-align: top;
+}
+.checkout .titlecheckout .shipment .shiper {
+  line-height: 5px;
+  margin-top: -5px;
+}
+.checkout .titlecheckout .shipment .shiper h1 {
+  font-weight: 900;
+  font-size: 20px;
+}
+.checkout .titlecheckout .shipment .shiper p {
+  line-height: 1px;
+  font-size: 15px;
+}
+.dropdownduration {
+  line-height: 2px;
+  margin: 4px 0;
+}
+.dropdownduration .price {
+  font-size: 12px;
+  font-weight: 900;
+  color: orange;
+}
+.titleCheck {
+  padding-bottom: 5px;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: 0;
+  border-bottom: 1px solid black;
+}
+/* .address .bodyCheck {
+  margin: 0 10px;
+} */
+.address .bodyCheck h5.itemCheck {
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: 0;
+}
+.address .bodyCheck p.itemCheck,
+p.itemCheck {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 2px;
+  letter-spacing: 0;
+}
+.btnCheck {
+  border: 1px solid black;
+  padding: 5px 10px;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 0;
+  color: rgb(0, 0, 0);
+  background-color: transparent;
+}
+.btnCheck:hover {
+  outline: none;
+  color: rgb(255, 255, 255);
+  background-color: black;
+}
+.inlinebutton {
+  /* display: inline-flex; */
+  float: left !important;
+}
+input[type="radio"] {
+  box-sizing: border-box;
+  appearance: none;
+  background: white;
+  outline: 1px solid #333;
+  border: 1px solid white;
+  width: 10px;
+  height: 10px;
+  display: inline-flex;
+}
+
+input[type="radio"]:checked {
+  background: #333;
+}
+
+/* .optionAdd {
+  margin-top: -3px !important;
+} */
+
+/* .optionShipper {
+  margin-top: -3px !important;
+} */
+
+.optionBank {
+  margin-top: -5px !important;
+  font-size: 15px;
+  font-weight: 900;
+}
+/* checkout */
 
 /* Register */
 .loginRegister {
@@ -594,6 +834,7 @@ div.col-2 {
   font-size: 20px !important;
   font-weight: 600;
   color: black;
+  margin: 0;
 }
 .orderSummary .header {
   background-color: rgb(245, 245, 245);
@@ -684,7 +925,6 @@ div.col-2 {
 .shop input,
 input.radiosize {
   margin-right: 5px;
-  background-color: aqua !important;
 }
 .shop .cardshop {
   border: 1px solid white;
@@ -725,7 +965,249 @@ div.shop .cardshop:hover {
 .btnfilter:focus {
   box-shadow: none;
 }
+.inputsearchshop{
+  height: 40px;
+  border: 1px solid black;
+  padding: 5px;
+  box-sizing: border-box
+}
+.inputsearchshop:focus, .inputsearchshop:hover{
+  outline: none;
+  border: 1.5px solid black;
+  box-sizing: border-box
+
+}
 /* shop */
+
+/* orderuser */
+.orderuser {
+  border: 1px solid black;
+  padding: 20px;
+}
+.orderuserpayment {
+  border: 1px solid black;
+  padding: 10px;
+}
+.btnorderusercancel {
+  background-color: transparent;
+  border: none;
+  color: red;
+}
+.btnorderusercancel:hover {
+  color: grey;
+}
+.btnorderuserinv {
+  padding: 0;
+  font-weight: 900;
+  letter-spacing: 0;
+  background-color: transparent;
+  border: none;
+  color: rgb(37, 37, 37);
+}
+.btnorderuserinv:hover {
+  color: grey;
+}
+.btnorderuserinv:active,
+.btnorderuserinv:focus {
+  outline: none;
+}
+/* .btnorderuser {
+  height: 40px;
+  margin-top: 0px;
+} */
+.imgorderuser {
+  width: 120px;
+  margin: 10px 0;
+}
+.totalorderuser,
+.pmorderuser,
+.bankorderuser,
+.accountorderuser {
+  font-weight: 900;
+  line-height: 5px;
+  letter-spacing: 0;
+}
+.totalorderuser {
+  font-size: 18px;
+  color: orange;
+}
+.orderuser .orderuserpayment span {
+}
+.btnorderchange {
+  margin-top: 25px;
+  color: grey;
+  background-color: transparent;
+  border: none;
+}
+.btnorderchange:hover {
+  color: rgb(224, 224, 224);
+}
+.btnorderuser {
+  padding: 0 3px;
+  height: 30px;
+  margin-top: 10px;
+}
+.droppayment {
+  margin-bottom: 25px;
+}
+.dropchangepayment {
+  width: 100% !important;
+  background-color: white;
+  padding: 0px 20px;
+  top: -20px;
+}
+.dropitempaymnet {
+  padding: 15px;
+  border-bottom: 1px solid black;
+}
+/* .btnchangepayment {
+  width: 150px;
+  margin: 0 10px;
+} */
+.btnchangepayment {
+  border: 1px solid black;
+  padding: 5px 10px;
+  margin: 0 10px;
+  width: 150px;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 0;
+  color: rgb(0, 0, 0);
+  background-color: transparent;
+}
+.btnchangepayment:hover {
+  outline: none;
+  color: rgb(255, 255, 255);
+  background-color: black;
+}
+.imgmodalproof {
+  width: 100%;
+  object-fit: cover;
+}
+.btnmodalproof {
+  width: 200px;
+  height: 30px;
+  padding: 0;
+}
+.imgordersadmin {
+  width: 80px;
+}
+/* .droppayment {
+  height: 300px;
+} */
+/* orderuser */
+
+/* orders */
+.theadorders {
+  font-size: 13px;
+  font-weight: 900;
+}
+.tbodyorders {
+  font-size: 10px;
+}
+.btnorders {
+  padding: 0px;
+  font-size: 12px;
+  width: 60px;
+}
+.dropdownstatusorder {
+  width: 140px;
+  height: 30px;
+  border: 1px solid black;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 900;
+  color: white;
+  background-color: black;
+}
+.dropitemstatusorder {
+  height: 20px;
+  padding: 5px 10px;
+  background-color: white;
+  margin-bottom: 5px;
+}
+.dropmenustatusorder {
+  background-color: white;
+}
+.divdetailsorder {
+  /* border-bottom: 1px solid black; */
+  margin: 10px 0;
+}
+.headerdetailsorder {
+  background-color: rgb(0, 0, 0);
+  color: white;
+  border-radius: 0px;
+  border: 0px;
+}
+.headerdetailsorder .close {
+  color: rgba(255, 255, 255, 1);
+}
+.bodydetailsorder {
+  background-color: rgb(245, 245, 245);
+  border-radius: 0px;
+  border: 0px;
+}
+.h3detailsorder {
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 0;
+}
+.pdetailsorder {
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 3px;
+  text-transform: lowercase;
+}
+.imgdetailsorder {
+  width: 80px !important;
+  height: 80px !important;
+  object-fit: cover;
+}
+.valueordersradio{
+  font-size: 12px !important;
+  letter-spacing: 0;
+  padding: 0;
+  margin: 0
+}
+.btnfilterorders{
+  border: 1px solid black;
+  background-color: transparent;
+  font-size: 13px;
+  font-weight: 600
+}
+.btnfilterorders:hover{
+  border: 1.5px solid black;
+  outline: none;
+  background-color: black;
+  color: white
+}
+.btnfilterorders:focus{
+  outline: none
+
+}
+/* orders */
+
+/* add payment method */
+.addpaymnet {
+  padding: 5px;
+  height: 33px;
+  border: 1px solid black;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 900;
+  color: black;
+}
+.addpaymnet:focus,
+.addpaymnet:checked {
+  box-shadow: none;
+  border: 1.5px solid black;
+}
+.formpayment {
+  font-size: 15px;
+  font-weight: 900;
+}
+/* add payment method */
 
 /* Footer */
 .footer {

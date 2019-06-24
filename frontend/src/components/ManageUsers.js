@@ -55,7 +55,7 @@ class ManageUsers extends React.Component {
         </div>
       );
     }
-    return <Redirect to="/home" />;
+    return <Redirect to="/" />;
   }
 }
 

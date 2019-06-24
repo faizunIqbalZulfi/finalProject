@@ -149,6 +149,7 @@ export const onLogout = () => {
   cookies.remove("user_id", { path: "/" });
   cookies.remove("address", { path: "/" });
   cookies.remove("role", { path: "/" });
+  cookies.remove("cart", { path: "/" });
   return {
     type: LOGOUT_SUCCESS
   };

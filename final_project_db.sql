@@ -1,15 +1,20 @@
 CREATE DATABASE final_project;
 USE final_project;
-DROP TABLE wishcart;
-DESC images;
-DESC wishcart;
+DROP TABLE orderdetails;
+DESC shipers;
+DESC users;
 SELECT * FROM wishcart;
 SELECT * FROM size;
 SELECT * FROM users;
 SELECT * FROM products;
-SELECT * FROM stock;
+SELECT * FROM stock WHERE qty <= 2;
 SELECT * FROM images;
 SELECT * FROM addresses;
+SELECT * FROM shipers;
+SELECT * FROM paymentmethod;
+SELECT * FROM orders;
+SELECT * FROM orderdetails;
+DESC addresses;
 SELECT * FROM addresses WHERE user_id IN (SELECT user_id FROM users where email = "faizun@gmail.com");
 
 SELECT * FROM products p 
@@ -18,14 +23,32 @@ WHERE i.name_image LIKE '%default%'
 ORDER BY p.product_id DESC
 LIMIT 6;
 
-SELECT * FROM products p 
-JOIN images i ON p.product_id = i.product_id
-JOIN stock s ON p.product_id = s.product_id
-WHERE p.product_id = 37;
+SELECT * FROM stock WHERE product_id = 31 AND size_id = 3;
+
+INSERT INTO stock 
+    (stock_id, product_id, size_id, qty)
+    VALUES 
+        (47, 11, 10, 8),
+        (52, 12, 10, 7)
+    ON DUPLICATE KEY UPDATE 
+    qty = VALUES(qty);
 
 SELECT * FROM images 
 WHERE product_id = 10
 LIMIT 1;
+
+ALTER TABLE users ADD COLUMN status BOOLEAN DEFAULT TRUE AFTER role;
+
+ALTER TABLE users DROP COLUMN status;
+
+SELECT p.category1, p.category2, p.created_at, i.name_image, p.price,
+    p.product_id, p.product_name, s.size FROM products p
+    JOIN images i ON p.product_id = i.product_id
+    JOIN stock st ON p.product_id = st.product_id
+    JOIN size s ON st.size_id = s.size_id
+    WHERE i.name_image LIKE '%default%'
+    AND p.category1 = 'women'
+    AND p.category2 = 'running';
     
 
 INSERT INTO users (email, password, first_name, last_name, gender) 
@@ -126,4 +149,62 @@ CREATE TABLE wishcart(
     FOREIGN KEY (size_id) REFERENCES size(size_id)
     ON DELETE CASCADE ON UPDATE CASCADE
     
+);
+
+CREATE TABLE paymentmethod(
+	paymentmethod_id INT AUTO_INCREMENT PRIMARY KEY,
+    bank_name VARCHAR(15),
+    no_rek VARCHAR(20),
+    an_bank VARCHAR(30)
+);
+
+CREATE TABLE shipers(
+	shipper_id INT AUTO_INCREMENT PRIMARY KEY,
+    company_name VARCHAR(15),
+    category VARCHAR(20),
+    price INT,
+    estimasi VARCHAR(25),
+    phone VARCHAR(14)
+);
+
+CREATE TABLE orders(
+	order_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    address_id INT NOT NULL,
+    paymentmethod_id INT NOT NULL,
+    shipper_id INT NOT NULL,
+    status VARCHAR (50) DEFAULT 'waiting payment',
+    pricetotal INT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE NOW(),
+    CONSTRAINT fk_user_id_orders
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT fk_address_id_orders
+    FOREIGN KEY (address_id) REFERENCES addresses(address_id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_paymentmethod_id_orders
+    FOREIGN KEY (paymentmethod_id) REFERENCES paymentmethod(paymentmethod_id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_shipper_id_orders
+    FOREIGN KEY (shipper_id) REFERENCES shipers(shipper_id)
+    ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE orderdetails(
+	orderdetail_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    product_id INT NOT NULL,
+    size_id INT NOT NULL,
+    price INT,
+    qty INT,
+    CONSTRAINT fk_order_id_orderdetails
+    FOREIGN KEY (order_id) REFERENCES orders(order_id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_product_id_orderdetails
+    FOREIGN KEY (product_id) REFERENCES products(product_id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_size_id_orderdetails
+    FOREIGN KEY (size_id) REFERENCES size(size_id)
+    ON DELETE CASCADE ON UPDATE CASCADE
 );

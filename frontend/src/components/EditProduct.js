@@ -23,11 +23,21 @@ class EditProduct extends React.Component {
     category1: "",
     category2: "",
     files: [],
-    imagesPreviewUrls: []
+    imagesPreviewUrls: [],
+    product: []
   };
 
-  componentDidMount() {
-    this.props.onGetAllProduct();
+  async componentDidMount() {
+
+    await this.props.onGetAllProduct();
+    await this.setState({
+      product: this.props.products.filter(obj => {
+        // console.log(obj.product_id, cookies.get("product_id"));
+
+        return obj.product_id == cookies.get("product_id")
+      })
+    })
+    console.log(this.state.product);
   }
 
   toggle() {
@@ -161,7 +171,7 @@ class EditProduct extends React.Component {
   render() {
     console.log(this.props.images);
 
-    if (this.props.products.length !== 0) {
+    if (this.state.product.length) {
       var {
         product_name,
         description,
@@ -169,7 +179,7 @@ class EditProduct extends React.Component {
         category1,
         category2,
         product_id
-      } = this.props.products[cookies.get("product_id")];
+      } = this.state.product[0];
       if (this.state.category1 === "" && this.state.category2 === "") {
         this.setState({ category1, category2 });
         this.props.onGetImageProduct(product_id);
@@ -491,10 +501,10 @@ class EditProduct extends React.Component {
             <button
               className={`btn
                   ${
-                    this.state.category1 === "Men"
-                      ? "btn-secondary"
-                      : "btn-outline-secondary"
-                  }
+                this.state.category1 === "Men"
+                  ? "btn-secondary"
+                  : "btn-outline-secondary"
+                }
                 `}
               onClick={() => this.setState({ category1: "Men" })}
             >
@@ -503,10 +513,10 @@ class EditProduct extends React.Component {
             <button
               className={`btn
                   ${
-                    this.state.category1 === "Women"
-                      ? "btn-secondary"
-                      : "btn-outline-secondary"
-                  }
+                this.state.category1 === "Women"
+                  ? "btn-secondary"
+                  : "btn-outline-secondary"
+                }
                 `}
               onClick={() => this.setState({ category1: "Women" })}
             >
@@ -525,7 +535,7 @@ class EditProduct extends React.Component {
                 this.state.category2
                   ? "d-flex justify-content-between"
                   : "text-right"
-              } `}
+                } `}
               color="white"
             >
               {this.state.category2}
@@ -586,7 +596,7 @@ class EditProduct extends React.Component {
                       key={i}
                       src={`http://localhost:2404/show/image/${
                         image.name_image
-                      }`}
+                        }`}
                     />
                     <button
                       className="productClose"
@@ -609,7 +619,7 @@ class EditProduct extends React.Component {
         <div className="bortopbot">
           <div className="row py-3">
             <button
-              onClick={() => {}}
+              onClick={() => { }}
               className="btnsavedit btn btn-outline-secondary"
             >
               CANCEL

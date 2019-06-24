@@ -51,7 +51,6 @@ class Account extends React.Component {
       console.log(e);
     }
   };
-
   deleteAvatar = async user_id => {
     try {
       await axios.delete(`/delete/avatar/${user_id}`);
@@ -63,48 +62,27 @@ class Account extends React.Component {
       console.log(e);
     }
   };
-
   _handleImageChange = e => {
     e.preventDefault();
-
-    // let files = Array.from(e.target.files);
     let imagesPreviewUrls = URL.createObjectURL(e.target.files[0]);
-
-    console.log(imagesPreviewUrls);
-
-    // files.forEach((file, i) => {
-    //   let reader = new FileReader();
-
-    //   reader.onloadend = () => {
     this.setState({
       files: e.target.files,
       imagesPreviewUrls: [imagesPreviewUrls]
     });
-
-    console.log(this.state.files);
-
-    //   };
-
-    //   reader.readAsDataURL(file);
-    // });
   };
-
   toggle = () => {
     this.setState(prevState => ({
       modalPassword: !prevState.modalPassword
     }));
   };
-
   togglePhoto = () => {
     this.setState(prevState => ({
       modalPhoto: !prevState.modalPhoto
     }));
   };
-
   onRadioBtnClick = gender => {
     this.setState({ gender });
   };
-
   onEditBtnClick = () => {
     const first_Name = this.firstName.value;
     const last_Name = this.lastName.value;
@@ -112,9 +90,6 @@ class Account extends React.Component {
     const gender = this.state.gender;
     const avatar = this.state.files;
     // const urlAvatar = this.state.imagesPreviewUrls;
-    console.log(this.state.files);
-    console.log(this.state.files[0]);
-
     this.props.onEditUser({
       email,
       first_Name,
@@ -124,16 +99,13 @@ class Account extends React.Component {
       // urlAvatar
     });
   };
-
   onEditPassBtnClick = () => {
     const password = this.oldPass.value;
     const newPass = this.newPass.value;
     const coNewPass = this.coNewPass.value;
-
     this.props.onEditPassword({ password, newPass, coNewPass });
     this.toggle();
   };
-
   onEditMessage = () => {
     if (this.props.message !== "") {
       return (

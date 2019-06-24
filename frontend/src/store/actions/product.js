@@ -1,5 +1,8 @@
 import { GET_PRODUCTS, GET_IMAGE, SUMCART } from "./actionTypes";
 import axios from "../../config/axios";
+import Cookies from "universal-cookie";
+
+const cookies = new Cookies();
 
 //addproduct
 export const onAddProduct = data => {
@@ -173,18 +176,23 @@ export const onEditProduct = data => {
 //getSumCart
 export const getAllWishcart = user_id => {
   return async dispatch => {
-    // const res = await axios.get(`/get/cart/${user_id}`);
-    const wishlist = await axios.get(`/get/wishlist/${user_id}`);
-    // this.setState({ allWishlist: wishlist.data });
+    try {
+      // const res = await axios.get(`/get/cart/${user_id}`);
+      const wishlist = await axios.get(`/get/wishlist/${user_id}`);
+      // this.setState({ allWishlist: wishlist.data });
 
-    const cart = await axios.get(`/get/cart/${user_id}`);
-    // this.setState({ allCart: cart.data });
+      const cart = await axios.get(`/get/cart/${user_id}`);
+      // this.setState({ allCart: cart.data });
 
-    // if (res.data.length) {
-    dispatch({
-      type: SUMCART,
-      payload: { cart, wishlist }
-    });
-    // }
+      cookies.set("cart", cart.data.length, { path: "/" });
+      // if (res.data.length) {
+      dispatch({
+        type: SUMCART,
+        payload: { cart, wishlist }
+      });
+      // }
+    } catch (e) {
+      console.log(e);
+    }
   };
 };
