@@ -75,9 +75,9 @@ class Orders extends React.Component {
           <td className="align-middle" scope="col">
             {obj.username}
           </td>
-          <td className="align-middle" scope="col">{`${obj.address1} ${
-            obj.city
-            } ${obj.pos_code} ${obj.province}`}</td>
+          <td className="align-middle" scope="col">
+            {obj.address}
+          </td>
           <td className="align-middle" scope="col">
             Rp{(obj.pricetotal + obj.price).toLocaleString("IN")}
           </td>
@@ -128,7 +128,7 @@ class Orders extends React.Component {
                     >
                       paid
                   </DropdownItem>
-                  <DropdownItem
+                    <DropdownItem
                       // value={obj.paymentmethod_id}
                       onClick={this.selectStatus}
                       className="dropitemstatusorder"

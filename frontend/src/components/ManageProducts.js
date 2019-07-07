@@ -67,6 +67,12 @@ class ManageProducts extends React.Component {
                   </Link>
                 </li>
                 <li class="list-group-item border border-left-0 border-right-0">
+                  <Link to={`/manageproducts/orders/0`}>
+                    <i class="mx-2 fas fa-history"></i>
+                    history
+                  </Link>
+                </li>
+                <li class="list-group-item border border-left-0 border-right-0">
                   <Link to={`/manageproducts/addpaymentmethod/0`}>
                     <i class="mx-2 fas fa-credit-card" />
                     Payment

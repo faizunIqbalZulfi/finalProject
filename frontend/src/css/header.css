@@ -249,7 +249,7 @@ div.scrollmenu::-webkit-scrollbar {
 
 /* Detail Product */
 .detailProduct {
-  margin-top: 130px;
+  margin-top: 100px;
   padding: 0px 50px;
 }
 .detailProduct img {
@@ -293,7 +293,7 @@ div.scrollmenu::-webkit-scrollbar {
   width: 200px;
   height: 200px;
   object-fit: cover;
-  /* border-radius: 50px; */
+  border: 1px solid black
 }
 
 .btnModal {
@@ -326,7 +326,69 @@ div.scrollmenu::-webkit-scrollbar {
 
   /* padding-bottom: 50px; */
 }
-
+.pAccount{
+  font-size: 12px;
+  font-weight: 500;
+  color: black
+}
+.inputAccount{
+  border: 1px solid black;
+  height: 40px !important;
+  color: black
+}
+.inputAccount:focus, .inputAccount:hover{
+  box-shadow: none;
+  border: 1.5px solid black;
+}
+/* .imgAva{
+  display: block;
+} */
+.avatar{
+  display: inline;
+  position: relative;
+  width: 200px;
+  height: 200px;
+  
+}
+.btnAccountAva{
+  position: relative;
+  transform: translate(0px, -30px);
+  
+}
+.btnEditAva, .btnDeleteAva{
+  /* display: inline-block; */
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: 1px solid transparent;
+  height: 30px;
+  width: 100px;
+  padding: 0;
+}
+.btnEditAva:hover, .btnDeleteAva:hover{
+  border: 1px solid rgb(0, 0, 0);
+}
+.btnEditAva:focus, .btnDeleteAva:focus{
+  outline: none
+}
+.btnAccount{
+  height: 35px;
+  border: 1px solid black;
+  background-color: white;
+  color: black
+}
+.btnAccountActive{
+  height: 35px;
+  border: 1px solid black;
+  background-color: black;
+  color: white
+}
+.btnAccount:hover{
+  background-color: black;
+  color: white
+}
+.btnAccount:focus{
+  outline: none
+}
 /* Account */
 
 /* ManageProduct */
@@ -368,11 +430,23 @@ div.scrollmenu::-webkit-scrollbar {
 .btnEditLink {
   color: red;
 }
+.inputmanageproduct{
+  border: 1px solid black;
+  width: 300px;
+  height: 35px;
+  margin-left: 10px;
+  padding: 0 10px;
+  font-size: 13px;
+  font-weight: 600
+}
+.inputmanageproduct:focus{
+  outline: none
+}
 /* ManageProduct */
 
 /* Address */
 .AccountAddress .address {
-  border: 1px solid rgb(199, 199, 199);
+  border: 1px solid rgb(0, 0, 0);
   padding: 20px;
   margin-bottom: 40px;
 }
@@ -380,19 +454,66 @@ div.scrollmenu::-webkit-scrollbar {
   border-bottom: 1px solid rgb(199, 199, 199);
   padding-bottom: 10px;
 }
-
 .btnlink {
   background-color: transparent;
   border: 0;
 }
-
 .btnlink:hover {
   color: rgb(136, 136, 136);
 }
-
 .btnsetdefault {
   background-color: transparent;
   border: none;
+}
+.btnaddaddress{
+  border: 1px solid black;
+  background-color: white;
+  width: 100%;
+  height: 35px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.divaddress{
+  border-bottom: 1px solid black;
+  padding-bottom: 5px;
+  margin-bottom: 10px
+}
+.h5address{
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0;
+  margin: 0
+}
+.paddress{
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0;
+  margin: 0
+}
+.btnaddress{
+  border: 1px solid black;
+  background-color: white;
+  width: 100px;
+  height: 30px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.btnlinkaddress{
+  border: 1px solid black;
+  background-color: white;
+  width: 100px;
+  height: 25px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-right: 5px;
+  margin-top: 10px
+}
+.btnaddress:hover, .btnlinkaddress:hover, .btnaddaddress:hover{
+  background-color: black;
+  color: white
+}
+.btnlinkaddress:focus, .btnaddress:focus, .btnaddaddress:focus{
+  outline: none
 }
 /* Address */
 
@@ -530,7 +651,7 @@ div.col-2 {
   line-height: 5px;
   padding: 10px;
 }
-.btnaddress {
+/* .btnaddress {
   text-align: left;
   padding: 0;
   margin-bottom: 10px;
@@ -540,12 +661,12 @@ div.col-2 {
 }
 .btnaddress:hover {
   background-color: rgb(245, 245, 245);
-}
+} */
 .address .card-title {
   border-bottom: 1px solid rgb(199, 199, 199);
   padding-bottom: 10px;
 }
-.btnaddress .address {
+.address {
   margin: 0;
   border: 1px solid black;
   padding: 10px;
@@ -721,7 +842,6 @@ input[type="radio"]:checked {
 .row h5 {
   font-weight: 100;
 }
-
 .col-md-4 .btn,
 .col-md-8 .btn,
 .form-control,
@@ -734,7 +854,6 @@ input[type="radio"]:checked {
   /* border: 1px; */
   height: 50px;
 }
-
 .col-md-3 ul {
   padding-left: 0px !important;
   list-style-type: none;
@@ -775,6 +894,134 @@ a:hover {
 }
 
 /* Register */
+
+/* forgotpassword */
+.forgotpass{
+  margin-top: 200px;
+  padding: 0 400px;
+  text-align: center
+}
+.divforgotpass{
+  border: 1px solid black;
+  /* margin: 0px 400px; */
+  padding: 30px 50px
+}
+.h5forgotpass{
+  font-size: 35px;
+  font-weight: 600;
+  letter-spacing: 0
+}
+.pforgotpass{
+  font-size: 13px;
+  margin-right: 100px;
+  margin-left: 100px;
+  margin-bottom: 0;
+  margin-top: 15px
+}
+.pforgotpass2{
+  background-color: rgba(255, 0, 0, 0.8);
+  color: white;
+  padding: 10px 0;
+  margin-top: 15px;
+  margin-left: 100px;
+  margin-right: 100px
+}
+.pforgotpass3{
+  background-color: rgba(0, 128, 0.8);
+  color: white;
+  padding: 10px 0;
+  margin-top: 15px;
+  margin-left: 100px;
+  margin-right: 100px
+}
+.inputforgotpass{
+  width: 100%;
+  height: 35px;
+  border: 1px solid black;
+  padding: 0 10px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 30px
+}
+.inputforgotpass:focus{
+  outline: none
+}
+.btnforgotpass{
+  border: 1px solid black;
+  background-color: white;
+  font-size: 17px;
+  font-weight: 900;
+  width: 150px;
+  height: 35px;
+  margin-top: 30px
+}
+.btnforgotpass:hover{
+  background-color: black;
+  color: white
+}
+.btnforgotpass:focus{
+  outline: none
+}
+.linkforgotpass:hover{
+  text-decoration: underline
+}
+/* forgotpassword */
+
+/* resetpassword */
+.resetpassword{
+  margin-top: 100px;
+  padding: 0 450px;
+  text-align: center
+}
+.divresetpass{
+  border: 1px solid black;
+  padding: 20px 50px
+}
+.h5resetpass{
+  font-size: 35px;
+  font-weight: 600;
+  letter-spacing: 0
+}
+.presetpass{
+  font-size: 13px;
+  margin-right: 100px;
+  margin-left: 100px;
+  margin-bottom: 0;
+  margin-top: 15px
+}
+.presetpass2{
+  margin-bottom: 0;
+  margin-top: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-align: left
+}
+.inputresetpass{
+  width: 100%;
+  height: 35px;
+  border: 1px solid black;
+  padding: 0 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.btnresetpass{
+  border: 1px solid black;
+  background-color: white;
+  font-size: 17px;
+  font-weight: 900;
+  width: 150px;
+  height: 35px;
+  margin-top: 30px
+}
+.btnresetpass:hover{
+  background-color: black;
+  color: white
+}
+.btnresetpass:focus{
+  outline: none
+}
+/* resetpassword */
 
 /* Cart */
 .cartContainer {
@@ -856,7 +1103,45 @@ div.col-2 {
 .dropCartMenu {
   background-color: white;
 }
-
+.precommended{
+  font-size: 30px;
+  font-weight: 900;
+  letter-spacing: 0
+}
+.recommended .cardshop .textshop {
+  margin-top: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 2px;
+}
+.modalnotifcart{
+  margin-top: 200px;
+}
+.modalbodynotifcart{
+  border: 0.5px solid black;
+  padding: 30px 0
+}
+.h5modalnotifcart{
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0;
+  margin: 0
+  /* margin-top: 30px */
+}
+.btnmodalnotifcart{
+  width: 150px;
+  height: 35px;
+  border: 1px solid black;
+  background-color: white;
+  font-size: 13px;
+  font-weight: 700;
+  margin-top: 30px
+}
+.btnmodalnotifcart:hover{
+  background-color: black;
+  color: white
+}
 /* Cart */
 
 /* ModalCart */
@@ -915,6 +1200,21 @@ div.col-2 {
 /* ModalCart */
 
 /* shop */
+.divshopcol-2, 
+.divshopcol-10, 
+.divaddresscol-md-8,
+.divdetailproductcol-8,
+.divdetailproductcol-4{
+  height:570px;
+  overflow-y: scroll;
+}
+.divshopcol-2::-webkit-scrollbar, 
+.divshopcol-10::-webkit-scrollbar,
+.divaddresscol-md-8::-webkit-scrollbar,
+.divdetailproductcol-8::-webkit-scrollbar,
+.divdetailproductcol-4::-webkit-scrollbar {
+  display: none;
+}
 .shop {
   margin-top: 100px;
   padding: 0px 20px;
@@ -937,6 +1237,26 @@ div.shop .cardshop:hover {
   width: 100%;
   height: 230px;
   object-fit: cover;
+}
+.imgunavailable{
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+  filter: opacity(80%);
+  filter: grayscale(100%)
+}
+.pshop{
+  font-size: 13px;
+  padding: 0 10px;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  font-weight: 900;
+  color: rgb(255, 255, 255);
+  background-color: rgb(255, 94, 0);
+  position: absolute;
+  top: 5%;
+  left: 30%;
+  transform: translate(-50%, -50%);
 }
 .shop .cardshop .textshop {
   margin-top: 20px;
@@ -1017,7 +1337,9 @@ div.shop .cardshop:hover {
 } */
 .imgorderuser {
   width: 120px;
+  height: 120px;
   margin: 10px 0;
+  object-fit: cover
 }
 .totalorderuser,
 .pmorderuser,

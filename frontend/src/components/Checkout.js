@@ -130,18 +130,41 @@ class Checkout extends React.Component {
     });
   };
   onPayBtnClick = async () => {
+    if (this.state.address.length) {
+      var {
+        address_name,
+        address1,
+        city,
+        pos_code,
+        no_telp,
+        name,
+        province,
+        address_id
+      } = this.state.address[0];
+      console.log((`${name} (${no_telp})
+      ${address1}, ${city}, ${province}, (${pos_code})`));
+    }
     if (this.state.paymentmethod_id && this.state.shipper.length) {
       let price = 0;
       this.props.cart.forEach(obj => {
         price += obj.price * obj.qty;
       });
       const user_id = this.props.user_id;
-      const address_id = this.state.address[0].address_id;
+      const address = `${name} (${no_telp}), ${address1}, ${city}, ${province}, (${pos_code})`;
       const paymentmethod_id = this.state.paymentmethod_id;
       const shipper_id = this.state.shipper[0].shipper_id;
       const wishcart = this.props.cart;
       const pricetotal = price;
       const res = await axios.post(`/addorders`, {
+        user_id,
+        address,
+        paymentmethod_id,
+        shipper_id,
+        wishcart,
+        pricetotal
+      });
+      console.log(res);
+      console.log({
         user_id,
         address_id,
         paymentmethod_id,
@@ -150,14 +173,7 @@ class Checkout extends React.Component {
         pricetotal
       });
 
-      // console.log({
-      //   user_id,
-      //   address_id,
-      //   paymentmethod_id,
-      //   shipper_id,
-      //   wishcart,
-      //   pricetotal
-      // });
+
       await this.props.getAllWishcart(this.props.user_id);
     } else {
       console.log("please choose payment method");
@@ -257,34 +273,34 @@ class Checkout extends React.Component {
                 <form>
                   {this.state.expedisi === obj.company_name
                     ? this.state.shippers.map(obj => {
-                        if (this.state.expedisi === obj.company_name) {
-                          return (
-                            <div className="radio mt-4 radioAddress">
-                              <label>
-                                <input
-                                  onClick={() => {
-                                    this.selectedShipper(obj.shipper_id);
-                                  }}
-                                  type="radio"
-                                  name="bank"
-                                  className="inlinebutton"
-                                />
-                                <div className="ml-4 optionBank">
-                                  <div className="cartBody text-uppercase">
-                                    {obj.category}
-                                  </div>
-                                  <div className="cartBody mt-1">
-                                    {obj.estimasi}
-                                  </div>
-                                  <div className="cartBody mt-1 d-inline">
-                                    Rp{obj.price.toLocaleString("IN")}
-                                  </div>
+                      if (this.state.expedisi === obj.company_name) {
+                        return (
+                          <div className="radio mt-4 radioAddress">
+                            <label>
+                              <input
+                                onClick={() => {
+                                  this.selectedShipper(obj.shipper_id);
+                                }}
+                                type="radio"
+                                name="bank"
+                                className="inlinebutton"
+                              />
+                              <div className="ml-4 optionBank">
+                                <div className="cartBody text-uppercase">
+                                  {obj.category}
                                 </div>
-                              </label>
-                            </div>
-                          );
-                        }
-                      })
+                                <div className="cartBody mt-1">
+                                  {obj.estimasi}
+                                </div>
+                                <div className="cartBody mt-1 d-inline">
+                                  Rp{obj.price.toLocaleString("IN")}
+                                </div>
+                              </div>
+                            </label>
+                          </div>
+                        );
+                      }
+                    })
                     : null}
                 </form>
               </div>
@@ -296,7 +312,8 @@ class Checkout extends React.Component {
   };
 
   render() {
-    console.log(this.state);
+    console.log(this.state.address);
+
     if (this.props.cart.length) {
       var sumPrice = 0;
       var sumQty = 0;
@@ -317,6 +334,7 @@ class Checkout extends React.Component {
         province,
         address_id
       } = this.state.address[0];
+      // console.log((`${name} (${no_telp}) ${address1}, ${city}, ${province}, (${pos_code})`));
     }
 
     if (parseInt(cookies.get("cart"))) {
@@ -366,18 +384,18 @@ class Checkout extends React.Component {
                     </div>
                   </div>
                 ) : (
-                  <div>
-                    <p className="itemCheck my-4">empty</p>
-                    <button
-                      onClick={() => {
-                        this.toggleAdd(false);
-                      }}
-                      className="btnCheck"
-                    >
-                      alamat baru
+                    <div>
+                      <p className="itemCheck my-4">empty</p>
+                      <button
+                        onClick={() => {
+                          this.toggleAdd(false);
+                        }}
+                        className="btnCheck"
+                      >
+                        alamat baru
                     </button>
-                  </div>
-                )}
+                    </div>
+                  )}
               </div>
               <br />
               <div>
@@ -415,15 +433,19 @@ class Checkout extends React.Component {
                   <div className="d-flex justify-content-between px-0 pt-0">
                     <p class="mb-0 d-inline">estimated shipping</p>
                     <p>{`Rp.${(this.state.shipper.length
-                      ? this.state.shipper[0].price.toLocaleString("IN")
+                      ? this.state.shipper[0].company_name === this.state.expedisi
+                        ? this.state.shipper[0].price.toLocaleString("IN")
+                        : 0
                       : 0
                     ).toLocaleString("IN")}`}</p>
                   </div>
                   <div className="total d-flex justify-content-between px-0">
                     <p class="mb-0 d-inline">total</p>
                     <p className="text-warning">{`Rp.${(sumPrice &&
-                    this.state.shipper.length
-                      ? sumPrice + this.state.shipper[0].price
+                      this.state.shipper.length
+                      ? this.state.shipper[0].company_name === this.state.expedisi
+                        ? sumPrice + this.state.shipper[0].price
+                        : 0
                       : 0
                     ).toLocaleString("IN")}`}</p>
                   </div>

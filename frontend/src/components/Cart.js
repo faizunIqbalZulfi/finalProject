@@ -11,19 +11,20 @@ import { admin, user } from "../config/message";
 const cookies = new Cookies();
 
 class Cart extends React.Component {
-  // state = {
-  //   allWishlist: [props cart: []
-  // };
+  state = {
+    recommendedCart: []
+  };
 
-  componentDidMount() {
-    this.props.getAllWishcart(cookies.get("user_id"));
+  async componentDidMount() {
+    await this.props.getAllWishcart(cookies.get("user_id"));
+    await this.getRecommendedCart(cookies.get("user_id"))
   }
 
   addToCart = async wishcart_id => {
     const res = await axios.post(`/add/cart/wishlist/${wishcart_id}`);
     console.log(res);
 
-    this.props.getAllWishcart(cookies.get("user_id"));
+    await this.props.getAllWishcart(cookies.get("user_id"));
   };
 
   addToWishlist = async wishcart_id => {
@@ -33,13 +34,12 @@ class Cart extends React.Component {
     this.props.getAllWishcart(cookies.get("user_id"));
   };
 
-  // getAllWishcart = async () => {
-  //   const wishlist = await axios.get(`/get/wishlist/${cookies.get("user_id")}`);
-  //   this.setState({ allWishlist: wishlist.data });
-
-  //   const cart = await axios.get(`/get/cart/${cookies.get("user_id")}`);
-  //   this.setStprops cart: cart.data });
-  // };
+  getRecommendedCart = async (user_id) => {
+    if (this.props.cart.length) {
+      const res = await axios.get(`/get/recommended/${user_id}`)
+      this.setState({ recommendedCart: res.data })
+    }
+  }
 
   deleteWishcart = async wishcart_id => {
     console.log(wishcart_id);
@@ -154,7 +154,7 @@ class Cart extends React.Component {
                   {/* <button className="btnCart btn btn-outline-secondary mr-2">
                     EDIT
                   </button> */}
-                  <EditCart product={product} />
+                  <EditCart product={product} recommendedCart={this.getRecommendedCart} />
                   <button
                     onClick={() => {
                       this.addToWishlist(wishcart_id);
@@ -195,19 +195,10 @@ class Cart extends React.Component {
           <div className="header">
             <h5 class="card-title my-3">ORDER SUMMARY</h5>
           </div>
-          {/* <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6> */}
           <div className="body">
             <div className="d-flex justify-content-between px-0">
               <p class="mb-0 d-inline">SUBTOTAL</p>
               <p>{`Rp.${sumPrice.toLocaleString("IN")}`}</p>
-            </div>
-            <div className="d-flex justify-content-between px-0 pt-0">
-              <p class="mb-0 d-inline">ESTIMATED SHIPPING</p>
-              <p>{`Rp.${(50000).toLocaleString("IN")}`}</p>
-            </div>
-            <div className="total d-flex justify-content-between px-0">
-              <p class="mb-0 d-inline">TOTAL</p>
-              <p>{`${(sumPrice + 50000).toLocaleString("IN")}`}</p>
             </div>
           </div>
           <div className="d-flex justify-content-center">
@@ -231,14 +222,6 @@ class Cart extends React.Component {
             <p class="mb-0 d-inline">SUBTOTAL</p>
             <p>{`Rp.${(0).toLocaleString("IN")}`}</p>
           </div>
-          <div className="d-flex justify-content-between px-0 pt-0">
-            <p class="mb-0 d-inline">ESTIMATED SHIPPING</p>
-            <p>{`Rp.${(0).toLocaleString("IN")}`}</p>
-          </div>
-          <div className="total d-flex justify-content-between px-0">
-            <p class="mb-0 d-inline">TOTAL</p>
-            <p>{`Rp.${(0).toLocaleString("IN")}`}</p>
-          </div>
         </div>
         <div className="d-flex justify-content-center">
           <Link to="/checkout">
@@ -250,6 +233,36 @@ class Cart extends React.Component {
       </div>
     );
   };
+
+  renderRecommended = () => {
+    if (this.state.recommendedCart.length) {
+      return this.state.recommendedCart.map(obj => {
+        return (
+          <div className="cardshop d-inline-block text-left col-3">
+            <Link
+              className="text-dark"
+              to={`/detailproduct/${obj.product_id}`}
+            >
+              <img
+                className="imgshop"
+                src={`http://localhost:2404/show/image/${obj.name_image}`}
+              />
+              <hr />
+              <div className="textshop">
+                <p>{obj.product_name}</p>
+                <p className="font-italic text-secondary">{`${
+                  obj.category1
+                  }'s ${obj.category2}`}</p>
+                <p className="text-secondary">{`Rp${obj.price.toLocaleString(
+                  "IN"
+                )}`}</p>
+              </div>
+            </Link>
+          </div>
+        )
+      })
+    }
+  }
 
   render() {
     console.log(this.props.cart);
@@ -266,26 +279,36 @@ class Cart extends React.Component {
         });
       }
       return (
-        <div className="cartContainer">
-          <div class="row">
-            <div class="col-8 p-0">
-              {/* cart */}
-              <div className="cart mb-5">
-                <div className="header">
-                  YOUR CART ({this.props.cart.length ? sumQty : 0})
-                </div>
-                {this.renderCart()}
-              </div>
-              {/* wishlish */}
-              {this.props.wishlist.length ? (
+        <div>
+          <div className="cartContainer">
+            <div class="row">
+              <div class="col-8 p-0">
+                {/* cart */}
                 <div className="cart mb-5">
-                  <div className="header">SAVED TO YOUR WISH LIST</div>
-                  {this.renderWishlist()}
+                  <div className="header">
+                    YOUR CART ({this.props.cart.length ? sumQty : 0})
                 </div>
-              ) : null}
+                  {this.renderCart()}
+                </div>
+                {/* wishlish */}
+                {this.props.wishlist.length ? (
+                  <div className="cart mb-5">
+                    <div className="header">SAVED TO YOUR WISH LIST</div>
+                    {this.renderWishlist()}
+                  </div>
+                ) : null}
+              </div>
+              <div class="col-4">{this.renderOrderSummary()}</div>
             </div>
-            <div class="col-4">{this.renderOrderSummary()}</div>
           </div>
+          {this.state.recommendedCart.length ?
+            <div className="recommended mb-5 text-center">
+              <p className="precommended">recommended for you</p>
+              <div className="scrollmenu">
+                {this.renderRecommended()}
+              </div>
+            </div> :
+            null}
         </div>
       );
     }

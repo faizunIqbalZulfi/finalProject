@@ -43,10 +43,14 @@ class Orders extends React.Component {
   //   console.log(res);
   // };
   cancelTransaction = async order_id => {
-    const res = await axios.delete(`/delete/orderuser/${order_id}`);
-    console.log(res);
+    const ask = window.confirm("are you sure")
+    if (ask) {
+      const res = await axios.delete(`/delete/orderuser/${order_id}`);
+      console.log(res);
 
-    this.getOrderUser(cookies.get("user_id"));
+      this.getOrderUser(cookies.get("user_id"));
+
+    }
   };
   renderOrderUser = () => {
     if (this.state.order.length) {
@@ -140,7 +144,7 @@ class Orders extends React.Component {
                     // }}
                     className="btnorderuserinv"
                   >
-                    <i class="fas fa-file-invoice mr-2" />
+                    <i class="fas fa-file-pdf mr-2"></i>
                     Invoice
                   </a>
                 </div>

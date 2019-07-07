@@ -23,7 +23,8 @@ class Account extends React.Component {
     modalPhoto: false,
     files: [],
     imagesPreviewUrls: [],
-    user: []
+    user: [],
+    flagAva: true
   };
 
   componentDidMount() {
@@ -98,6 +99,7 @@ class Account extends React.Component {
       avatar
       // urlAvatar
     });
+    this.setState({ flagAva: !this.state.flagAva })
   };
   onEditPassBtnClick = () => {
     const password = this.oldPass.value;
@@ -133,55 +135,49 @@ class Account extends React.Component {
       if (this.state.user.length !== 0) {
         var { first_name, last_name, email, user_id } = this.state.user[0];
       }
-      console.log(this.props.message);
+      console.log(document.getElementsByClassName("imgAva")[0]);
 
       return (
         <div>
           <h4 className="mb-4">Account Settings</h4>
 
-          <div className="photoProfile">
-            <img
-              src={
-                this.state.imagesPreviewUrls.length !== 0
-                  ? this.state.imagesPreviewUrls[0]
-                  : `https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png`
-              }
-            />
-            <button
-              className="profileClose"
-              onClick={() => {
-                this.deleteAvatar(user_id);
-              }}
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-            {/* <input
-              style={{ display: "none" }}
-              type="file"
-              ref={fileInput => (this.fileInput = fileInput)}
-              onChange={this._handleImageChange}
-            /> */}
-            <br />
+          <div className="photoProfile text-center">
             <input
               style={{ display: "none" }}
               type="file"
               ref={fileInput => (this.fileInput = fileInput)}
               onChange={this._handleImageChange}
             />
-            <button
-              // hidden={true}
-              onClick={() => {
-                this.fileInput.click();
-              }}
-              className="my-4 btn btn-outline-secondary"
-              // onClick={() => {
-              //   this.setState({ edit: !this.state.edit });
-              // }}
-              data-toggle="modal"
-              data-target="#exampleModal"
-            >
-              Edit
-            </button>
+            <div className="avatar  m-0">
+              <img
+                className="imgAva"
+                onClick={() => { this.setState({ flagAva: !this.state.flagAva }) }}
+                src={
+                  this.state.imagesPreviewUrls.length !== 0
+                    ? this.state.imagesPreviewUrls[0]
+                    : `https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png`
+                }
+              />
+              <div hidden={this.state.flagAva} className="btnAccountAva">
+                <button
+                  onClick={() => {
+                    this.fileInput.click();
+                  }}
+                  className="btnEditAva"
+                >
+                  edit
+                </button>
+                <button
+                  onClick={() => {
+                    this.deleteAvatar(user_id);
+                  }}
+                  className="btnDeleteAva"
+                >
+                  delete
+                </button>
+              </div>
+            </div>
+
             {/* <div hidden={this.state.edit}>
               <input
                 style={{ display: "none" }}
@@ -216,42 +212,42 @@ class Account extends React.Component {
           </div>
           <form className="register2">
             <div className="form-group">
-              <p className="loginRegister mb-0">E-Mail</p>
+              <p className="pAccount mb-0">E-Mail</p>
               <input
                 ref={input => {
                   this.email = input;
                 }}
                 type="text"
-                className="form-control"
+                className="inputAccount form-control"
                 defaultValue={email}
               />
             </div>
 
             <div className="form-group">
-              <p className="loginRegister mb-0">First Name</p>
+              <p className="pAccount mb-0">First Name</p>
               <input
                 ref={input => {
                   this.firstName = input;
                 }}
                 type="texy"
-                className="form-control"
+                className="inputAccount form-control"
                 defaultValue={first_name}
               />
             </div>
             <div className="form-group">
-              <p className="loginRegister mb-0">Last Name</p>
+              <p className="pAccount mb-0">Last Name</p>
               <input
                 ref={input => {
                   this.lastName = input;
                 }}
                 type="text"
-                className="form-control"
+                className="inputAccount form-control"
                 defaultValue={last_name}
               />
             </div>
           </form>
           <div className="form-group">
-            <p className="loginRegister mb-0">Gender</p>
+            <p className="pAccount mb-0">Gender</p>
             <div className="btn-group btn-block">
               <button
                 className={
@@ -276,12 +272,12 @@ class Account extends React.Component {
             </div>
           </div>
           <div className="form-group">
-            <p className="loginRegister mb-0">Password</p>
+            <p className="pAccount mb-0">Password</p>
             <button
               onClick={() => {
                 this.toggle();
               }}
-              className="btn btn-outline-secondary btn-block"
+              className="btnAccount btn-block"
               data-toggle="modal"
               data-target="#exampleModal"
             >
@@ -303,18 +299,18 @@ class Account extends React.Component {
                 onClick={() => {
                   this.onEditBtnClick();
                 }}
-                className="btnsavedit btn btn-outline-secondary"
+                className="btnAccount ml-3"
               >
                 SAVE
               </button>
-              <button
+              {/* <button
                 onClick={() => {
                   this.props.onDeleteUser(this.props.user_id);
                 }}
                 className="btnsavedit btn btn-outline-danger"
               >
                 DELETE
-              </button>
+              </button> */}
             </div>
           </div>
 
@@ -330,7 +326,7 @@ class Account extends React.Component {
 
             <ModalBody>
               <div className="form-group">
-                <p className="loginRegister mb-0">Old Password</p>
+                <p className="pAccount mb-0">Old Password</p>
                 <input
                   ref={input => {
                     this.oldPass = input;
@@ -340,7 +336,7 @@ class Account extends React.Component {
                 />
               </div>
               <div className="form-group">
-                <p className="loginRegister mb-0">New Password</p>
+                <p className="pAccount mb-0">New Password</p>
                 <input
                   ref={input => {
                     this.newPass = input;
@@ -350,7 +346,7 @@ class Account extends React.Component {
                 />
               </div>
               <div className="form-group">
-                <p className="loginRegister mb-0">Confirm New Password</p>
+                <p className="pAccount mb-0">Confirm New Password</p>
                 <input
                   ref={input => {
                     this.coNewPass = input;

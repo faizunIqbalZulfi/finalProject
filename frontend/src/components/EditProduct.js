@@ -256,6 +256,7 @@ class EditProduct extends React.Component {
                 ref={input => {
                   this.size35half = input;
                 }}
+                min={0}
                 type="number"
                 className="form-control inputStock"
               />
@@ -276,6 +277,7 @@ class EditProduct extends React.Component {
                 ref={input => {
                   this.size36 = input;
                 }}
+                min={0}
                 type="number"
                 className="form-control inputStock"
               />
@@ -296,6 +298,7 @@ class EditProduct extends React.Component {
                 ref={input => {
                   this.size37 = input;
                 }}
+                min={0}
                 type="number"
                 className="form-control inputStock"
               />
@@ -316,6 +319,7 @@ class EditProduct extends React.Component {
                 ref={input => {
                   this.size37half = input;
                 }}
+                min={0}
                 type="number"
                 className="form-control inputStock"
               />
@@ -336,6 +340,7 @@ class EditProduct extends React.Component {
                 ref={input => {
                   this.size38 = input;
                 }}
+                min={0}
                 type="number"
                 className="form-control inputStock"
               />
@@ -356,6 +361,7 @@ class EditProduct extends React.Component {
                 ref={input => {
                   this.size38half = input;
                 }}
+                min={0}
                 type="number"
                 className="form-control inputStock"
               />
@@ -378,6 +384,7 @@ class EditProduct extends React.Component {
                 ref={input => {
                   this.size39 = input;
                 }}
+                min={0}
                 type="number"
                 className="form-control inputStock"
               />
@@ -398,6 +405,7 @@ class EditProduct extends React.Component {
                 ref={input => {
                   this.size40 = input;
                 }}
+                min={0}
                 type="number"
                 className="form-control inputStock"
               />
@@ -418,6 +426,7 @@ class EditProduct extends React.Component {
                 ref={input => {
                   this.size41 = input;
                 }}
+                min={0}
                 type="number"
                 className="form-control inputStock"
               />
@@ -438,6 +447,7 @@ class EditProduct extends React.Component {
                 ref={input => {
                   this.size42 = input;
                 }}
+                min={0}
                 type="number"
                 className="form-control inputStock"
               />
@@ -458,6 +468,7 @@ class EditProduct extends React.Component {
                 ref={input => {
                   this.size43 = input;
                 }}
+                min={0}
                 type="number"
                 className="form-control inputStock"
               />
@@ -478,6 +489,7 @@ class EditProduct extends React.Component {
                 ref={input => {
                   this.size44 = input;
                 }}
+                min={0}
                 type="number"
                 className="form-control inputStock"
               />

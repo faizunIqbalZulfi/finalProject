@@ -55,11 +55,16 @@ class AddPaymentMethod extends React.Component {
     }
   };
   removePaymentMethod = async () => {
-    await axios.delete(`/delete/paymentmethod/${this.state.paymentmethod_id}`)
-    var ele = document.getElementsByTagName("input");
-    for (var i = 0; i < ele.length; i++) ele[i].checked = false;
-    this.setState({ paymentmethod_id: null })
-    this.getPaymentMethod()
+    const ask = window.confirm("are you sure ?")
+    if (ask) {
+      await axios.delete(`/delete/paymentmethod/${this.state.paymentmethod_id}`)
+      var ele = document.getElementsByTagName("input");
+      for (var i = 0; i < ele.length; i++) ele[i].checked = false;
+      this.setState({ paymentmethod_id: null })
+      this.getPaymentMethod()
+
+    }
+
 
   }
   editPaymentMethod = async () => {

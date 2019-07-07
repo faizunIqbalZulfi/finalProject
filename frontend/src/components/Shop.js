@@ -181,10 +181,13 @@ class Shop extends React.Component {
             className="text-dark"
             to={`/detailproduct/${product.product_id}`}
           >
-            <img
-              className="imgshop"
-              src={`http://localhost:2404/show/image/${product.name_image}`}
-            />
+            <div className="p-relative">
+              <img
+                className={product.status ? "imgshop" : "imgunavailable"}
+                src={`http://localhost:2404/show/image/${product.name_image}`}
+              />
+              <p hidden={product.status ? true : false} className="pshop">discontinued</p>
+            </div>
             <hr />
             <div className="textshop">
               <p>{product.product_name}</p>
@@ -208,7 +211,7 @@ class Shop extends React.Component {
       return (
         <div className="shop">
           <div className="row">
-            <div className="col-2">
+            <div className="col-2 divshopcol-2">
               <div className="mb-5">
                 <h4 className="mb-4 pb-3 border-bottom text-uppercase">
                   {this.props.match.params.gender}
@@ -444,7 +447,7 @@ class Shop extends React.Component {
                 </button>
               </div>
             </div>
-            <div className="col-10">
+            <div className="divshopcol-10 col-10">
               <div className="col-2 mb-4">
                 <Dropdown
                   isOpen={this.state.dropdownSort}

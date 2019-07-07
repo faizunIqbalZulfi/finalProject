@@ -19,6 +19,7 @@ import Checkout from "./Checkout";
 
 import { keepLogin } from "../store/actions/user";
 import { admin, user } from "../config/message";
+import ForgotPassword from "./ForgotPassword";
 
 const cookies = new Cookies();
 
@@ -40,6 +41,7 @@ class App extends Component {
           <Route path="/" exact component={Home} />
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
+          <Route path="/fotgotpassword" component={ForgotPassword} />
           <Route path="/setting/:path/:page" component={Setting} />
           <Route path="/cart" component={Cart} />
           <Route path="/wishlist" component={Wishlist} />

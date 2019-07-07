@@ -16,8 +16,11 @@ class Users extends React.Component {
     this.setState({ users: res.data });
   };
   activeBanned = async (status, user_id) => {
-    await axios.patch(`/edit/status/${status}/${user_id}`)
-    this.getAlluser()
+    const ask = window.confirm("are you sure ?")
+    if (ask) {
+      await axios.patch(`/edit/status/${status}/${user_id}`)
+      this.getAlluser()
+    }
   }
   renderUsers = () => {
     return this.state.users.map(obj => {

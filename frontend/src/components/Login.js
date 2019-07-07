@@ -67,9 +67,9 @@ class Login extends React.Component {
                   placeholder="Password"
                 />
               </div>
-              <a className="loginRegister" href="">
+              <Link className="loginRegister" to="/fotgotpassword">
                 Forgotten your password?
-              </a>
+              </Link>
             </form>
             {this.onLoginError()}
             <button

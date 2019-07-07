@@ -59,11 +59,11 @@ class Setting extends React.Component {
     }
     return (
       <div className="account">
-        <div className="d-flex justify-content-center name">
+        {/* <div className="d-flex justify-content-center name">
           <div className="">
             <h2>{username}</h2>
           </div>
-        </div>
+        </div> */}
         <div className="d-flex">
           <div className="col-md-2">
             <h4 className="mb-4">Settings</h4>
@@ -99,7 +99,7 @@ class Setting extends React.Component {
                 </li> */}
             </ul>
           </div>
-          <div className="col-md-8 ">{this.onSettingClick()}</div>
+          <div className="divaddresscol-md-8 col-md-8">{this.onSettingClick()}</div>
         </div>
       </div>
     );

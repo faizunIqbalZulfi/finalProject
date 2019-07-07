@@ -99,10 +99,7 @@ const createPdf = async (products, pdfName) => {
                 <div class="row px-5">
                   <div class="col-md-6">
                     <p class="font-weight-bold mb-4">Customer Information</p>
-                    <p class="mb-1">{{name}}</p>
-                    <p>{{address}}</p>
-                    <p class="mb-1">{{city}}, {{province}}</p>
-                    <p class="mb-1">{{posCode}}</p>
+                    <p class="mb-1">{{address}}</p>
                   </div>
                   <div class="col-md-6">
                     <p class="font-weight-bold mb-4">Shipping Estimation</p>
@@ -190,11 +187,11 @@ const createPdf = async (products, pdfName) => {
   var data = {
     invoiceNumber: `${products[0].order_id}`,
     dueTo: `${products[0].updated_at.getDate()}-${products[0].updated_at.getMonth()}-${products[0].updated_at.getFullYear()}`,
-    name: `${products[0].first_name} ${products[0].last_name}`,
-    address: `${products[0].address1}`,
-    city: `${products[0].city}`,
-    province: `${products[0].province}`,
-    posCode: `${products[0].pos_code}`,
+    // name: `${products[0].first_name} ${products[0].last_name}`,
+    address: `${products[0].address}`,
+    // city: `${products[0].city}`,
+    // province: `${products[0].province}`,
+    // posCode: `${products[0].pos_code}`,
     subTotal: (subTotal).toLocaleString("IN"),
     priceShipment: `${(products[0].priceShipment).toLocaleString("IN")}`,
     priceGrand: `${(products[0].priceGrand).toLocaleString("IN")}`

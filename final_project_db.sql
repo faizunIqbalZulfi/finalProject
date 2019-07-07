@@ -1,8 +1,8 @@
 CREATE DATABASE final_project;
 USE final_project;
-DROP TABLE orderdetails;
+DROP TABLE orders;
 DESC shipers;
-DESC users;
+DESC products;
 SELECT * FROM wishcart;
 SELECT * FROM size;
 SELECT * FROM users;
@@ -14,7 +14,7 @@ SELECT * FROM shipers;
 SELECT * FROM paymentmethod;
 SELECT * FROM orders;
 SELECT * FROM orderdetails;
-DESC addresses;
+DESC orders;
 SELECT * FROM addresses WHERE user_id IN (SELECT user_id FROM users where email = "faizun@gmail.com");
 
 SELECT * FROM products p 
@@ -37,9 +37,19 @@ SELECT * FROM images
 WHERE product_id = 10
 LIMIT 1;
 
-ALTER TABLE users ADD COLUMN status BOOLEAN DEFAULT TRUE AFTER role;
+SELECT u.first_name, u.last_name, o.pricetotal, o.created_at, s.company_name, pm.bank_name  FROM orders o 
+JOIN orderdetails od ON od.order_id = o.order_id
+JOIN users u ON u.user_id = o.user_id
+JOIN shipers s on s.shipper_id = o.shipper_id
+JOIN paymentmethod pm ON pm. paymentmethod_id = o.paymentmethod_id
+order by o.pricetotal desc;
 
-ALTER TABLE users DROP COLUMN status;
+
+ALTER TABLE orders ADD COLUMN created_at TIMESTAMP NOT NULL DEFAULT NOW() AFTER pricetotal;
+
+ALTER TABLE orders MODIFY COLUMN created_at DATE;
+
+ALTER TABLE orders DROP COLUMN created_at;
 
 SELECT p.category1, p.category2, p.created_at, i.name_image, p.price,
     p.product_id, p.product_name, s.size FROM products p
@@ -170,25 +180,24 @@ CREATE TABLE shipers(
 CREATE TABLE orders(
 	order_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    address_id INT NOT NULL,
     paymentmethod_id INT NOT NULL,
     shipper_id INT NOT NULL,
+    address VARCHAR (100) NOT NULL,
     status VARCHAR (50) DEFAULT 'waiting payment',
+    paymentconfirm VARCHAR (100),
+    invoice VARCHAR (100),
     pricetotal INT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE NOW(),
     CONSTRAINT fk_user_id_orders
     FOREIGN KEY (user_id) REFERENCES users(user_id)
     ON DELETE CASCADE ON UPDATE CASCADE,
-	CONSTRAINT fk_address_id_orders
-    FOREIGN KEY (address_id) REFERENCES addresses(address_id)
-    ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_paymentmethod_id_orders
     FOREIGN KEY (paymentmethod_id) REFERENCES paymentmethod(paymentmethod_id)
-    ON DELETE CASCADE ON UPDATE CASCADE,
+    ON UPDATE CASCADE,
     CONSTRAINT fk_shipper_id_orders
     FOREIGN KEY (shipper_id) REFERENCES shipers(shipper_id)
-    ON DELETE CASCADE ON UPDATE CASCADE
+    ON UPDATE CASCADE
 );
 
 CREATE TABLE orderdetails(

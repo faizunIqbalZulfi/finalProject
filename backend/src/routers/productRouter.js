@@ -9,11 +9,11 @@ const uploadDir = path.join(__dirname, "../uploads/product");
 
 const storage = multer.diskStorage({
   // Destination
-  destination: function(req, file, cb) {
+  destination: function (req, file, cb) {
     cb(null, uploadDir);
   },
   // Filename
-  filename: function(req, file, cb) {
+  filename: function (req, file, cb) {
     // var check = true;
     if (file.originalname === "default.jpg") {
       console.log(file);
@@ -124,11 +124,12 @@ router.post("/add/image", upstore.array("image", 10), (req, res) => {
 
 //getallproductshome
 router.get("/get/products", (req, res) => {
-  const sql = `SELECT p.product_id, product_name, description, price, SUM(s.qty) as qty, category1, category2, created_at
+  const sql = `SELECT p.product_id, p.status, product_name, description, price, SUM(s.qty) as qty, category1, category2, created_at
    FROM products p 
    JOIN stock s ON p.product_id = s.product_id
    JOIN size sz ON sz.size_id = s.size_id
-   GROUP BY p.product_id, product_name, description, price, category1, category2`;
+   GROUP BY p.product_id, product_name, description, price, category1, category2
+   order by p.status desc`;
 
   const sql2 = `SELECT s.stock_id, s.product_id, sz.size_id, sz.size, s.qty FROM stock s
   RIGHT JOIN size sz ON sz.size_id = s.size_id`;
@@ -165,7 +166,7 @@ router.get("/show/image/:img", (req, res) => {
 router.get("/getedit/image/:product_id", (req, res) => {
   const sql = `SELECT name_image FROM images WHERE product_id = ${
     req.params.product_id
-  }
+    }
   AND name_image LIKE  '%default%'`;
 
   connection.query(sql, (err, result) => {
@@ -179,7 +180,7 @@ router.get("/getedit/image/:product_id", (req, res) => {
 router.get("/get/image/:product_id", (req, res) => {
   const sql = `SELECT image_id, product_id, name_image FROM images WHERE product_id = ${
     req.params.product_id
-  }`;
+    }`;
 
   connection.query(sql, (err, result) => {
     if (err) return res.send(err);
@@ -214,7 +215,7 @@ router.patch("/edit/product/:product_id", (req, res) => {
   });
   const sql = `UPDATE products SET ? WHERE product_id =${
     req.params.product_id
-  }`;
+    }`;
 
   connection.query(sql, req.body, (err, result) => {
     if (err) return res.send(err);
@@ -240,7 +241,7 @@ router.patch("/edit/stock/:product_id", (req, res) => {
   for (let i = 0; i < req.body.length; i++) {
     const sql = `select * from stock where product_id = ${
       req.params.product_id
-    } && size_id = ${req.body[i].size_id}`;
+      } && size_id = ${req.body[i].size_id}`;
 
     connection.query(sql, (err, result) => {
       if (err) return res.send(err);
@@ -249,7 +250,7 @@ router.patch("/edit/stock/:product_id", (req, res) => {
         console.log("ada");
         const sql = `update stock set qty = ${
           req.body[i].qty
-        } where product_id = ${req.params.product_id}
+          } where product_id = ${req.params.product_id}
         && size_id = ${req.body[i].size_id}`;
 
         connection.query(sql, (err, result) => {
@@ -298,26 +299,27 @@ router.post(
 );
 
 //deleteproduct
-router.delete("/delete/product/:product_id", (req, res) => {
-  const sql = `select name_image from images where product_id = ${
-    req.params.product_id
-  }`;
-  const sql2 = `delete from products where product_id = ${
-    req.params.product_id
-  }`;
+router.patch("/delete/product/:product_id", (req, res) => {
+  // const sql = `select name_image from images where product_id = ${
+  //   req.params.product_id
+  //   }`;
+  // const sql2 = `delete from products where product_id = ${
+  //   req.params.product_id
+  //   }`;
+  const sql = `update products set status = false where product_id = ${req.params.product_id}`
 
   connection.query(sql, (err, result) => {
     if (err) return res.send(err);
 
-    for (let index = 0; index < result.length; index++) {
-      fs.unlink(`${uploadDir}/${result[index].name_image}`, err => {});
-    }
-    connection.query(sql2, (err, result) => {
-      if (err) return res.send(err);
-      console.log("deleteproduct");
+    // for (let index = 0; index < result.length; index++) {
+    //   fs.unlink(`${uploadDir}/${result[index].name_image}`, err => { });
+    // }
+    // connection.query(sql2, (err, result) => {
+    //   if (err) return res.send(err);
+    //   console.log("deleteproduct");
 
-      res.send(result);
-    });
+    res.send(result);
+    // });
   });
 });
 
@@ -325,7 +327,7 @@ router.delete("/delete/product/:product_id", (req, res) => {
 router.get("/detail/product/:product_id", (req, res) => {
   const sql = `SELECT * FROM products WHERE product_id = ${
     req.params.product_id
-  }`;
+    }`;
 
   connection.query(sql, (err, result) => {
     if (err) return res.send(err);
@@ -340,7 +342,7 @@ router.get("/detail/product/:product_id", (req, res) => {
 
       const sql = `SELECT * FROM images WHERE product_id = ${
         req.params.product_id
-      }`;
+        }`;
       connection.query(sql, (err, result) => {
         if (err) return res.send(err);
         var images = result;
@@ -366,7 +368,7 @@ router.get("/get/products/shop/:gender", (req, res) => {
   console.log(typeof req.query.category);
 
   if (req.query.category) {
-    const sql = `SELECT p.category1, p.category2, p.created_at, i.name_image, p.price,
+    const sql = `SELECT p.category1, p.status, p.category2, p.created_at, i.name_image, p.price,
     p.product_id, p.product_name, s.size  FROM products p
     JOIN images i ON p.product_id = i.product_id
     JOIN stock st ON p.product_id = st.product_id
@@ -380,7 +382,7 @@ router.get("/get/products/shop/:gender", (req, res) => {
       res.send(result);
     });
   } else {
-    const sql = `SELECT p.category1, p.category2, p.created_at, i.name_image, p.price,
+    const sql = `SELECT p.category1, p.status, p.category2, p.created_at, i.name_image, p.price,
     p.product_id, p.product_name, s.size  FROM products p
     JOIN images i ON p.product_id = i.product_id
     JOIN stock st ON p.product_id = st.product_id

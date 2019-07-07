@@ -10,6 +10,7 @@ const {
   registerSuccess,
   editSuccess
 } = require("../../../frontend/src/config/message");
+const sendVerify = require("../emails/nodemailer")
 
 const uploadDir = path.join(__dirname, "../uploads/avatar");
 
@@ -69,6 +70,7 @@ router.post("/register/user", async (req, res) => {
   const sql = `INSERT INTO users SET ?`;
 
   console.log(req.body);
+  if (req.body.username === null) return res.send("username empty")
 
   if (req.body.email === null || !isEmail(req.body.email))
     return res.send("invalid email");
@@ -119,15 +121,17 @@ router.get("/user/:user_id", (req, res) => {
 
 //edituser
 router.patch("/edit/user/:user_id", upstore.single("avatar"), (req, res) => {
-  Object.keys(req.body).forEach(key => {
-    if (!req.body[key]) {
-      delete req.body[key];
-    }
-  });
+  console.log(req.body);
+
+  // Object.keys(req.body).forEach(key => {
+  //   if (!req.body[key]) {
+  //     req.body[key];
+  //   }
+  // });
 
   const sql = `UPDATE users SET ? WHERE user_id =${req.params.user_id}`;
 
-  if (req.body.email === null || !isEmail(req.body.email))
+  if (req.body.email === "" || !isEmail(req.body.email))
     return res.send("invalid email");
 
   connection.query(sql, req.body, (err, result) => {
@@ -233,5 +237,30 @@ router.get("/get/alluser", (req, res) => {
     res.send(result);
   });
 });
+
+// forgotpass
+router.get("/send/email/:email", (req, res) => {
+  const sql = `select * from users where email = '${req.params.email}'`
+  connection.query(sql, async (err, result) => {
+    if (err) return res.send(err)
+    if (!result.length) return res.send("user not found")
+
+    var password = await Date.now()
+    var hashPassword = await bcrypt.hash(password.toString(), 8);
+
+    const sql = `update users set password = '${hashPassword}' 
+    where email = '${req.params.email}'`
+    connection.query(sql, (err, result) => {
+      if (err) return res.send(err)
+
+      sendVerify(req.params.email, password)
+      res.send("success")
+    })
+
+
+
+  })
+})
+
 
 module.exports = router;

@@ -67,7 +67,7 @@ class Addresses extends React.Component {
         <div
           className={
             this.props.message === deleteSuccess ||
-            this.props.message === addAddressSucces
+              this.props.message === addAddressSucces
               ? "alert alert-success mt-2 text-center"
               : "alert alert-danger mt-2 text-center"
           }
@@ -79,6 +79,59 @@ class Addresses extends React.Component {
       return null;
     }
   };
+
+  renderAddress = () => {
+    if (this.props.addresses.length) {
+      return (
+        this.props.addresses.map((address, index) => {
+          return (
+            <div key={index} class="address">
+              <div class="card-body p-0">
+                <div className="divaddress d-flex justify-content-between">
+                  <h5 className="h5address">
+                    {address.address_name} {address.status ? `(${address.status})` : null}
+                  </h5>
+                  {!address.status ?
+                    <button
+                      onClick={() => {
+                        this.onSelectDefault(
+                          address.address_id,
+                          address.user_id
+                        );
+                      }}
+                      className="btnaddress">set default
+                    </button> :
+                    null
+                  }
+                </div>
+                <p className="paddress">{address.address1}</p>
+                <p className="paddress">
+                  {address.city} <span>{address.pos_code}</span>
+                </p>
+                <p className="paddress">{address.no_telp}</p>
+                <Link
+                  to={`/setting/editaddress/${index}`}
+                >
+                  <button className="btnlinkaddress">Edit</button>
+                </Link>
+                <button
+                  onClick={() => {
+                    this.onDeleteBtnClick(
+                      address.address_id,
+                      address.user_id
+                    );
+                  }}
+                  className="btnlinkaddress"
+                >
+                  Delete
+                  </button>
+              </div>
+            </div>
+          );
+        })
+      )
+    }
+  }
 
   render() {
     console.log(this.props.addresses);
@@ -92,22 +145,23 @@ class Addresses extends React.Component {
             onClick={() => {
               this.toggle();
             }}
-            className="btn btn-outline-secondary btn-block"
+            className="btnaddaddress"
             ata-toggle="modal"
             data-target="#exampleModal"
           >
             Add
           </button>
         </div>
-        {this.props.addresses.length !== 0
+        {this.renderAddress()}
+        {/* {this.props.addresses.length !== 0
           ? this.props.addresses.map((address, index) => {
-              return (
-                <div key={index} class="address">
-                  <div class="card-body p-0">
-                    <h5 class="card-title">
-                      {address.status ? (
-                        `${address.address_name} (${address.status})`
-                      ) : (
+            return (
+              <div key={index} class="address">
+                <div class="card-body p-0">
+                  <h5 class="card-title">
+                    {address.status ? (
+                      `${address.address_name} (${address.status})`
+                    ) : (
                         <button
                           onClick={() => {
                             this.onSelectDefault(
@@ -118,35 +172,34 @@ class Addresses extends React.Component {
                           className="btnsetdefault"
                         >{`${address.address_name} set default`}</button>
                       )}
-                    </h5>
-                    {/* {address.status ? null : <button>set default</button>} */}
-                    <p class="card-text">{address.address1}</p>
-                    <p class="card-text">
-                      {address.city} <span>{address.pos_code}</span>
-                    </p>
-                    <p className="card-text">{address.no_telp}</p>
-                    <Link
-                      to={`/setting/editaddress/${index}`}
-                      class="card-link"
-                    >
-                      Edit
+                  </h5>
+                  <p class="card-text">{address.address1}</p>
+                  <p class="card-text">
+                    {address.city} <span>{address.pos_code}</span>
+                  </p>
+                  <p className="card-text">{address.no_telp}</p>
+                  <Link
+                    to={`/setting/editaddress/${index}`}
+                    class="card-link"
+                  >
+                    Edit
                     </Link>
-                    <button
-                      onClick={() => {
-                        this.onDeleteBtnClick(
-                          address.address_id,
-                          address.user_id
-                        );
-                      }}
-                      className="btnlink card-link"
-                    >
-                      Delete
+                  <button
+                    onClick={() => {
+                      this.onDeleteBtnClick(
+                        address.address_id,
+                        address.user_id
+                      );
+                    }}
+                    className="btnlink card-link"
+                  >
+                    Delete
                     </button>
-                  </div>
                 </div>
-              );
-            })
-          : null}
+              </div>
+            );
+          })
+          : null} */}
         <Modal
           isOpen={this.state.modal}
           fade={false}
@@ -165,7 +218,7 @@ class Addresses extends React.Component {
                 }}
                 type="text"
                 className="form-control"
-                // defaultValue={address_name}
+              // defaultValue={address_name}
               />
             </div>
             <div className="form-group">
@@ -176,7 +229,7 @@ class Addresses extends React.Component {
                 }}
                 type="texy"
                 className="form-control"
-                // defaultValue={city}
+              // defaultValue={city}
               />
             </div>
             <div className="form-group">
@@ -187,7 +240,7 @@ class Addresses extends React.Component {
                 }}
                 type="texy"
                 className="form-control"
-                // defaultValue={city}
+              // defaultValue={city}
               />
             </div>
             <div className="form-group">
@@ -198,7 +251,7 @@ class Addresses extends React.Component {
                 }}
                 type="texy"
                 className="form-control"
-                // defaultValue={city}
+              // defaultValue={city}
               />
             </div>
             <div className="form-group">
@@ -209,7 +262,7 @@ class Addresses extends React.Component {
                 }}
                 rows="3"
                 className="form-control"
-                // defaultValue={address1}
+              // defaultValue={address1}
               />
             </div>
             <div className="form-group">
@@ -220,7 +273,7 @@ class Addresses extends React.Component {
                 }}
                 type="text"
                 className="form-control"
-                // defaultValue={pos_code}
+              // defaultValue={pos_code}
               />
             </div>
             <div className="form-group">
@@ -231,7 +284,7 @@ class Addresses extends React.Component {
                 }}
                 type="text"
                 className="form-control"
-                // defaultValue={no_telp}
+              // defaultValue={no_telp}
               />
             </div>
           </ModalBody>

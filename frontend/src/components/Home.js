@@ -209,7 +209,7 @@ class Home extends React.Component {
               </div>
             </Link>
           </div>
-          <h1 className="titlebestseller">best seller</h1>
+          <h1 hidden={this.state.productsBestSeller.length < 5 ? true : false} className="titlebestseller">best seller</h1>
           <div class="scrollmenu mb-5">{this.renderListBest()}</div>
         </div>
       );

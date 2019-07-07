@@ -181,19 +181,12 @@ router.post("/add/cart", (req, res) => {
     connection.query(sql, (err, result) => {
       if (err) return res.send(err);
 
-      if (result.length) return res.send("product sudah ada");
-      // {
-      //   const sql = `UPDATE wishcart SET qty = ${result[0].qty + 1}
-      //   WHERE wishcart_id = ${result[0].wishcart_id}`;
-      //   connection.query(sql, (err, result) => {
-      //     if (err) return res.send(err);
-      //     return res.send(result);
-      //   });
-      // }
-      else {
+      if (result.length) {
+        return res.send("product sudah ada");
+
+      } else {
         const sql = `INSERT INTO wishcart (user_id, product_id, size_id, status)
           VALUES (${user_id}, ${product_id}, ${size_id}, '${status}')`;
-
         connection.query(sql, (err, result) => {
           if (err) return res.send(err);
 
@@ -291,5 +284,39 @@ router.patch("/edit/cart", (req, res) => {
     });
   });
 });
+
+// recommendwishcart
+router.get("/get/recommended/:user_id", (req, res) => {
+  const sql = `select u.gender, p.category2 as category, sum(w.qty) as total
+  from wishcart w
+  join products p on p.product_id = w.product_id
+  join users u on u.user_id = w.user_id
+  where w.user_id = ${req.params.user_id}
+  group by category
+  order by total desc
+  limit 1`
+  connection.query(sql, (err, result) => {
+    if (err) return res.send(err)
+    console.log(result);
+
+    if (result[0].gender == "M") {
+      var gender = "Men"
+    } else {
+      var gender = "Women"
+    }
+    console.log(gender, result[0].category);
+
+    const sql = `select * from products p
+    join images i on i.product_id = p.product_id
+    where category1 = '${gender}' 
+    and category2 = '${result[0].category}'
+    and name_image like '%default%'
+    limit 6`
+    connection.query(sql, (err, result) => {
+      if (err) return res.send(err)
+      res.send(result)
+    })
+  })
+})
 
 module.exports = router;

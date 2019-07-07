@@ -127,8 +127,8 @@ router.patch(`/edit/paymentmethod/:paymentmethod_id`, (req, res) => {
 
 //addorders&orderdetails&removewishcart
 router.post("/addorders", (req, res) => {
-  const sql = `INSERT INTO orders (user_id, address_id, paymentmethod_id, shipper_id, pricetotal) 
-    VALUES (${req.body.user_id}, ${req.body.address_id}, ${
+  const sql = `INSERT INTO orders (user_id, address, paymentmethod_id, shipper_id, pricetotal) 
+    VALUES (${req.body.user_id}, '${req.body.address}', ${
     req.body.paymentmethod_id
     }, ${req.body.shipper_id}, ${req.body.pricetotal})`;
 
@@ -159,12 +159,10 @@ router.post("/addorders", (req, res) => {
 
 // getorderuser_id
 router.get("/get/order/:user_id", (req, res) => {
-  const sql = `SELECT o.order_id, o.invoice, o.paymentmethod_id, o.paymentconfirm, o.status, SUM(o.pricetotal+s.price) AS pricetotal,
-    s.company_name, s.category, s.estimasi, s.phone, pm.bank_name, pm.no_rek, pm.an_bank,
-    a.name, a.address_name, a.no_telp, a.city, a.province, a.pos_code, a.address1 FROM orders o 
+  const sql = `SELECT o.order_id, o.invoice, o.address, o.paymentmethod_id, o.paymentconfirm, o.status, SUM(o.pricetotal+s.price) AS pricetotal,
+    s.company_name, s.category, s.estimasi, s.phone, pm.bank_name, pm.no_rek, pm.an_bank FROM orders o 
     JOIN shipers s ON s.shipper_id = o.shipper_id
     JOIN paymentmethod pm ON pm.paymentmethod_id = o.paymentmethod_id
-    JOIN addresses a ON a.address_id = o.address_id
     WHERE o.user_id = ${req.params.user_id}
     GROUP BY o.order_id`;
 
@@ -241,11 +239,10 @@ router.patch("/update/status/order/:order_id", (req, res) => {
 
             // createpdf
             const sql = `SELECT u.first_name, u.last_name, od.orderdetail_id, p.description, o.order_id, p.product_id, p.price AS priceProduct, od.qty, SUM(o.pricetotal+sh.price) AS priceGrand, 
-            o.created_at, o.updated_at, p.product_name, p.category1, p.category2, a.name, a.address_name, sh.price AS priceShipment,
-            a.no_telp, a.city, a.province, a.pos_code, a.address1, s.size FROM orderdetails od
+            o.created_at, o.address, o.updated_at, p.product_name, p.category1, p.category2, sh.price AS priceShipment,
+            s.size FROM orderdetails od
             JOIN orders o ON o.order_id = od.order_id
             JOIN products p ON od.product_id = p.product_id
-            JOIN addresses a ON a.address_id = o.address_id
             JOIN size s ON s.size_id = od.size_id
             JOIN shipers sh ON sh.shipper_id = o.shipper_id
             JOIN users u ON u.user_id = o.user_id
@@ -293,12 +290,10 @@ router.patch(
 
 // getorders
 router.get("/get/order", (req, res) => {
-  const sql = `SELECT o.order_id, o.status, o.pricetotal, o.paymentconfirm, o.created_at, o.updated_at,
-    s.company_name, s.category, s.price, s.phone, pm.bank_name, pm.no_rek, a.name, 
-    a.address_name, a.no_telp, a.city, a.province, a.pos_code, a.address1, u.username FROM orders o 
+  const sql = `SELECT o.order_id, o.status, o.address, o.pricetotal, o.paymentconfirm, o.created_at, o.updated_at,
+    s.company_name, s.category, s.price, s.phone, pm.bank_name, pm.no_rek, u.username FROM orders o 
     JOIN shipers s ON s.shipper_id = o.shipper_id
     JOIN paymentmethod pm ON pm.paymentmethod_id = o.paymentmethod_id
-    JOIN addresses a ON a.address_id = o.address_id
     JOIN users u ON u.user_id = o.user_id order by o.status desc`;
 
   connection.query(sql, (err, result) => {
@@ -350,5 +345,21 @@ router.get("/get/orderdetails/:order_id", (req, res) => {
 router.get("/show/invoice/:pdf", (req, res) => {
   res.sendFile(`${pdfDir}/${req.params.pdf}`);
 });
+
+
+
+// router.post("/test", (req, res) => {
+//   const sql = `insert into test set ?`
+
+//   connection.query(sql, req.body, (err, result) => {
+//     if (err) return res.send(err)
+//     const sql = `select * from test`
+//     connection.query(sql, (err, result) => {
+//       if (err) return res.send(err)
+
+//       res.send(result[0].address)
+//     })
+//   })
+// })
 
 module.exports = router;

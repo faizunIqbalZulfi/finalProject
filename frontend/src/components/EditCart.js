@@ -93,7 +93,8 @@ class EditCart extends React.Component {
       qty: parseInt(this.state.qty)
     });
 
-    this.props.getAllWishcart(cookies.get("user_id"));
+    await this.props.getAllWishcart(cookies.get("user_id"));
+    await this.props.recommendedCart(cookies.get("user_id"))
     this.toggle();
   };
 
@@ -101,15 +102,21 @@ class EditCart extends React.Component {
     return this.state.stock.map(stock => {
       if (stock.qty && stock.size)
         return (
-          <DropdownItem onClick={this.selectSize}>{stock.size}</DropdownItem>
+          <DropdownItem className="px-2" onClick={this.selectSize}>{stock.size}</DropdownItem>
         );
     });
   };
   renderListQty = () => {
     const arrData = [];
     // const qty = 0
-    for (let i = 1; i <= this.state.arrQty; i++) {
-      arrData.push(<DropdownItem onClick={this.selectQty}>{i}</DropdownItem>);
+    if (this.state.arrQty < 5) {
+      for (let i = 1; i <= this.state.arrQty; i++) {
+        arrData.push(<DropdownItem className="px-2" onClick={this.selectQty}>{i}</DropdownItem>);
+      }
+    } else {
+      for (let i = 1; i <= 5; i++) {
+        arrData.push(<DropdownItem className="px-2" onClick={this.selectQty}>{i}</DropdownItem>);
+      }
     }
     return arrData;
   };

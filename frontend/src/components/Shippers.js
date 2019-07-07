@@ -56,11 +56,15 @@ class Shippers extends React.Component {
     }
   }
   deleteShipper = async () => {
-    await axios.delete(`/delete/shippers/${this.state.shipper_id}`)
-    var ele = document.getElementsByTagName("input");
-    for (var i = 0; i < ele.length; i++) ele[i].checked = false;
-    this.setState({ shipper_id: null })
-    this.getShippers()
+    const ask = window.confirm('are you sure ?')
+    if (ask) {
+      await axios.delete(`/delete/shippers/${this.state.shipper_id}`)
+      var ele = document.getElementsByTagName("input");
+      for (var i = 0; i < ele.length; i++) ele[i].checked = false;
+      this.setState({ shipper_id: null })
+      this.getShippers()
+
+    }
   }
   editShippers = async () => {
     const company_name = this.company_nameEdit.value;
